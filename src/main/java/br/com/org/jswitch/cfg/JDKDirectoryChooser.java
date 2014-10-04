@@ -12,18 +12,16 @@ public class JDKDirectoryChooser {
 
 	public List<JDK> choose() {
 		List<JDK> result = new ArrayList<JDK>();
-		String path = "";
-		String name = "";
-		JFileChooser chooser = new JFileChooser("C:/Program Files");
+		JFileChooser chooser = new JFileChooser("C:/");
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int retorno = chooser.showOpenDialog(null);
 
 		if (retorno == JFileChooser.APPROVE_OPTION) {
 			File chosenDirectory = chooser.getSelectedFile();
-			path = chosenDirectory.getPath();
-			name = chosenDirectory.getName();
+			String path = chosenDirectory.getPath();
+			String name = chosenDirectory.getName();
+			result.add(new JDK(name, path));
 		}
-		result.add(new JDK(name, path));
 		return result;
 
 	}
