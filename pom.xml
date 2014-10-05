@@ -14,6 +14,7 @@
               <mainClass>br.com.org.jswitch.Main</mainClass>
             </manifest>
           </archive>
+          <outputDirectory>${basedir}/install</outputDirectory>
         </configuration>
       </plugin>
       <plugin>
