@@ -3,12 +3,16 @@ JSwitch
 
 JSwitch is program to help to fast switch of JDKs installed on machine. 
 
-## 1) Install
+## 1) Compatibility
 
-The installer can be found on installer folder of project on github. Compatible only windows 7, therefore make download os jwitch.jar and execute it and then show initial window.
+* Windows 7
+
+## 2) Install
+
+The installer can be found on installer folder of project on github, therefore make download os jwitch.jar and execute it and then show initial window.
 
 
-## 2) Use Program
+## 3) Use Program
 
 * Grid show JDKs installed on machine( be able to find on default installation).
 * "Load"(Carregar..) button allows you find no default directory instalation.
@@ -17,7 +21,7 @@ The installer can be found on installer folder of project on github. Compatible 
 
 ![Initial window](http://content.screencast.com/users/anderson.satriani/folders/Jing/media/6eca085f-4ee6-434a-8164-beb26531f0bf/2014-10-05_1451.png)
 
-## 3) Switch JDKs
+## 4) Switch JDKs
 
 After installation, open folder on explorer and access context menu with options of JDKs installed, choice one. Automatically prompt will be started to you to fire up your program at the correct java version.
 
