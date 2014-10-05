@@ -1,7 +1,7 @@
 JSwitch
 =======
 
-JSwitch is program that help to fast switch of JDKs installed on machine. 
+JSwitch is program to help to fast switch of JDKs installed on machine. 
 
 ## 1) Install
 
