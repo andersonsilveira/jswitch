@@ -11,7 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
 
@@ -22,19 +24,39 @@ public class JSwitchUI {
 	private JFrame window;
 	private JPanel mainPanel;
 	private JTable table;
+	private JTabbedPane jTabbedPane;
+	private JScrollPane tableScroll;
+	private JTextWrapPane jTextPane;
+	private JScrollPane resultScroll;
 
 	// main e montaTela
 
 	public void montaTela() {
 		prepareWindow();
 		prepareMainPanel();
+		prepareTabbed();
+		prepareTabela();
+		prepareConsole();
+		prepareInstallButton();
 		prepareLoadButton();
 		prepareExitButton();
-		prepareTabela();
-		prepareInstallButton();
 		showWindow();
 	}
 	
+	private void prepareConsole() {
+		jTextPane = new JTextWrapPane();
+		jTextPane.setLineWrap(false);
+		resultScroll = new JScrollPane(jTextPane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		resultScroll.setPreferredSize(new Dimension(450, 450));
+		jTabbedPane.addTab("Resultado", resultScroll);
+		
+	}
+
+	private void prepareTabbed() {
+		jTabbedPane =	new JTabbedPane(JTabbedPane.TOP);
+		mainPanel.add(jTabbedPane);
+	}
+
 	private void prepareMainPanel() {
 		  mainPanel = new JPanel();
 		  window.add(mainPanel);
@@ -49,9 +71,9 @@ public class JSwitchUI {
 
 	private void showWindow() {
 		window.pack();
-		window.setSize(540, 540);
+		window.setSize(540, 560);
 		window.setVisible(true);
-		Dimension maximumSize = new Dimension(540, 540);
+		Dimension maximumSize = new Dimension(540, 560);
 		window.setMaximumSize(maximumSize);
 		window.setResizable(false);
 		jdks = new JDKLoader().load();
@@ -67,11 +89,11 @@ public class JSwitchUI {
 		table.setGridColor(Color.black);
 		table.setShowGrid(true);
 		
-		JScrollPane scroll = new JScrollPane(); 
-		scroll.getViewport().setBorder(null);
-		scroll.getViewport().add(table); 
-		scroll.setSize(450, 450);
-		mainPanel.add(scroll);
+		tableScroll = new JScrollPane(); 
+		tableScroll.getViewport().setBorder(null);
+		tableScroll.getViewport().add(table); 
+		tableScroll.setSize(450, 450);
+		jTabbedPane.addTab("JDK", tableScroll);
 	}
 
 	private List<JDK> jdks = new ArrayList<JDK>();
@@ -111,9 +133,11 @@ public class JSwitchUI {
 		JButton botaoInstalar = new JButton("Instalar");
 		botaoInstalar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new MenuContextExecutor().execute(jdks);
+				new MenuContextExecutor().execute(jdks,jTextPane);
+				jTabbedPane.setSelectedComponent(resultScroll);
 			}
 		});
 		mainPanel.add(botaoInstalar);
+		
 	}
 }

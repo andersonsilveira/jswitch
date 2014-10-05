@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
 
 import br.com.org.jswitch.model.JDK;
 
@@ -35,7 +36,7 @@ public class MenuContextExecutor {
 			+ "%%1" +SLASHDOT+ QUOTE+SLASHDOT+ QUOTE + QUOTE+" /f\n";
 	
 	
-	public void execute(List<JDK> jdks) {
+	public void execute(List<JDK> jdks, JTextPane jTextPane) {
 		File file = new File("command.bat");
 		try {
 		FileWriter fileWriter = new FileWriter(file);
@@ -50,10 +51,9 @@ public class MenuContextExecutor {
 			e.printStackTrace();
 		}
 		try {
-			ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/C",
-					"start", "cmd.exe", "/K", "command.bat");
+			ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/C", "command.bat");
 			Process process = processBuilder.start();
-			getDiretoryOfJavaInstalations(process);
+			getDiretoryOfJavaInstalations(process,jTextPane);
 			process.getErrorStream().close();
 			process.getOutputStream().close();
 			int exitValue = process.waitFor();
@@ -72,7 +72,7 @@ public class MenuContextExecutor {
 		file.delete();
 	}
 
-	private List<String> getDiretoryOfJavaInstalations(Process prs) {
+	private List<String> getDiretoryOfJavaInstalations(Process prs, JTextPane jTextPane) {
 		List<String> directories = new ArrayList<String>();
 		InputStream is = null;
 		ByteArrayOutputStream baos = null;
@@ -84,7 +84,9 @@ public class MenuContextExecutor {
 			while ((size = is.read(b)) != -1) {
 				baos.write(b, 0, size);
 			}
-			System.out.println(new String(baos.toByteArray()));
+			String result = new String(baos.toByteArray());
+			System.out.println(result);
+			jTextPane.setText(result);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
