@@ -9,7 +9,7 @@ JSwitch is program to help to fast switch of JDKs installed on machine.
 
 ## 2) Install
 
-The installer can be found on installer folder of project on github, therefore make download [JSwitch.jar](https://github.com/andersonsilveira/jswitch/blob/master/install/jswitch-0.0.1-SNAPSHOT.jar?raw=true) or [JSwitch.exe](https://github.com/andersonsilveira/jswitch/blob/master/install/JSwitch.exe) and execute it and then show initial window.
+The installer can be found on installer folder of project on github, therefore make download [JSwitch.jar](https://github.com/andersonsilveira/jswitch/blob/master/install/jswitch-0.0.1-SNAPSHOT.jar?raw=true) or [JSwitch.exe](https://github.com/andersonsilveira/jswitch/blob/master/install/JSwitch.exe?raw=true) and execute it and then show initial window.
 
 
 ## 3) Use Program
