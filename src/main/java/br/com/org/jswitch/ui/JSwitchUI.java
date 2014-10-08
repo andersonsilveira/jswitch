@@ -16,9 +16,6 @@ import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
 
-import br.com.org.jswitch.cfg.DirectoryChooser;
-import br.com.org.jswitch.cfg.win.JDKWindowsLoader;
-import br.com.org.jswitch.cfg.win.JDKWindowsMenuContextCreator;
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.model.JDK;
 /**
