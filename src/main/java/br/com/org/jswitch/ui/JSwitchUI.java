@@ -89,8 +89,6 @@ public class JSwitchUI {
 		Dimension maximumSize = new Dimension(540, 560);
 		window.setMaximumSize(maximumSize);
 		window.setResizable(false);
-		jdks = operationSystemManager.loadJDKInstalled();
-		
 		ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,table);
 		waitAction.executeLoader(operationSystemManager);
 	}
