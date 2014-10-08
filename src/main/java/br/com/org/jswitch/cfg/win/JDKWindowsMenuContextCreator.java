@@ -1,4 +1,4 @@
-package br.com.org.jswitch.cfg;
+package br.com.org.jswitch.cfg.win;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -12,9 +12,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
+import br.com.org.jswitch.cfg.JDKMenuContextCreator;
 import br.com.org.jswitch.model.JDK;
 
-public class MenuContextExecutor {
+public class JDKWindowsMenuContextCreator implements JDKMenuContextCreator {
 	private static final String SLASHDOT = "\\";
 	private static final String QUOTE = "\"";
 	//private static final String DELETE_JAVA_HOME = "reg delete \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" /v JAVA_HOME /f";
@@ -36,6 +37,7 @@ public class MenuContextExecutor {
 			+ "%%1" +SLASHDOT+ QUOTE+SLASHDOT+ QUOTE + QUOTE+" /f\n";
 	
 	
+	@Override
 	public void execute(List<JDK> jdks, JTextPane jTextPane) {
 		File file = new File("command.bat");
 		try {

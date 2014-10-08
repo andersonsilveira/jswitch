@@ -1,4 +1,4 @@
-package br.com.org.jswitch.cfg;
+package br.com.org.jswitch.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,13 +13,28 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
 
+import br.com.org.jswitch.cfg.DirectoryChooser;
+import br.com.org.jswitch.cfg.win.JDKWindowsLoader;
+import br.com.org.jswitch.cfg.win.JDKWindowsMenuContextCreator;
+import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.model.JDK;
-
+/**
+ * 
+ * @author Anderson
+ *
+ */
 public class JSwitchUI {
+
+	private OperationSystemManager operationSystemManager;
+
+	public JSwitchUI() {
+		super();
+		operationSystemManager = new OperationSystemManager();
+		
+	}
 
 	private JFrame window;
 	private JPanel mainPanel;
@@ -76,8 +91,8 @@ public class JSwitchUI {
 		Dimension maximumSize = new Dimension(540, 560);
 		window.setMaximumSize(maximumSize);
 		window.setResizable(false);
-		jdks = new JDKLoader().load();
-		JSwitchTableModel model = new JSwitchTableModel(jdks);
+		jdks = operationSystemManager.loadJDKInstalled();
+		JDKTableModel model = new JDKTableModel(jdks);
 		table.setModel(model);
 	}
 	
@@ -102,15 +117,16 @@ public class JSwitchUI {
 		botaoCarregar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				jdks = new JDKDirectoryChooser().choose();
+				JDK jdk = operationSystemManager.chooseDirectory();
+				jdks.add(jdk);
 				TableModel modelOld = table.getModel();
 				if(modelOld.getRowCount()>0){
-					List<JDK> dataRows = ((JSwitchTableModel) modelOld).getDataRows();
+					List<JDK> dataRows = ((JDKTableModel) modelOld).getDataRows();
 					dataRows.addAll(jdks);
-					JSwitchTableModel model = new JSwitchTableModel(dataRows);
+					JDKTableModel model = new JDKTableModel(dataRows);
 					table.setModel(model);
 				}else{
-					JSwitchTableModel model = new JSwitchTableModel(jdks);
+					JDKTableModel model = new JDKTableModel(jdks);
 					table.setModel(model);
 				}
 				
@@ -133,7 +149,7 @@ public class JSwitchUI {
 		JButton botaoInstalar = new JButton("Instalar");
 		botaoInstalar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new MenuContextExecutor().execute(jdks,jTextPane);
+				operationSystemManager.createMenuContext(jdks,jTextPane);
 				jTabbedPane.setSelectedComponent(resultScroll);
 			}
 		});

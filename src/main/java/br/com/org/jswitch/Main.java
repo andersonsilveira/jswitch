@@ -3,7 +3,7 @@
  */
 package br.com.org.jswitch;
 
-import br.com.org.jswitch.cfg.JSwitchUI;
+import br.com.org.jswitch.ui.JSwitchUI;
 
 
 /**

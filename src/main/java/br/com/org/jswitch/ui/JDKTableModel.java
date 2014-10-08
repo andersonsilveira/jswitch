@@ -1,4 +1,4 @@
-package br.com.org.jswitch.cfg;
+package br.com.org.jswitch.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import br.com.org.jswitch.model.JDK;
 
-public class JSwitchTableModel extends AbstractTableModel {
+public class JDKTableModel extends AbstractTableModel {
 
 	/**
 	 * 
@@ -28,7 +28,7 @@ public class JSwitchTableModel extends AbstractTableModel {
 		return jdks.isEmpty();
 	}
 
-	public JSwitchTableModel(List<JDK> jdks) {
+	public JDKTableModel(List<JDK> jdks) {
 		this.jdks = jdks;
 	}
 

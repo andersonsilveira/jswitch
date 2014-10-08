@@ -1,4 +1,4 @@
-package br.com.org.jswitch.cfg;
+package br.com.org.jswitch.ui;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
@@ -6,7 +6,11 @@ import javax.swing.text.StyledDocument;
 
 class JTextWrapPane extends JTextPane {
 
-    boolean wrapState = true;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4139968894204183674L;
+	boolean wrapState = true;
     JTextArea j = new JTextArea();
 
     JTextWrapPane() {

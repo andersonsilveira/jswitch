@@ -1,18 +1,19 @@
 package br.com.org.jswitch.cfg;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 
 import br.com.org.jswitch.model.JDK;
+/**
+ * 
+ * @author Anderson
+ *
+ */
+public abstract class DirectoryChooser {
 
-public class JDKDirectoryChooser {
-
-	public List<JDK> choose() {
-		List<JDK> result = new ArrayList<JDK>();
-		JFileChooser chooser = new JFileChooser("C:/");
+	public JDK choose() {
+		JFileChooser chooser = new JFileChooser(getInitialDirectory());
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int retorno = chooser.showOpenDialog(null);
 
@@ -20,10 +21,12 @@ public class JDKDirectoryChooser {
 			File chosenDirectory = chooser.getSelectedFile();
 			String path = chosenDirectory.getPath();
 			String name = chosenDirectory.getName();
-			result.add(new JDK(name, path));
+			return new JDK(name, path);
 		}
-		return result;
+		return null;
 
 	}
+	
+	public abstract String getInitialDirectory();
 
 }
