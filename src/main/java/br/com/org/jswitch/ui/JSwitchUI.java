@@ -29,13 +29,7 @@ import br.com.org.jswitch.model.JDK;
 public class JSwitchUI {
 
 	private OperationSystemManager operationSystemManager;
-
-	public JSwitchUI() {
-		super();
-		operationSystemManager = new OperationSystemManager();
-		
-	}
-
+	private List<JDK> jdks = new ArrayList<JDK>();
 	private JFrame window;
 	private JPanel mainPanel;
 	private JTable table;
@@ -43,6 +37,13 @@ public class JSwitchUI {
 	private JScrollPane tableScroll;
 	private JTextWrapPane jTextPane;
 	private JScrollPane resultScroll;
+
+	public JSwitchUI() {
+		super();
+		operationSystemManager = new OperationSystemManager();
+		
+	}
+
 
 	// main e montaTela
 
@@ -92,8 +93,9 @@ public class JSwitchUI {
 		window.setMaximumSize(maximumSize);
 		window.setResizable(false);
 		jdks = operationSystemManager.loadJDKInstalled();
-		JDKTableModel model = new JDKTableModel(jdks);
-		table.setModel(model);
+		
+		ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,table);
+		waitAction.executeLoader(operationSystemManager);
 	}
 	
 	private void prepareTabela(){
@@ -111,23 +113,24 @@ public class JSwitchUI {
 		jTabbedPane.addTab("JDK", tableScroll);
 	}
 
-	private List<JDK> jdks = new ArrayList<JDK>();
 	private void prepareLoadButton() {
 		JButton botaoCarregar = new JButton("Carregar...");
 		botaoCarregar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				JDK jdk = operationSystemManager.chooseDirectory();
-				jdks.add(jdk);
-				TableModel modelOld = table.getModel();
-				if(modelOld.getRowCount()>0){
-					List<JDK> dataRows = ((JDKTableModel) modelOld).getDataRows();
-					dataRows.addAll(jdks);
-					JDKTableModel model = new JDKTableModel(dataRows);
-					table.setModel(model);
-				}else{
-					JDKTableModel model = new JDKTableModel(jdks);
-					table.setModel(model);
+				if(jdk!=null){
+					TableModel modelOld = table.getModel();
+					if(modelOld.getRowCount()>0){
+						List<JDK> dataRows = ((JDKTableModel) modelOld).getDataRows();
+						dataRows.add(jdk);
+						JDKTableModel model = new JDKTableModel(dataRows);
+						table.setModel(model);
+					}else{
+						jdks.add(jdk);
+						JDKTableModel model = new JDKTableModel(jdks);
+						table.setModel(model);
+					}
 				}
 				
 			}
