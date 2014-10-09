@@ -19,61 +19,67 @@ import javax.swing.SwingWorker;
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.model.JDK;
 
-class ShowWaitAction  {
-   protected static final long SLEEP_TIME = 1 * 1000;
-   
+class ShowWaitAction {
+	protected static final long SLEEP_TIME = 1 * 1000;
+
 	private Component componentParent;
 
 	private JTable table;
-	
-   public ShowWaitAction(String name, Component componentParent, JTable table) {
-      this.componentParent = componentParent;
-      this.table = table;
-   }
 
-   
-   public void executeLoader(final OperationSystemManager manager) {
-      SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>(){
+	private List<JDK> loadJDKInstalled;
 
+	public List<JDK> getLoadJDKInstalled() {
+		return loadJDKInstalled;
+	}
 
-		@Override
-         protected Void doInBackground() throws Exception {
+	private String name;
 
-			List<JDK> loadJDKInstalled = manager.loadJDKInstalled();
-			JDKTableModel tableModel = new JDKTableModel(loadJDKInstalled);
-			table.setModel(tableModel);
-			Thread.sleep(SLEEP_TIME);
-            return null;
-         }
-      };
+	public ShowWaitAction(String name, Component componentParent, JTable table) {
+		this.componentParent = componentParent;
+		this.table = table;
+		this.name = name;
+	}
 
-      Window win = SwingUtilities.getWindowAncestor(componentParent);
-      final JDialog dialog = new JDialog(win, "Dialog", ModalityType.APPLICATION_MODAL);
+	public void executeLoader(final OperationSystemManager manager) {
+		SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
 
-      mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			protected Void doInBackground() throws Exception {
 
-         @Override
-         public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals("state")) {
-               if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
-                  dialog.dispose();
-               }
-            }
-         }
-      });
-      mySwingWorker.execute();
+				loadJDKInstalled = manager.loadJDKInstalled();
+				JDKTableModel tableModel = new JDKTableModel(loadJDKInstalled);
+				table.setModel(tableModel);
+				Thread.sleep(SLEEP_TIME);
+				return null;
+			}
+		};
 
-      JProgressBar progressBar = new JProgressBar();
-      progressBar.setIndeterminate(true);
-      JPanel panel = new JPanel(new BorderLayout());
-      panel.add(progressBar, BorderLayout.CENTER);
-      panel.add(new JLabel("Please wait......."), BorderLayout.PAGE_START);
-      dialog.add(panel);
-      dialog.pack();
-      dialog.setLocationRelativeTo(win);
-      dialog.setVisible(true);
-   }
+		Window win = SwingUtilities.getWindowAncestor(componentParent);
+		final JDialog dialog = new JDialog(win, name,
+				ModalityType.APPLICATION_MODAL);
 
+		mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
 
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals("state")) {
+					if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
+						dialog.dispose();
+					}
+				}
+			}
+		});
+		mySwingWorker.execute();
+
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setIndeterminate(true);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(progressBar, BorderLayout.CENTER);
+		panel.add(new JLabel("Please wait......."), BorderLayout.PAGE_START);
+		dialog.add(panel);
+		dialog.pack();
+		dialog.setLocationRelativeTo(win);
+		dialog.setVisible(true);
+	}
 
 }

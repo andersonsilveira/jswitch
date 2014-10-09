@@ -91,6 +91,7 @@ public class JSwitchUI {
 		window.setResizable(false);
 		ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,table);
 		waitAction.executeLoader(operationSystemManager);
+		jdks = waitAction.getLoadJDKInstalled();
 	}
 	
 	private void prepareTabela(){

@@ -23,6 +23,9 @@ public class JDKWindowsMenuContextCreator implements JDKMenuContextCreator {
 	
 	private static final String REGISTRY = 
 			 "cd /d %ProgramFiles%\n"
+			 + "if not exist JSwitch (\n"
+			 + "mkdir JSwitch)\n"
+			 + "cd JSwitch\n"
 			+ "if not exist {0}.bat (\n"
 			+ "echo "+RESTORE_JAVA_HOME+">>{0}.bat\n"
 			+ "echo echo off>>{0}.bat\n"
@@ -32,8 +35,8 @@ public class JDKWindowsMenuContextCreator implements JDKMenuContextCreator {
 			+ "echo set PATH=%%JAVA_HOME%%\\bin;%%PATH%%>>{0}.bat\n"
 			+ "echo echo Display java version>>{0}.bat\n"
 			+ "echo java -version>>{0}.bat)\n"
-			+ "reg add HKEY_CLASSES_ROOT\\Directory\\Background\\shell\\{0}\\command  /d \"cmd /k "+ SLASHDOT+ QUOTE+ "%ProgramFiles%\\{0}"	+ SLASHDOT+ QUOTE+ QUOTE+ " /f\n"
-			+ "reg add HKEY_CLASSES_ROOT\\Folder\\shell\\{0}\\command /d \"cmd /k "+ SLASHDOT + QUOTE + SLASHDOT + QUOTE + "%ProgramFiles%\\{0}"+SLASHDOT + QUOTE + " "+SLASHDOT+ QUOTE
+			+ "reg add HKEY_CLASSES_ROOT\\Directory\\Background\\shell\\{0}\\command  /d \"cmd /k "+ SLASHDOT+ QUOTE+ "%ProgramFiles%\\JSwitch\\{0}"	+ SLASHDOT+ QUOTE+ QUOTE+ " /f\n"
+			+ "reg add HKEY_CLASSES_ROOT\\Folder\\shell\\{0}\\command /d \"cmd /k "+ SLASHDOT + QUOTE + SLASHDOT + QUOTE + "%ProgramFiles%\\JSwitch\\{0}"+SLASHDOT + QUOTE + " "+SLASHDOT+ QUOTE
 			+ "%%1" +SLASHDOT+ QUOTE+SLASHDOT+ QUOTE + QUOTE+" /f\n";
 	
 	

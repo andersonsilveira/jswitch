@@ -21,7 +21,6 @@ import br.com.org.jswitch.model.JDK;
  */
 public final class OperationSystemManager {
 
-	private static String OS = System.getProperty("os.name").toLowerCase();
 	
 	Map<Platform, JDKLoader> mapOfLoader = new HashMap<Platform, JDKLoader>();
 	Map<Platform, JDKMenuContextCreator> mapOfContextMenuExecuter = new HashMap<Platform, JDKMenuContextCreator>();
@@ -39,7 +38,7 @@ public final class OperationSystemManager {
 	}
 	
 	public void createMenuContext(List<JDK> jdks, JTextPane jTextPane){
-		mapOfContextMenuExecuter.get(OS).execute(jdks, jTextPane);
+		mapOfContextMenuExecuter.get(getPlatform()).execute(jdks, jTextPane);
 	}
 	
 	public JDK chooseDirectory(){
