@@ -19,13 +19,14 @@ public class JDKWindowsMenuContextCreator implements JDKMenuContextCreator {
 	private static final String SLASHDOT = "\\";
 	private static final String QUOTE = "\"";
 	//private static final String DELETE_JAVA_HOME = "reg delete \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" /v JAVA_HOME /f";
-	private static final String RESTORE_JAVA_HOME = "setx JAVA_HOME \"{1}\" /m";
+	public static final String RESTORE_JAVA_HOME = "setx JAVA_HOME \"{1}\" /m";
 	
 	private static final String REGISTRY = 
 			 "cd /d %ProgramFiles%\n"
 			 + "if not exist JSwitch (\n"
 			 + "mkdir JSwitch)\n"
 			 + "cd JSwitch\n"
+			 + "echo {0}>>config.cfg\n"
 			+ "if not exist {0}.bat (\n"
 			+ "echo "+RESTORE_JAVA_HOME+">>{0}.bat\n"
 			+ "echo echo off>>{0}.bat\n"
@@ -75,6 +76,7 @@ public class JDKWindowsMenuContextCreator implements JDKMenuContextCreator {
 		} finally {
 		}
 		file.delete();
+		
 	}
 
 	private List<String> getDiretoryOfJavaInstalations(Process prs, JTextPane jTextPane) {
