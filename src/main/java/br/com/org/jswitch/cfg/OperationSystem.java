@@ -1,19 +1,21 @@
 package br.com.org.jswitch.cfg;
 
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JFileChooser;
+import javax.swing.JTextPane;
 
 import br.com.org.jswitch.model.JDK;
-/**
- * 
- * @author Anderson
- *
- */
-public abstract class DirectoryChooser {
 
-	public JDK choose() {
-		JFileChooser chooser = new JFileChooser(getInitialDirectory());
+public abstract class OperationSystem {
+
+	public abstract List<JDK> loadDefaultJDK();
+	
+	public abstract void install(List<JDK> jdks, JTextPane jTextPane) throws Exception;
+	
+	public JDK chooseDirectoryOfJDKInstalation() {
+		JFileChooser chooser = new JFileChooser(getInitialDirectoryChooser());
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int retorno = chooser.showOpenDialog(null);
 
@@ -27,6 +29,5 @@ public abstract class DirectoryChooser {
 
 	}
 	
-	public abstract String getInitialDirectory();
-
+	public abstract String getInitialDirectoryChooser();
 }

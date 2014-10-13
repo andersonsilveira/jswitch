@@ -3,6 +3,8 @@
  */
 package br.com.org.jswitch;
 
+import javax.swing.JOptionPane;
+
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.ui.JSwitchSystemTray;
 import br.com.org.jswitch.ui.JSwitchUI;
@@ -27,8 +29,9 @@ public class Main {
 				new JSwitchSystemTray().execute();				
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,
+					"O JSwicht ocorreu um erro durante a inicialização do aplicativo",
+					"JSwitch", JOptionPane.ERROR_MESSAGE);
 		}
 
 		

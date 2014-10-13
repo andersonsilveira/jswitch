@@ -6,13 +6,9 @@ import java.util.Map;
 
 import javax.swing.JTextPane;
 
-import br.com.org.jswitch.cfg.DirectoryChooser;
-import br.com.org.jswitch.cfg.JDKLoader;
-import br.com.org.jswitch.cfg.JDKMenuContextCreator;
+import br.com.org.jswitch.cfg.OperationSystem;
 import br.com.org.jswitch.cfg.SystemTrayConfig;
-import br.com.org.jswitch.cfg.win.JDKWindowChooseDirectory;
-import br.com.org.jswitch.cfg.win.JDKWindowsLoader;
-import br.com.org.jswitch.cfg.win.JDKWindowsMenuContextCreator;
+import br.com.org.jswitch.cfg.win.WindowsSystem;
 import br.com.org.jswitch.cfg.win.WindowsSystemTrayConfig;
 import br.com.org.jswitch.model.JDK;
 
@@ -24,33 +20,41 @@ import br.com.org.jswitch.model.JDK;
 public final class OperationSystemManager {
 
 	
-	Map<Platform, JDKLoader> mapOfLoader = new HashMap<Platform, JDKLoader>();
-	Map<Platform, JDKMenuContextCreator> mapOfContextMenuExecuter = new HashMap<Platform, JDKMenuContextCreator>();
-	Map<Platform, DirectoryChooser> mapOfDirectoryChooser = new HashMap<Platform, DirectoryChooser>();
 	Map<Platform, SystemTrayConfig> mapOfSysTray = new HashMap<Platform, SystemTrayConfig>();
+	
+	Map<Platform, OperationSystem> mapOfOperation = new HashMap<Platform, OperationSystem>();
+	
+	
 	
 	
 	public OperationSystemManager() {
-		mapOfLoader.put(Platform.Windows, new JDKWindowsLoader());
-		mapOfContextMenuExecuter.put(Platform.Windows, new JDKWindowsMenuContextCreator());
-		mapOfDirectoryChooser.put(Platform.Windows, new JDKWindowChooseDirectory());
 		mapOfSysTray.put(Platform.Windows, new WindowsSystemTrayConfig());
+		mapOfOperation.put(Platform.Windows, new WindowsSystem());
 	}
 	
 	public List<JDK> loadJDKInstalled(){
-		return mapOfLoader.get(getPlatform()).load();
+		return mapOfOperation.get(getPlatform()).loadDefaultJDK();
 	}
 	
 	public boolean isAlreadyInstalled(){
 		return !getSystemTrayConfig().getJDKInstalled().isEmpty();
 	}
 	
-	public void createMenuContext(List<JDK> jdks, JTextPane jTextPane){
-		mapOfContextMenuExecuter.get(getPlatform()).execute(jdks, jTextPane);
+	public void install(List<JDK> jdks, JTextPane jTextPane) throws Exception{
+		try {
+			mapOfOperation.get(getPlatform()).install(jdks, jTextPane);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 	public JDK chooseDirectory(){
-		return mapOfDirectoryChooser.get(getPlatform()).choose();
+		return mapOfOperation.get(getPlatform()).chooseDirectoryOfJDKInstalation();
+	}
+	
+	public SystemTrayConfig getSystemTrayConfig() {
+		return mapOfSysTray.get(getPlatform());
+		
 	}
 	
 	
@@ -81,9 +85,5 @@ public final class OperationSystemManager {
 		return m_os;
 	}
 
-	public SystemTrayConfig getSystemTrayConfig() {
-		return mapOfSysTray.get(getPlatform());
-		
-	}
 	
 }

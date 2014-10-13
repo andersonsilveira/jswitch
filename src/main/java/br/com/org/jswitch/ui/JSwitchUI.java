@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -148,7 +149,12 @@ public class JSwitchUI {
 		JButton botaoInstalar = new JButton("Instalar");
 		botaoInstalar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				operationSystemManager.createMenuContext(jdks,jTextPane);
+				try {
+				    operationSystemManager.install(jdks,jTextPane);
+				} catch (Exception e1) {
+				    JOptionPane.showMessageDialog(null, "Erro durante a instalação do aplicativo",
+					    "JSwitch", JOptionPane.ERROR_MESSAGE);
+				}
 				jTabbedPane.setSelectedComponent(resultScroll);
 			}
 		});

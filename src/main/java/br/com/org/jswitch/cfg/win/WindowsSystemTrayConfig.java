@@ -44,7 +44,7 @@ public class WindowsSystemTrayConfig implements SystemTrayConfig {
 	public void change(String jdk) throws IOException {
 		ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/C",
 				MessageFormat.format(
-						JDKWindowsMenuContextCreator.RESTORE_JAVA_HOME, "",
+						WindowsSystem.RESTORE_JAVA_HOME, "",
 						getProgramFilesDir() + File.separator + "Java"
 								+ File.separator + jdk));
 		processBuilder.start();
@@ -82,7 +82,6 @@ public class WindowsSystemTrayConfig implements SystemTrayConfig {
 				directories.add(dir);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
