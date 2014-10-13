@@ -40,7 +40,7 @@ public class JSwitchSystemTray {
 			
 		}
 		menu.addSeparator();
-		MenuItem closeItem = new MenuItem("Close");
+		MenuItem closeItem = new MenuItem("Fechar");
 		closeItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
