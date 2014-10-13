@@ -27,3 +27,8 @@ After installation, open folder on explorer and access context menu with options
 
 ![Context Menu Explore] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/5cb524e6-6bf0-4c63-8f6e-79d5379ef2f3/2014-10-05_1457.png)
 ![Prompt console] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/c5c1fcf2-fcef-4ea3-b239-8514b53ad566/2014-10-05_1506.png)
+
+Another way to switch is a System Tray on O.S enable in boot of system. You can see icon tray available:
+![System Icon Tray] 
+(http://content.screencast.com/users/anderson.satriani/folders/Jing/media/4526b2b0-0cb7-4ef8-b6c5-698afabaf78b/2014-10-13_1241.png)
+
