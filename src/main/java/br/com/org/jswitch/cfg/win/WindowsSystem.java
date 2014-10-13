@@ -227,6 +227,10 @@ public class WindowsSystem extends OperationSystem {
 	Process findProgramFiles = pFindProgramFiles.start();
 	String pathname = outputProcess(findProgramFiles);
 	String installPathname = pathname.trim() + File.separator + "JSwitch";
+	File dir = new File(installPathname);
+	if(!dir.exists()){
+		dir.mkdir();
+	}
 	return installPathname;
     }
 
