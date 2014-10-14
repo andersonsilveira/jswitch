@@ -65,7 +65,7 @@
 						<configuration>
 							<headerType>gui</headerType>
 							<jar>${project.build.directory}/${artifactId}-${version}-shade.jar</jar>
-							<outfile>${basedir}/install/setup.exe</outfile>
+							<outfile>${project.build.directory}/install-jswitch.exe</outfile>
 							<downloadUrl>http://java.com/download</downloadUrl>
 							<classPath>
 								<mainClass>br.com.org.jswitch.Main</mainClass>
@@ -85,15 +85,45 @@
 								<txtProductVersion>1.0.0.0</txtProductVersion>
 								<productName>${project.name}</productName>
 								<companyName>https://github.com/andersonsilveira/jswitch</companyName>
-								<internalName>jswitch</internalName>
-								<originalFilename>setup.exe</originalFilename>
+								<internalName>install-jswitch</internalName>
+								<originalFilename>install-jswitch.exe</originalFilename>
 							</versionInfo>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>appassembler-maven-plugin</artifactId>
+				<version>1.8.1</version>
+				<executions>
+					<execution>
+						<id>generate-scripts</id>
+						<phase>package</phase>
+						<goals>
+							<goal>create-repository</goal>
+						</goals>
+						</execution>
+				</executions>
+			</plugin>
 			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptor>src/main/assembly/bin.xml</descriptor>
+				</configuration>
+			</plugin>
+						
 			<!-- <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
@@ -154,6 +184,15 @@
 			</plugin> -->
 		</plugins>
 	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		
+	</dependencies>
 
 	<!-- <dependencies>
 		<dependency>

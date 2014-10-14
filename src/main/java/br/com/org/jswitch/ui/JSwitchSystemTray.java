@@ -9,17 +9,24 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 
-import br.com.org.jswitch.cfg.SystemTrayConfig;
+import br.com.org.jswitch.cfg.FileChangeListener;
+import br.com.org.jswitch.cfg.FileMonitor;
+import br.com.org.jswitch.cfg.OperationSystem;
 import br.com.org.jswitch.control.OperationSystemManager;
 
-public class JSwitchSystemTray {
+public class JSwitchSystemTray implements FileChangeListener{
 
 	
+	private OperationSystemManager systemManager;
+	private TrayIcon icon;
+	private CheckboxMenuItemGroup menuItemGroup;
+
 	public void execute() throws Exception {
 
-		final SystemTrayConfig systemTrayConfig = new OperationSystemManager().getSystemTrayConfig();
+		systemManager = new OperationSystemManager();
 		if (!SystemTray.isSupported()) {
 			System.out.println("SystemTray is not supported");
 			return;
@@ -29,14 +36,14 @@ public class JSwitchSystemTray {
 		Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/switch-icon.png"));
 
 		PopupMenu menu = new PopupMenu();
-		final TrayIcon icon = new TrayIcon(image, "JSwitch", menu);
+		icon = new TrayIcon(image, "JSwitch", menu);
 		icon.setImageAutoSize(true);
-		List<String> jdkInstalled = systemTrayConfig.getJDKInstalled();
-		 CheckboxMenuItemGroup mig = new CheckboxMenuItemGroup(systemTrayConfig,icon);
+		List<String> jdkInstalled = systemManager.getJDKInstalled();
+		menuItemGroup = new CheckboxMenuItemGroup(systemManager,icon);
 		for (final String jdk : jdkInstalled) {
 			CheckboxMenuItem checkboxMenuItem = new CheckboxMenuItem(jdk);
 			menu.add(checkboxMenuItem);
-			mig.add(checkboxMenuItem);
+			menuItemGroup.add(checkboxMenuItem);
 			
 		}
 		menu.addSeparator();
@@ -51,5 +58,24 @@ public class JSwitchSystemTray {
 		tray.add(icon);
 		icon.displayMessage("Attention", "JSwitch foi iniciado com sucesso!!", 
 				TrayIcon.MessageType.INFO);
+		
+		FileMonitor fileMonitor = FileMonitor.getInstance();
+		File fileConfig = systemManager.getFileConfig();
+		fileMonitor.addFileChangeListener(this, fileConfig, 1000);
+	}
+
+	@Override
+	public void fileChanged(File file) {
+		try {
+			String value = systemManager.getPropertyValueOnConfigFile(OperationSystem.SELECTED_JDK);
+			systemManager.change(value);
+			menuItemGroup.selectItem(value);
+			icon.displayMessage("JSwitch", value +" foi selecionado!", 
+					TrayIcon.MessageType.INFO);
+		} catch (Exception e) {
+			icon.displayMessage("Attention", " ocorreu um erro durante a configuração", 
+					TrayIcon.MessageType.ERROR);
+		}
+		
 	}
 }

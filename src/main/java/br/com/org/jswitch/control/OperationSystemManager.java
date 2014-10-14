@@ -1,5 +1,7 @@
 package br.com.org.jswitch.control;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,9 +9,7 @@ import java.util.Map;
 import javax.swing.JTextPane;
 
 import br.com.org.jswitch.cfg.OperationSystem;
-import br.com.org.jswitch.cfg.SystemTrayConfig;
 import br.com.org.jswitch.cfg.win.WindowsSystem;
-import br.com.org.jswitch.cfg.win.WindowsSystemTrayConfig;
 import br.com.org.jswitch.model.JDK;
 
 /**
@@ -17,10 +17,9 @@ import br.com.org.jswitch.model.JDK;
  * @author Anderson
  *
  */
-public final class OperationSystemManager {
+public final class OperationSystemManager{
 
 	
-	Map<Platform, SystemTrayConfig> mapOfSysTray = new HashMap<Platform, SystemTrayConfig>();
 	
 	Map<Platform, OperationSystem> mapOfOperation = new HashMap<Platform, OperationSystem>();
 	
@@ -28,35 +27,28 @@ public final class OperationSystemManager {
 	
 	
 	public OperationSystemManager() {
-		mapOfSysTray.put(Platform.Windows, new WindowsSystemTrayConfig());
 		mapOfOperation.put(Platform.Windows, new WindowsSystem());
 	}
 	
 	public List<JDK> loadJDKInstalled(){
-		return mapOfOperation.get(getPlatform()).loadDefaultJDK();
+		return getPlatformSystem().loadDefaultJDK();
 	}
 	
 	public boolean isAlreadyInstalled(){
-		return !getSystemTrayConfig().getJDKInstalled().isEmpty();
+		return !getJDKInstalled().isEmpty();
 	}
 	
 	public void install(List<JDK> jdks, JTextPane jTextPane) throws Exception{
 		try {
-			mapOfOperation.get(getPlatform()).install(jdks, jTextPane);
+			getPlatformSystem().install(jdks, jTextPane);
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 	
 	public JDK chooseDirectory(){
-		return mapOfOperation.get(getPlatform()).chooseDirectoryOfJDKInstalation();
+		return getPlatformSystem().chooseDirectoryOfJDKInstalation();
 	}
-	
-	public SystemTrayConfig getSystemTrayConfig() {
-		return mapOfSysTray.get(getPlatform());
-		
-	}
-	
 	
 	
 	public enum Platform {
@@ -84,6 +76,35 @@ public final class OperationSystemManager {
 		
 		return m_os;
 	}
+
+	public List<String> getJDKInstalled() {
+		return getPlatformSystem().getJDKInstalled();
+	}
+
+	public void change(String jdk) throws IOException {
+		getPlatformSystem().change(jdk);
+		
+	}
+	
+	public File getFileConfig() throws Exception{
+		return getPlatformSystem().getFileConfig();
+	}
+
+
+
+	public String getPropertyValueOnConfigFile(String selectedJdk) throws Exception {
+		return getPlatformSystem().getPropertyValueOnConfigFile(selectedJdk);
+	}
+
+	public void changeJDKOnFileConfig(String jdkname) throws Exception {
+		getPlatformSystem().setPropertyValueOnConfiFile(OperationSystem.SELECTED_JDK,jdkname);
+		
+	}
+	
+	private OperationSystem getPlatformSystem() {
+		return mapOfOperation.get(getPlatform());
+	}
+
 
 	
 }

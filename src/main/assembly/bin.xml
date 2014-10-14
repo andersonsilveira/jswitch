@@ -11,36 +11,17 @@
   <fileSets>
     <fileSet>
       <directory>target/appassembler/repo</directory>
-      <outputDirectory>repo</outputDirectory>
+      <outputDirectory>lib</outputDirectory>
       <excludes>
         <exclude>maven-metadata-appassembler.xml</exclude>
       </excludes>
     </fileSet> 
-    <!--<fileSet>
-      <directory>target/generated-resources/appassembler/booter-unix/etc</directory>
-      <outputDirectory>etc</outputDirectory>
-      <includes>
-        <include>my-server.xml</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>target/generated-resources/appassembler/booter-unix/bin</directory>
-      <outputDirectory>bin</outputDirectory>
-      <fileMode>0755</fileMode>
-      <lineEnding>unix</lineEnding>
-    </fileSet>-->
 	<fileSet>
-      <directory>target/generated-resources/appassembler/booter-windows/etc</directory>
-      <outputDirectory>etc</outputDirectory>
-      <includes>
-        <include>app1.xml</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>target/generated-resources/appassembler/booter-windows/bin</directory>
+      <directory>target</directory>
       <outputDirectory>bin</outputDirectory>
-      <fileMode>0755</fileMode>
-      <lineEnding>dos</lineEnding>
+      <includes>
+        <include>install-jswitch.exe</include>
+      </includes>
     </fileSet>
   </fileSets>
 </assembly>

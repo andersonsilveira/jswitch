@@ -5,7 +5,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,7 +28,7 @@ import br.com.org.jswitch.model.JDK;
 public class JSwitchUI {
 
 	private OperationSystemManager operationSystemManager;
-	private List<JDK> jdks = new ArrayList<JDK>();
+	private Set<JDK> jdks = new HashSet<JDK>();
 	private JFrame window;
 	private JPanel mainPanel;
 	private JTable table;
@@ -92,7 +93,7 @@ public class JSwitchUI {
 		window.setResizable(false);
 		ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,table);
 		waitAction.executeLoader(operationSystemManager);
-		jdks = waitAction.getLoadJDKInstalled();
+		jdks = new HashSet<JDK>(waitAction.getLoadJDKInstalled());
 	}
 	
 	private void prepareTabela(){
@@ -119,13 +120,13 @@ public class JSwitchUI {
 				if(jdk!=null){
 					TableModel modelOld = table.getModel();
 					if(modelOld.getRowCount()>0){
-						List<JDK> dataRows = ((JDKTableModel) modelOld).getDataRows();
+						Set<JDK> dataRows = new HashSet<JDK>(((JDKTableModel) modelOld).getDataRows());
 						dataRows.add(jdk);
-						JDKTableModel model = new JDKTableModel(dataRows);
+						JDKTableModel model = new JDKTableModel(new ArrayList<JDK>(dataRows));
 						table.setModel(model);
 					}else{
 						jdks.add(jdk);
-						JDKTableModel model = new JDKTableModel(jdks);
+						JDKTableModel model = new JDKTableModel(new ArrayList<JDK>(jdks));
 						table.setModel(model);
 					}
 				}
@@ -150,7 +151,7 @@ public class JSwitchUI {
 		botaoInstalar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-				    operationSystemManager.install(jdks,jTextPane);
+				    operationSystemManager.install(new ArrayList<JDK>( jdks ),jTextPane);
 				} catch (Exception e1) {
 				    JOptionPane.showMessageDialog(null, "Erro durante a instalação do aplicativo",
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);

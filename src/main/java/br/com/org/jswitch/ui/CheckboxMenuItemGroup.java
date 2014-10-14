@@ -4,24 +4,23 @@ import java.awt.CheckboxMenuItem;
 import java.awt.TrayIcon;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.com.org.jswitch.cfg.SystemTrayConfig;
+import br.com.org.jswitch.control.OperationSystemManager;
 
 public class CheckboxMenuItemGroup implements ItemListener {
 
-    public CheckboxMenuItemGroup(SystemTrayConfig systemTrayConfig,
+    public CheckboxMenuItemGroup(OperationSystemManager operationSystemManager,
 			TrayIcon icon) {
 		super();
-		this.systemTrayConfig = systemTrayConfig;
+		this.operationSystemManager = operationSystemManager;
 		this.icon = icon;
 	}
 
 	private Set<CheckboxMenuItem>   items = new HashSet<CheckboxMenuItem>();
     
-    SystemTrayConfig systemTrayConfig;
+    OperationSystemManager operationSystemManager;
     
     TrayIcon icon;
 
@@ -36,10 +35,8 @@ public class CheckboxMenuItemGroup implements ItemListener {
         if (e.getStateChange() == ItemEvent.SELECTED) {
             String itemAffected = (String) e.getItem();
             try {
-				systemTrayConfig.change(itemAffected);
-				icon.displayMessage("JSwitch", itemAffected +" foi selecionado!", 
-						TrayIcon.MessageType.INFO);
-			} catch (IOException e1) {
+				operationSystemManager.changeJDKOnFileConfig(itemAffected);
+			} catch (Exception e1) {
 				icon.displayMessage("Attention", itemAffected +" ocorreu um erro durante a configuração", 
 						TrayIcon.MessageType.ERROR);
 			}
@@ -51,11 +48,24 @@ public class CheckboxMenuItemGroup implements ItemListener {
             }
         }
     }
+    
+    
 
     public void selectItem(CheckboxMenuItem itemToSelect) {
         for (CheckboxMenuItem item : items) {
             item.setState(item == itemToSelect);
         }
+    }
+    
+    public void selectItem(String itemToSelect) {
+    	 for (CheckboxMenuItem item : items) {
+             if (item.getLabel().equals(itemToSelect)){
+            	 item.setState(true);
+             }
+    	 }
+    	 for (CheckboxMenuItem item : items) {
+             if (!item.getLabel().equals(itemToSelect)) item.setState(false);
+         }
     }
 
     public CheckboxMenuItem getSelectedItem() {
