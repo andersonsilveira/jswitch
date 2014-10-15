@@ -49,8 +49,9 @@ public class WindowsSystem extends OperationSystem {
 	    + "echo set PATH=%%JAVA_HOME%%\\bin;%%PATH%%>>{0}.bat\n"
 	    + "echo echo Display java version>>{0}.bat\n"
 	    + "echo java -version>>{0}.bat\n"
+	    + "echo set currentDir=%%CD%%>>{0}.bat\n"
 	    + "echo cd %%programFiles%%\\JSwitch\\ ^&^& type nul^>.selected>>{0}.bat\n"
-	    + "echo cd %%programFiles%%\\JSwitch\\ ^&^& echo selectedJDK^={0}^>^>.selected>>{0}.bat)\n"
+	    + "echo cd %%programFiles%%\\JSwitch\\ ^&^& echo selectedJDK^={0}^>^>.selected^&^& cd %%currentDir%%>>{0}.bat)\n"
 	    + "reg add HKEY_CLASSES_ROOT\\Directory\\Background\\shell\\{0}\\command  /d \"cmd /k "
 	    + SLASHDOT
 	    + QUOTE
@@ -150,20 +151,27 @@ public class WindowsSystem extends OperationSystem {
 
     @Override
     public void install(List<JDK> jdks, JTextPane jTextPane) throws Exception {
-	copySysTrayToProgramFiles();
-	createFileConfig(jdks, jTextPane);
-	File file = createCommandForRegistry(jdks, "command.bat", REGISTRY);
-	try {
-	    executeCommand(jTextPane);
-
-	} catch (IOException e) {
-	    throw e;
-	} catch (InterruptedException e) {
-	    throw e;
-	} finally {
-	    file.delete();
-	}
-	initSysTray(jTextPane);
+    if(jdks!=null && !jdks.isEmpty()){
+    	copySysTrayToProgramFiles();
+    	createFileConfig(jdks, jTextPane);
+    	File file = createCommandForRegistry(jdks, "command.bat", REGISTRY);
+    	try {
+    		executeCommand(jTextPane);
+    		
+    	} catch (IOException e) {
+    		throw e;
+    	} catch (InterruptedException e) {
+    		throw e;
+    	} finally {
+    		file.delete();
+    	}
+    	initSysTray(jTextPane);
+    }else{
+    	JOptionPane.showMessageDialog(null,
+				"Selecione pelo menos um diretório de instalação", "JSwitch",
+				JOptionPane.ERROR_MESSAGE);
+    	jTextPane.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
+    }
 
     }
 
@@ -193,7 +201,7 @@ public class WindowsSystem extends OperationSystem {
 	    String name = line.split("=")[0];
 	    String value = line.split("=")[1];
 	    if (name.equalsIgnoreCase(jdk)) {
-		result = value;
+		result = value.trim();
 	    }
 	}
 	br.close();
@@ -263,20 +271,22 @@ public class WindowsSystem extends OperationSystem {
 	}
     }
 
-    private void executeCommand(JTextPane jTextPane) throws IOException, InterruptedException {
-	ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/C", "command.bat");
-	Process process = processBuilder.start();
-	String result = outputProcess(process);
-	jTextPane.setText(result);
-	process.getErrorStream().close();
-	process.getOutputStream().close();
-	int exitValue = process.waitFor();
-	System.out.println(exitValue);
-	if (exitValue != 0) {
-	    JOptionPane.showMessageDialog(null, "Erro na instalação, verifique as permissões de UAC!", "JSwitch",
-		    JOptionPane.ERROR_MESSAGE);
+	private void executeCommand(JTextPane jTextPane) throws Exception {
+		ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/C", "command.bat");
+		Process process = processBuilder.start();
+		String result = outputProcess(process);
+		jTextPane.setText(result);
+		process.getErrorStream().close();
+		process.getOutputStream().close();
+		int exitValue = process.waitFor();
+		System.out.println(exitValue);
+		if (exitValue != 0) {
+			JOptionPane.showMessageDialog(null,
+					"Erro na instalação, verifique as permissões de UAC!", "JSwitch",
+					JOptionPane.ERROR_MESSAGE);
+			throw new Exception("Erro na instalação, verifique as permissões de AUC!");
+		}
 	}
-    }
 
     private void copySysTrayToProgramFiles() throws Exception {
 	String installPathname = getInstallationDir();

@@ -36,6 +36,7 @@ public class JSwitchUI {
 	private JScrollPane tableScroll;
 	private JTextWrapPane jTextPane;
 	private JScrollPane resultScroll;
+	private JButton botaoInstalar;
 
 	public JSwitchUI() {
 		super();
@@ -120,15 +121,14 @@ public class JSwitchUI {
 				if(jdk!=null){
 					TableModel modelOld = table.getModel();
 					if(modelOld.getRowCount()>0){
-						Set<JDK> dataRows = new HashSet<JDK>(((JDKTableModel) modelOld).getDataRows());
-						dataRows.add(jdk);
-						JDKTableModel model = new JDKTableModel(new ArrayList<JDK>(dataRows));
-						table.setModel(model);
-					}else{
+						jdks = new HashSet<JDK>(((JDKTableModel) modelOld).getDataRows());
 						jdks.add(jdk);
-						JDKTableModel model = new JDKTableModel(new ArrayList<JDK>(jdks));
-						table.setModel(model);
 					}
+					jdks.add(jdk);
+					JDKTableModel model = new JDKTableModel(new ArrayList<JDK>(jdks));
+					table.setModel(model);
+					jTabbedPane.setSelectedComponent(tableScroll);
+					botaoInstalar.setEnabled(true);
 				}
 				
 			}
@@ -147,7 +147,7 @@ public class JSwitchUI {
 	}
 	
 	private void prepareInstallButton() {
-		JButton botaoInstalar = new JButton("Instalar");
+		botaoInstalar = new JButton("Instalar");
 		botaoInstalar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -157,6 +157,7 @@ public class JSwitchUI {
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				}
 				jTabbedPane.setSelectedComponent(resultScroll);
+				((JButton)e.getSource()).setEnabled(false);
 			}
 		});
 		mainPanel.add(botaoInstalar);
