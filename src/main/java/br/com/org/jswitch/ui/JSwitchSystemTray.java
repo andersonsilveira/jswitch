@@ -16,7 +16,11 @@ import br.com.org.jswitch.cfg.FileChangeListener;
 import br.com.org.jswitch.cfg.FileMonitor;
 import br.com.org.jswitch.cfg.OperationSystem;
 import br.com.org.jswitch.control.OperationSystemManager;
-
+/**
+ * 
+ * @author Anderson
+ *
+ */
 public class JSwitchSystemTray implements FileChangeListener{
 
 	

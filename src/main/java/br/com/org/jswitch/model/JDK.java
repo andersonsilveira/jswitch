@@ -1,5 +1,9 @@
 package br.com.org.jswitch.model;
-
+/**
+ * 
+ * @author Anderson
+ *
+ */
 public class JDK {
 
 	private String path;

@@ -8,7 +8,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import br.com.org.jswitch.control.OperationSystemManager;
-
+/**
+ * 
+ * @author Anderson
+ *
+ */
 public class CheckboxMenuItemGroup implements ItemListener {
 
     public CheckboxMenuItemGroup(OperationSystemManager operationSystemManager,

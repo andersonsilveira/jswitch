@@ -6,7 +6,11 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import br.com.org.jswitch.model.JDK;
-
+/**
+ * 
+ * @author Anderson
+ *
+ */
 public class JDKTableModel extends AbstractTableModel {
 
 	/**

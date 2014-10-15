@@ -18,7 +18,11 @@ import javax.swing.SwingWorker;
 
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.model.JDK;
-
+/**
+ * 
+ * @author Anderson
+ *
+ */
 class ShowWaitAction {
 	protected static final long SLEEP_TIME = 1 * 1000;
 

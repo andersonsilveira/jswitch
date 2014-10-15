@@ -3,7 +3,11 @@ package br.com.org.jswitch.ui;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.StyledDocument;
-
+/**
+ * 
+ * @author Anderson
+ *
+ */
 class JTextWrapPane extends JTextPane {
 
     /**

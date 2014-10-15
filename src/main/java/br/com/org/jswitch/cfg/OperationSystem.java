@@ -12,7 +12,11 @@ import javax.swing.JTextPane;
 import org.apache.commons.io.filefilter.NameFileFilter;
 
 import br.com.org.jswitch.model.JDK;
-
+/**
+ * 
+ * @author Anderson
+ *
+ */
 public abstract class OperationSystem {
 	
 	 private static final String SELECTED = ".selected";

@@ -25,12 +25,12 @@ The installer can be found on "installer" folder of project on github, therefore
 
 After installation, open folder on explorer and access context menu with options of JDKs installed, choice one. Automatically prompt will be started to you to fire up your program at the correct java version.
 
-#Prompt Console
+###Prompt Console
 
 ![Context Menu Explore] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/5cb524e6-6bf0-4c63-8f6e-79d5379ef2f3/2014-10-05_1457.png)
 ![Prompt console] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/c5c1fcf2-fcef-4ea3-b239-8514b53ad566/2014-10-05_1506.png)
 
-#System Tray
+###System Tray
 Another way to switch is a System Tray on O.S enable in boot of system. You can see icon tray available:
 
 
