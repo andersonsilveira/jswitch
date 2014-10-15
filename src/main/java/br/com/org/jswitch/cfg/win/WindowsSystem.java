@@ -49,8 +49,8 @@ public class WindowsSystem extends OperationSystem {
 	    + "echo set PATH=%%JAVA_HOME%%\\bin;%%PATH%%>>{0}.bat\n"
 	    + "echo echo Display java version>>{0}.bat\n"
 	    + "echo java -version>>{0}.bat\n"
-	    + "echo type nul^>.selected>>{0}.bat\n"
-	    + "echo echo selectedJDK^={0}^>^>.selected>>{0}.bat)\n"
+	    + "echo cd %%programFiles%%\\JSwitch\\ ^&^& type nul^>.selected>>{0}.bat\n"
+	    + "echo cd %%programFiles%%\\JSwitch\\ ^&^& echo selectedJDK^={0}^>^>.selected>>{0}.bat)\n"
 	    + "reg add HKEY_CLASSES_ROOT\\Directory\\Background\\shell\\{0}\\command  /d \"cmd /k "
 	    + SLASHDOT
 	    + QUOTE
