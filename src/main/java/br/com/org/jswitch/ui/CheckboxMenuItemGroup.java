@@ -35,7 +35,7 @@ public class CheckboxMenuItemGroup implements ItemListener {
         if (e.getStateChange() == ItemEvent.SELECTED) {
             String itemAffected = (String) e.getItem();
             try {
-				operationSystemManager.changeJDKOnFileConfig(itemAffected);
+				operationSystemManager.changeJDKOnSelectedFile(itemAffected);
 			} catch (Exception e1) {
 				icon.displayMessage("Attention", itemAffected +" ocorreu um erro durante a configuração", 
 						TrayIcon.MessageType.ERROR);

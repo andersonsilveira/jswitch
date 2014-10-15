@@ -39,7 +39,9 @@ public class WindowsSystem extends OperationSystem {
 			+ "if exist config.cfg (\n" + "type nul> text.txt)\n" + "echo {0}>>config.cfg\n";
 
 	private static final String REGISTRY = "cd /d %ProgramFiles%\n" + "if not exist JSwitch (\n"
-			+ "mkdir JSwitch)\n" + "cd JSwitch\n" + "if not exist {0}.bat (\n" + "echo "
+			+ "mkdir JSwitch)\n" + "cd JSwitch\n" 
+			+ "if not exist {0}.bat (\n" 
+			+ "echo "
 			+ RESTORE_JAVA_HOME
 			+ ">>{0}.bat\n"
 			+ "echo echo off>>{0}.bat\n"
@@ -48,7 +50,9 @@ public class WindowsSystem extends OperationSystem {
 			+ "echo echo setting PATH>>{0}.bat\n"
 			+ "echo set PATH=%%JAVA_HOME%%\\bin;%%PATH%%>>{0}.bat\n"
 			+ "echo echo Display java version>>{0}.bat\n"
-			+ "echo java -version>>{0}.bat)\n"
+			+ "echo java -version>>{0}.bat\n"
+			+ "echo type nul^>.selected>>{0}.bat\n"
+			+ "echo echo selectedJDK^={0}^>^>.selected>>{0}.bat)\n"
 			+ "reg add HKEY_CLASSES_ROOT\\Directory\\Background\\shell\\{0}\\command  /d \"cmd /k "
 			+ SLASHDOT
 			+ QUOTE
@@ -180,7 +184,7 @@ public class WindowsSystem extends OperationSystem {
 
 	private String getPathnameOfJDK(String jdk) {
 		try {
-			return getPropertyValueOnConfigFile(jdk);
+			return getPropertyValueOnConfigFile(jdk, getFileConfig());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -188,20 +192,21 @@ public class WindowsSystem extends OperationSystem {
 	}
 
 	@Override
-	public String getPropertyValueOnConfigFile(String jdk) throws Exception {
-		FileReader fileReaderConfig = getFileReaderConfig();
-		BufferedReader br = new BufferedReader(fileReaderConfig);
+	public String getPropertyValueOnConfigFile(String jdk, File file) throws Exception {
+		FileReader fileReader = new FileReader(file);
+		BufferedReader br = new BufferedReader(fileReader);
 		String line;
-
+		String result = null;
 		while ((line = br.readLine()) != null) {
 			String name = line.split("=")[0];
 			String value = line.split("=")[1];
 			if (name.equalsIgnoreCase(jdk)) {
-				return value;
+			    result = value;
 			}
 		}
-		fileReaderConfig.close();
-		return null;
+		br.close();
+		fileReader.close();
+		return result;
 	}
 
 	@Override
@@ -214,7 +219,7 @@ public class WindowsSystem extends OperationSystem {
 			String line;
 
 			while ((line = br.readLine()) != null) {
-				if(!line.contains(SELECTED_JDK)){
+				if(!line.contains(PROPERTY_SELECTED_JDK)){
 					ret.add(line.split("=")[0]); 
 				}
 			}
@@ -233,18 +238,23 @@ public class WindowsSystem extends OperationSystem {
 
 	private void createFileConfig(List<JDK> jdks, JTextPane jTextPane) throws Exception {
 		File file = getFileConfig();
-		if (file.exists()) {
-			file.delete();
-		} else {
-			file.createNewFile();
-		}
+		verify(file);
+		File fileSelectedConfig = getFileSelectedConfig();
+		FileUtils.write(fileSelectedConfig, PROPERTY_SELECTED_JDK+"=\r\n");
 		FileWriter fileWriter = new FileWriter(file);
-		fileWriter.write(SELECTED_JDK+"=\r\n");
 		for (JDK jdk : jdks) {
 			fileWriter.write(jdk.getName() + "=" + jdk.getPath() + "\r\n");
 		}
 		fileWriter.flush();
 		fileWriter.close();
+	}
+
+	private void verify(File file) throws IOException {
+	    if (file.exists()) {
+	    	file.delete();
+	    } else {
+	    	file.createNewFile();
+	    }
 	}
 
 	private void initSysTray(JTextPane jTextPane) throws Exception {
@@ -363,12 +373,11 @@ public class WindowsSystem extends OperationSystem {
 	}
 
 	@Override
-	public void setPropertyValueOnConfiFile(String string, String jdkname) {
+	public void setPropertyValueOnFile(String string, String jdkname, File file) {
 		try {
-			File fileConfig = getFileConfig();
-			List<String> lines =  FileUtils.readLines(fileConfig) ;
+			List<String> lines =  FileUtils.readLines(file) ;
 			lines.set(0,string+"="+jdkname);
-			FileUtils.writeLines(fileConfig, lines);
+			FileUtils.writeLines(file, lines);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

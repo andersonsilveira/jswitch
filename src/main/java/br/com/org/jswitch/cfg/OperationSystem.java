@@ -15,8 +15,9 @@ import br.com.org.jswitch.model.JDK;
 
 public abstract class OperationSystem {
 	
-	 public static final String CONFIG_CFG = "config.cfg";
-	public static final String SELECTED_JDK = "selectedJDK";
+	 private static final String SELECTED = ".selected";
+	public static final String CONFIG_CFG = "config.cfg";
+	public static final String PROPERTY_SELECTED_JDK = "selectedJDK";
 
 	public abstract List<JDK> loadDefaultJDK();
 	
@@ -55,17 +56,23 @@ public abstract class OperationSystem {
 
 	public abstract void change(String jdk) throws IOException;
 
-	public abstract String getPropertyValueOnConfigFile(String jdk)
+	public abstract String getPropertyValueOnConfigFile(String jdk, File file)
 			throws Exception;
 	public File getFileConfig() throws Exception {
 		String pathname = getInstallationDir();
 		File fileConfig = new File(pathname+File.separator+CONFIG_CFG);
 		return fileConfig;
 	}
+	
+	public File getFileSelectedConfig() throws Exception {
+		String pathname = getInstallationDir();
+		File fileSelected = new File(pathname+File.separator+SELECTED);
+		return fileSelected;
+	}
 
 	public abstract String getInstallationDir() throws Exception;
 
-	public abstract void setPropertyValueOnConfiFile(String string, String property);
+	public abstract void setPropertyValueOnFile(String string, String property, File file);
 
 	
 }

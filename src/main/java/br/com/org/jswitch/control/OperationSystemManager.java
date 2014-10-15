@@ -93,11 +93,20 @@ public final class OperationSystemManager{
 
 
 	public String getPropertyValueOnConfigFile(String selectedJdk) throws Exception {
-		return getPlatformSystem().getPropertyValueOnConfigFile(selectedJdk);
+		return getPlatformSystem().getPropertyValueOnConfigFile(selectedJdk, getFileConfig());
+	}
+	
+	public String getPropertyValueOnSelectedFile(String selectedJdk,File file) throws Exception {
+		return getPlatformSystem().getPropertyValueOnConfigFile(selectedJdk, file);
 	}
 
-	public void changeJDKOnFileConfig(String jdkname) throws Exception {
-		getPlatformSystem().setPropertyValueOnConfiFile(OperationSystem.SELECTED_JDK,jdkname);
+	public File getFileSelected() throws Exception {
+	    return getPlatformSystem().getFileSelectedConfig();
+	}
+
+	public void changeJDKOnSelectedFile(String jdkname) throws Exception {
+		File fileConfig = getFileSelected();
+		getPlatformSystem().setPropertyValueOnFile(OperationSystem.PROPERTY_SELECTED_JDK,jdkname, fileConfig);
 		
 	}
 	

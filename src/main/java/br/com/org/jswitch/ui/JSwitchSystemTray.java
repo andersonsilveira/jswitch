@@ -60,14 +60,14 @@ public class JSwitchSystemTray implements FileChangeListener{
 				TrayIcon.MessageType.INFO);
 		
 		FileMonitor fileMonitor = FileMonitor.getInstance();
-		File fileConfig = systemManager.getFileConfig();
-		fileMonitor.addFileChangeListener(this, fileConfig, 1000);
+		File fileConfSelected = systemManager.getFileSelected();
+		fileMonitor.addFileChangeListener(this, fileConfSelected, 1000);
 	}
 
 	@Override
 	public void fileChanged(File file) {
 		try {
-			String value = systemManager.getPropertyValueOnConfigFile(OperationSystem.SELECTED_JDK);
+			String value = systemManager.getPropertyValueOnSelectedFile(OperationSystem.PROPERTY_SELECTED_JDK,file);
 			systemManager.change(value);
 			menuItemGroup.selectItem(value);
 			icon.displayMessage("JSwitch", value +" foi selecionado!", 

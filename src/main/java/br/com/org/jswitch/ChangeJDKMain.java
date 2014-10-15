@@ -6,7 +6,7 @@ public class ChangeJDKMain {
 
 	public static void main(String[] args) throws Exception {
 		OperationSystemManager operationSystemManager = new OperationSystemManager();
-		operationSystemManager.changeJDKOnFileConfig(args[0]);
+		operationSystemManager.changeJDKOnSelectedFile(args[0]);
 	}
 
 }
