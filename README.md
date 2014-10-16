@@ -33,7 +33,9 @@ After installation, open folder on explorer and access context menu with options
 ###System Tray
 Another way to switch is a System Tray on O.S, which that will be enabled at system startup. You can see icon tray available:
 
-
 ![System Icon Tray] 
+(http://content.screencast.com/users/anderson.satriani/folders/Jing/media/ec28ba6b-f5d4-42ab-ab5f-9d226b0d83c4/2014-10-15_2159.png)
+
+![Menu System Icon Tray] 
 (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/e7ffa900-9d67-4db6-9aa2-f88728f09a7f/2014-10-13_1252.png)
 
