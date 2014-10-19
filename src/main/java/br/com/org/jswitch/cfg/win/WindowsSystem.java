@@ -17,12 +17,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
 import org.apache.commons.io.FileUtils;
 
 import br.com.org.jswitch.cfg.OperationSystem;
+import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
+import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
+import br.com.org.jswitch.cfg.exception.InstallationFailException;
+import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
+import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
 import br.com.org.jswitch.model.JDK;
 
 public class WindowsSystem extends OperationSystem {
@@ -52,37 +56,13 @@ public class WindowsSystem extends OperationSystem {
 	    + "echo set currentDir=%%CD%%>>{0}.bat\n"
 	    + "echo cd %%programFiles%%\\JSwitch\\ ^&^& type nul^>.selected>>{0}.bat\n"
 	    + "echo cd %%programFiles%%\\JSwitch\\ ^&^& echo selectedJDK^={0}^>^>.selected^&^& cd %%currentDir%%>>{0}.bat)\n"
-	    + "reg add HKEY_CLASSES_ROOT\\Directory\\Background\\shell\\{0}\\command  /d \"cmd /k "
-	    + SLASHDOT
-	    + QUOTE
-	    + "%ProgramFiles%\\JSwitch\\{0}"
-	    + SLASHDOT
-	    + QUOTE
-	    + QUOTE
-	    + " /f\n"
-	    + "reg add HKEY_CLASSES_ROOT\\Folder\\shell\\{0}\\command /d \"cmd /k "
-	    + SLASHDOT
-	    + QUOTE
-	    + SLASHDOT
-	    + QUOTE
-	    + "%ProgramFiles%\\JSwitch\\{0}"
-	    + SLASHDOT
-	    + QUOTE
-	    + " "
-	    + SLASHDOT
-	    + QUOTE
-	    + "%%1"
-	    + SLASHDOT
-	    + QUOTE
-	    + SLASHDOT
-	    + QUOTE
-	    + QUOTE
-	    + " /f\n"
+	    + "reg add HKEY_CLASSES_ROOT\\Directory\\Background\\shell\\{0}\\command  /d \"cmd /k "+ SLASHDOT + QUOTE + "%ProgramFiles%\\JSwitch\\{0}" + SLASHDOT + QUOTE + QUOTE + " /f\n"
+	    + "reg add HKEY_CLASSES_ROOT\\Folder\\shell\\{0}\\command /d \"cmd /k "+ SLASHDOT + QUOTE + SLASHDOT+ QUOTE + "%ProgramFiles%\\JSwitch\\{0}"+ SLASHDOT + QUOTE + " "+ SLASHDOT+ QUOTE + "%%1" + SLASHDOT + QUOTE + SLASHDOT + QUOTE + QUOTE + " /f\n"
 	    + "reg add HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /v \"JSwitchSysTray\" /d "
 	    + QUOTE + SLASHDOT + QUOTE + "%ProgramFiles%\\JSwitch\\sysTray.exe" + SLASHDOT + QUOTE + QUOTE + " /f\n";
 
     @Override
-    public List<JDK> loadDefaultJDK() {
+    public List<JDK> loadDefaultJDK() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException {
 	List<JDK> jdks = null;
 	try {
 	    File file = new File("load.bat");
@@ -107,14 +87,18 @@ public class WindowsSystem extends OperationSystem {
 		jdks.add(new JDK(name, path.substring(0, path.length() - 1).toString()));
 	    }
 	    file.delete();
-	} catch (IOException e) {
-	    e.printStackTrace();
+	} catch (Exception e) {
+	   throw new LoadDefaultJDKException();
+	}
+	
+	if(jdks.isEmpty()){
+	    throw new DefautJDKInstalledNotFoundException();
 	}
 
 	return jdks;
     }
 
-    private List<String> getDiretoryOfJavaInstalations(ProcessBuilder pb) {
+    private List<String> getDiretoryOfJavaInstalations(ProcessBuilder pb) throws IOException {
 	List<String> directories = new ArrayList<String>();
 	InputStream is = null;
 	ByteArrayOutputStream baos = null;
@@ -135,8 +119,7 @@ public class WindowsSystem extends OperationSystem {
 		}
 	    }
 	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    throw e;
 	} finally {
 	    try {
 		if (is != null)
@@ -150,27 +133,32 @@ public class WindowsSystem extends OperationSystem {
     }
 
     @Override
-    public void install(List<JDK> jdks, JTextPane jTextPane) throws Exception {
+    public void install(List<JDK> jdks, JTextPane jTextPane) throws InstallationFailException, InstallationDirectoryFaultException, PermissionOperatingSystemExpection  {
     if(jdks!=null && !jdks.isEmpty()){
-    	copySysTrayToProgramFiles();
-    	createFileConfig(jdks, jTextPane);
+    	try {
+	    copySysTrayToProgramFiles();
+	    createFileConfig(jdks, jTextPane);
+	} catch (Exception e1) {
+	    throw new InstallationFailException();
+	}
     	File file = createCommandForRegistry(jdks, "command.bat", REGISTRY);
     	try {
     		executeCommand(jTextPane);
     		
     	} catch (IOException e) {
-    		throw e;
+    	    	throw new InstallationFailException();
     	} catch (InterruptedException e) {
-    		throw e;
-    	} finally {
+    	    throw new InstallationFailException();
+    	} catch (PermissionOperatingSystemExpection e) {
+	    throw e;
+	} finally {
     		file.delete();
     	}
     	initSysTray(jTextPane);
     }else{
-    	JOptionPane.showMessageDialog(null,
-				"Selecione pelo menos um diretório de instalação", "JSwitch",
-				JOptionPane.ERROR_MESSAGE);
-    	jTextPane.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
+	jTextPane.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
+	throw new InstallationDirectoryFaultException();
+
     }
 
     }
@@ -257,7 +245,7 @@ public class WindowsSystem extends OperationSystem {
 	}
     }
 
-    private void initSysTray(JTextPane jTextPane) throws Exception {
+    private void initSysTray(JTextPane jTextPane) throws InstallationFailException  {
 	try {
 	    String installationDir = getInstallationDir();
 	    ProcessBuilder processBuilder = new ProcessBuilder("\"" + installationDir + "\\sysTray.exe\"");
@@ -265,13 +253,11 @@ public class WindowsSystem extends OperationSystem {
 	    String text = jTextPane.getText();
 	    jTextPane.setText(text + "Starting systray!");
 	} catch (Exception e) {
-	    JOptionPane.showMessageDialog(null, "Erro durante a inicialização do aplicativo!", "JSwitch",
-		    JOptionPane.ERROR_MESSAGE);
-	    throw e;
+	    throw new InstallationFailException();
 	}
     }
 
-	private void executeCommand(JTextPane jTextPane) throws Exception {
+	private void executeCommand(JTextPane jTextPane) throws PermissionOperatingSystemExpection, IOException, InterruptedException  {
 		ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/C", "command.bat");
 		Process process = processBuilder.start();
 		String result = outputProcess(process);
@@ -281,10 +267,7 @@ public class WindowsSystem extends OperationSystem {
 		int exitValue = process.waitFor();
 		System.out.println(exitValue);
 		if (exitValue != 0) {
-			JOptionPane.showMessageDialog(null,
-					"Erro na instalação, verifique as permissões de UAC!", "JSwitch",
-					JOptionPane.ERROR_MESSAGE);
-			throw new Exception("Erro na instalação, verifique as permissões de AUC!");
+		    throw new PermissionOperatingSystemExpection();
 		}
 	}
 
@@ -337,7 +320,7 @@ public class WindowsSystem extends OperationSystem {
 	}
     }
 
-    private String outputProcess(Process prs) {
+    private String outputProcess(Process prs) throws IOException {
 	InputStream is = null;
 	ByteArrayOutputStream baos = null;
 	String result = null;
@@ -353,8 +336,7 @@ public class WindowsSystem extends OperationSystem {
 	    System.out.println(result);
 
 	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	   throw e;
 	} finally {
 	    try {
 		if (is != null)

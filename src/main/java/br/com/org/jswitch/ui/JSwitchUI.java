@@ -18,6 +18,9 @@ import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
 
+import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
+import br.com.org.jswitch.cfg.exception.InstallationFailException;
+import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.model.JDK;
 /**
@@ -152,8 +155,16 @@ public class JSwitchUI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 				    operationSystemManager.install(new ArrayList<JDK>( jdks ),jTextPane);
-				} catch (Exception e1) {
+				} catch (InstallationFailException e1) {
 				    JOptionPane.showMessageDialog(null, "Erro durante a instalação do aplicativo",
+					    "JSwitch", JOptionPane.ERROR_MESSAGE);
+				} catch (InstallationDirectoryFaultException e1) {
+				    JOptionPane.showMessageDialog(null,
+					"Selecione pelo menos um diretório de instalação", "JSwitch",
+					JOptionPane.ERROR_MESSAGE);
+				   
+				} catch (PermissionOperatingSystemExpection e1) {
+				    JOptionPane.showMessageDialog(null, "Verifique se você tem permissão necessária para instalação do aplicativo",
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				}
 				jTabbedPane.setSelectedComponent(resultScroll);

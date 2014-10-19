@@ -10,12 +10,15 @@ import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
+import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.model.JDK;
 /**
@@ -50,7 +53,15 @@ class ShowWaitAction {
 			@Override
 			protected Void doInBackground() throws Exception {
 
-				loadJDKInstalled = manager.loadJDKInstalled();
+				try {
+				    loadJDKInstalled = manager.loadJDKInstalled();
+				} catch (LoadDefaultJDKException e) {
+				    JOptionPane.showMessageDialog(null, "Falha durante a busca de diretórios padrão de instalação da JDK, tente carregar manualmente apartir do botão 'Carregar..'",
+					    "JSwitch", JOptionPane.ERROR_MESSAGE);
+				}catch (DefautJDKInstalledNotFoundException e){
+				    JOptionPane.showMessageDialog(null, "Não foi encontrado nenhum dirétorio padrão de instalação, tente carregar manualmente apartir do botão 'Carregar..'",
+					    "JSwitch", JOptionPane.WARNING_MESSAGE);
+				}
 				JDKTableModel tableModel = new JDKTableModel(loadJDKInstalled);
 				table.setModel(tableModel);
 				Thread.sleep(SLEEP_TIME);

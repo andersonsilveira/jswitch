@@ -11,6 +11,11 @@ import javax.swing.JTextPane;
 
 import org.apache.commons.io.filefilter.NameFileFilter;
 
+import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
+import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
+import br.com.org.jswitch.cfg.exception.InstallationFailException;
+import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
+import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
 import br.com.org.jswitch.model.JDK;
 /**
  * 
@@ -23,9 +28,9 @@ public abstract class OperationSystem {
 	public static final String CONFIG_CFG = "config.cfg";
 	public static final String PROPERTY_SELECTED_JDK = "selectedJDK";
 
-	public abstract List<JDK> loadDefaultJDK();
+	public abstract List<JDK> loadDefaultJDK() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException;
 	
-	public abstract void install(List<JDK> jdks, JTextPane jTextPane) throws Exception;
+	public abstract void install(List<JDK> jdks, JTextPane jTextPane) throws InstallationFailException, InstallationDirectoryFaultException, PermissionOperatingSystemExpection ;
 	
 	public JDK chooseDirectoryOfJDKInstalation() {
 		JFileChooser chooser = new JFileChooser(getInitialDirectoryChooser());

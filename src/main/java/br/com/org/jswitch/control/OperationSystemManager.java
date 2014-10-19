@@ -9,6 +9,11 @@ import java.util.Map;
 import javax.swing.JTextPane;
 
 import br.com.org.jswitch.cfg.OperationSystem;
+import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
+import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
+import br.com.org.jswitch.cfg.exception.InstallationFailException;
+import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
+import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
 import br.com.org.jswitch.cfg.win.WindowsSystem;
 import br.com.org.jswitch.model.JDK;
 
@@ -30,7 +35,7 @@ public final class OperationSystemManager{
 		mapOfOperation.put(Platform.Windows, new WindowsSystem());
 	}
 	
-	public List<JDK> loadJDKInstalled(){
+	public List<JDK> loadJDKInstalled() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException{
 		return getPlatformSystem().loadDefaultJDK();
 	}
 	
@@ -38,12 +43,8 @@ public final class OperationSystemManager{
 		return !getJDKInstalled().isEmpty();
 	}
 	
-	public void install(List<JDK> jdks, JTextPane jTextPane) throws Exception{
-		try {
+	public void install(List<JDK> jdks, JTextPane jTextPane) throws InstallationFailException, InstallationDirectoryFaultException, PermissionOperatingSystemExpection {
 			getPlatformSystem().install(jdks, jTextPane);
-		} catch (Exception e) {
-			throw e;
-		}
 	}
 	
 	public JDK chooseDirectory(){
