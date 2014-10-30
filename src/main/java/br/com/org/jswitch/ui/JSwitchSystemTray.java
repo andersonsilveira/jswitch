@@ -82,7 +82,7 @@ public class JSwitchSystemTray implements FileChangeListener {
 	jpopup.add(closeItem);
 
 	tray.add(icon);
-	icon.displayMessage("Attention", "JSwitch foi iniciado com sucesso!!", TrayIcon.MessageType.INFO);
+	icon.displayMessage("JSwitch", "Foi iniciado com sucesso!!", TrayIcon.MessageType.INFO);
 
 	FileMonitor fileMonitor = FileMonitor.getInstance();
 	File fileConfSelected = systemManager.getFileSelected();
@@ -105,7 +105,7 @@ public class JSwitchSystemTray implements FileChangeListener {
 	    menuItemGroup.selectItem(value);
 	    icon.displayMessage("JSwitch", value + " foi selecionado!", TrayIcon.MessageType.INFO);
 	} catch (Exception e) {
-	    icon.displayMessage("Attention", " ocorreu um erro durante a configuração", TrayIcon.MessageType.ERROR);
+	    icon.displayMessage("Atenção", " ocorreu um erro durante a configuração", TrayIcon.MessageType.ERROR);
 	}
 
     }
