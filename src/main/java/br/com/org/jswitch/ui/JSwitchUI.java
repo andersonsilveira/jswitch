@@ -5,8 +5,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,6 +23,7 @@ import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.model.JDK;
 /**
+ * UI class to interface of program
  * 
  * @author Anderson
  *
@@ -31,7 +31,7 @@ import br.com.org.jswitch.model.JDK;
 public class JSwitchUI {
 
 	private OperationSystemManager operationSystemManager;
-	private Set<JDK> jdks = new HashSet<JDK>();
+	private List<JDK> jdks = new ArrayList<JDK>();
 	private JFrame window;
 	private JPanel mainPanel;
 	private JTable table;
@@ -97,7 +97,7 @@ public class JSwitchUI {
 		window.setResizable(false);
 		ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,table);
 		waitAction.executeLoader(operationSystemManager);
-		jdks = new HashSet<JDK>(waitAction.getLoadJDKInstalled());
+		jdks = waitAction.getLoadJDKInstalled();
 	}
 	
 	private void prepareTabela(){
@@ -124,11 +124,10 @@ public class JSwitchUI {
 				if(jdk!=null){
 					TableModel modelOld = table.getModel();
 					if(modelOld.getRowCount()>0){
-						jdks = new HashSet<JDK>(((JDKTableModel) modelOld).getDataRows());
-						jdks.add(jdk);
+						jdks = ((JDKTableModel) modelOld).getDataRows();
 					}
 					jdks.add(jdk);
-					JDKTableModel model = new JDKTableModel(new ArrayList<JDK>(jdks));
+					JDKTableModel model = new JDKTableModel(jdks);
 					table.setModel(model);
 					jTabbedPane.setSelectedComponent(tableScroll);
 					botaoInstalar.setEnabled(true);

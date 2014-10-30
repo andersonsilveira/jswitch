@@ -2,7 +2,7 @@ package br.com.org.jswitch.cfg;
 
 import java.io.File;
 /**
- * 
+ * Class to represent a FileChangeListener abstraction
  * @author Anderson
  *
  */

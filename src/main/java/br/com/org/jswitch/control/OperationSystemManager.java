@@ -8,7 +8,7 @@ import java.util.Map;
 
 import javax.swing.JTextPane;
 
-import br.com.org.jswitch.cfg.OperationSystem;
+import br.com.org.jswitch.cfg.OperatingSystem;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
@@ -26,7 +26,7 @@ public final class OperationSystemManager{
 
 	
 	
-	Map<Platform, OperationSystem> mapOfOperation = new HashMap<Platform, OperationSystem>();
+	Map<Platform, OperatingSystem> mapOfOperation = new HashMap<Platform, OperatingSystem>();
 	
 	
 	
@@ -107,12 +107,21 @@ public final class OperationSystemManager{
 
 	public void changeJDKOnSelectedFile(String jdkname) throws Exception {
 		File fileConfig = getFileSelected();
-		getPlatformSystem().setPropertyValueOnFile(OperationSystem.PROPERTY_SELECTED_JDK,jdkname, fileConfig);
+		getPlatformSystem().setPropertyValueOnFile(OperatingSystem.PROPERTY_SELECTED_JDK,jdkname, fileConfig);
 		
 	}
 	
-	private OperationSystem getPlatformSystem() {
+	private OperatingSystem getPlatformSystem() {
 		return mapOfOperation.get(getPlatform());
+	}
+
+	public void ajustNames(JDK newJDK,List<JDK> jdks) {
+	   for (JDK jdk : jdks) {
+	    if(jdk.getName().equalsIgnoreCase(newJDK.getName())){
+		newJDK.setName(jdk.getName()+"(2)");
+	    }
+	}
+	    
 	}
 
 

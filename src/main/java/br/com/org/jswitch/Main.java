@@ -11,6 +11,8 @@ import br.com.org.jswitch.ui.JSwitchUI;
 
 
 /**
+ * Main class to start application
+ * 
  * @author Anderson
  *
  */

@@ -18,11 +18,12 @@ import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
 import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
 import br.com.org.jswitch.model.JDK;
 /**
- * 
+ * Abstraction of operating system, to realize the specific O.S
+ * is mandatory extends this class
  * @author Anderson
  *
  */
-public abstract class OperationSystem {
+public abstract class OperatingSystem {
 	
 	 private static final String SELECTED = ".selected";
 	public static final String CONFIG_CFG = "config.cfg";
@@ -82,6 +83,8 @@ public abstract class OperationSystem {
 	public abstract String getInstallationDir() throws Exception;
 
 	public abstract void setPropertyValueOnFile(String string, String property, File file);
+
+	public abstract void registerBootstrp() throws InstallationFailException, PermissionOperatingSystemExpection;
 
 	
 }
