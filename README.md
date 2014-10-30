@@ -3,6 +3,10 @@ JSwitch
 
 JSwitch is program to help to fast switch of JDKs installed on machine. 
 
+## Pre-Conditions
+
+At least the JAVA_HOME variable configured on environment of operating system.
+
 ## 1) Compatibility
 
 * Windows 7
@@ -28,6 +32,7 @@ After installation, open folder on explorer and access context menu with options
 ###Prompt Console
 
 ![Context Menu Explore] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/5cb524e6-6bf0-4c63-8f6e-79d5379ef2f3/2014-10-05_1457.png)
+
 ![Prompt console] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/c5c1fcf2-fcef-4ea3-b239-8514b53ad566/2014-10-05_1506.png)
 
 ###System Tray
