@@ -50,7 +50,7 @@ public class JSwitchUI {
 
 	// main e montaTela
 
-	public void montaTela() {
+	public void show() {
 		prepareWindow();
 		prepareMainPanel();
 		prepareTabbed();

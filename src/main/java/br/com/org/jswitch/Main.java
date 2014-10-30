@@ -26,9 +26,9 @@ public class Main {
 		OperationSystemManager operationSystemManager = new OperationSystemManager();
 		try {
 			if(!operationSystemManager.isAlreadyInstalled()){
-				new JSwitchUI().montaTela();				
+				new JSwitchUI().show();				
 			}else{
-				new JSwitchSystemTray().execute();				
+				new JSwitchSystemTray().show();				
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,

@@ -34,7 +34,7 @@ public class JSwitchSystemTray implements FileChangeListener {
     private TrayIcon icon;
     private CheckboxMenuItemGroupListener menuItemListener;
 
-    public void execute() throws Exception {
+    public void show() throws Exception {
 
 	systemManager = new OperationSystemManager();
 	if (!SystemTray.isSupported()) {
