@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
@@ -31,7 +32,7 @@ public class JSwitchSystemTray implements FileChangeListener {
 
     private OperationSystemManager systemManager;
     private TrayIcon icon;
-    private CheckboxMenuItemGroup menuItemGroup;
+    private CheckboxMenuItemGroupListener menuItemListener;
 
     public void execute() throws Exception {
 
@@ -52,11 +53,13 @@ public class JSwitchSystemTray implements FileChangeListener {
 
 	icon.setImageAutoSize(true);
 	List<String> jdkInstalled = systemManager.getJDKInstalled();
-	menuItemGroup = new CheckboxMenuItemGroup(systemManager, icon);
+	ButtonGroup buttonGroup = new ButtonGroup();
+	menuItemListener = new CheckboxMenuItemGroupListener(systemManager, icon);
 	for (final String jdk : jdkInstalled) {
 	    JCheckBoxMenuItem checkboxMenuItem = new JCheckBoxMenuItem(jdk);
+	    buttonGroup.add(checkboxMenuItem);
 	    jpopup.add(checkboxMenuItem);
-	    menuItemGroup.add(checkboxMenuItem);
+	    menuItemListener.add(checkboxMenuItem);
 
 	}
 	jpopup.addSeparator();
@@ -102,7 +105,7 @@ public class JSwitchSystemTray implements FileChangeListener {
 	try {
 	    String value = systemManager.getPropertyValueOnSelectedFile(OperatingSystem.PROPERTY_SELECTED_JDK, file);
 	    systemManager.change(value);
-	    menuItemGroup.selectItem(value);
+	    menuItemListener.selectItem(value);
 	    icon.displayMessage("JSwitch", value + " foi selecionado!", TrayIcon.MessageType.INFO);
 	} catch (Exception e) {
 	    icon.displayMessage("Atenção", " ocorreu um erro durante a configuração", TrayIcon.MessageType.ERROR);

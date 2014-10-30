@@ -14,9 +14,9 @@ import br.com.org.jswitch.control.OperationSystemManager;
  * @author Anderson
  *
  */
-public class CheckboxMenuItemGroup implements ItemListener {
+public class CheckboxMenuItemGroupListener implements ItemListener {
 
-    public CheckboxMenuItemGroup(OperationSystemManager operationSystemManager,
+    public CheckboxMenuItemGroupListener(OperationSystemManager operationSystemManager,
 			TrayIcon icon) {
 		super();
 		this.operationSystemManager = operationSystemManager;
@@ -37,22 +37,15 @@ public class CheckboxMenuItemGroup implements ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent e) {
+	JCheckBoxMenuItem itemAffected = (JCheckBoxMenuItem) e.getItem();
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            JCheckBoxMenuItem itemAffected = (JCheckBoxMenuItem) e.getItem();
             try {
 				operationSystemManager.changeJDKOnSelectedFile(itemAffected.getText());
 			} catch (Exception e1) {
-				icon.displayMessage("Attention", itemAffected +" ocorreu um erro durante a configuração", 
+				icon.displayMessage("Atenção", itemAffected +" ocorreu um erro durante a configuração", 
 						TrayIcon.MessageType.ERROR);
 			}
-            for (JCheckBoxMenuItem item : items) {
-                // Use this line to allow user to toggle the selected item off
-                if (!item.getText().equals(itemAffected.getText())) {
-                    item.setSelected(false);
-                }
-                // Use this line to force one of the items to always be selected
-                // item.setState(item.getLabel().equals(itemAffected));
-            }
+   
         }
     }
     
