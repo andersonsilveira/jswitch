@@ -100,6 +100,7 @@ public class JSwitchSystemTray implements FileChangeListener {
 	FileMonitor fileMonitor = FileMonitor.getInstance();
 	File fileConfSelected = systemManager.getFileSelected();
 	fileMonitor.addFileChangeListener(this, fileConfSelected, 1000);
+	systemManager.setCurrentJDKOnSystem();
     }
 
     private ImageIcon createIconClose() {

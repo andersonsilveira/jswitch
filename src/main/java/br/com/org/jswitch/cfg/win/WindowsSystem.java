@@ -25,6 +25,7 @@ import br.com.org.jswitch.cfg.OperatingSystem;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
+import br.com.org.jswitch.cfg.exception.JavaHomeVariableSystemNotFoundException;
 import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
 import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
 import br.com.org.jswitch.model.JDK;
@@ -225,6 +226,8 @@ public class WindowsSystem extends OperatingSystem {
 	    String value = line.split("=")[1];
 	    if (name.equalsIgnoreCase(jdk)) {
 		result = value.trim();
+	    }else if(value.equalsIgnoreCase(jdk)){
+		result = name.trim();
 	    }
 	}
 	br.close();
@@ -387,6 +390,25 @@ public class WindowsSystem extends OperatingSystem {
 	    e.printStackTrace();
 	}
 
+    }
+
+    @Override
+    public JDK getCurrentJDK() throws JavaHomeVariableSystemNotFoundException {
+	ProcessBuilder pFindProgramFiles = new ProcessBuilder("cmd", "/C", "echo %JAVA_HOME%");
+	Process findProgramFiles;
+	try {
+	    findProgramFiles = pFindProgramFiles.start();
+	    String pathname = outputProcess(findProgramFiles);
+	    if(pathname==null || pathname.isEmpty()){
+		throw new JavaHomeVariableSystemNotFoundException();
+	    }
+	    String nameOffileConfig = getPropertyValueOnConfigFile(pathname.trim(), getFileConfig());
+	    return new JDK(nameOffileConfig, pathname.trim());
+	} catch (IOException e) {
+	   throw new IllegalStateException();
+	} catch (Exception e) {
+	    throw new IllegalStateException();
+	}
     }
 
 }

@@ -52,31 +52,6 @@ public final class OperationSystemManager{
 	}
 	
 	
-	public enum Platform {
-		Windows,
-		Mac,
-		Unix,
-		Solaris,
-		unsupported
-	}
-	
-	private static Platform m_os = null;
- 
-	
-	private static Platform getPlatform() {
-		if(m_os == null) {
-			String os = System.getProperty("os.name").toLowerCase();
-	
-			                             m_os = Platform.unsupported;
-			if(os.indexOf("win")   >= 0) m_os = Platform.Windows;		// Windows
-			if(os.indexOf("mac")   >= 0) m_os = Platform.Mac;			// Mac
-			if(os.indexOf("nux")   >= 0) m_os = Platform.Unix;			// Linux
-			if(os.indexOf("nix")   >= 0) m_os = Platform.Unix;			// Unix
-			if(os.indexOf("sunos") >= 0) m_os = Platform.Solaris;		// Solaris
-		}
-		
-		return m_os;
-	}
 
 	public List<String> getJDKInstalled() {
 		return getPlatformSystem().getJDKInstalled();
@@ -124,6 +99,36 @@ public final class OperationSystemManager{
 	    
 	}
 
+	public void setCurrentJDKOnSystem() throws Exception {
+	  JDK jdk =  getPlatformSystem().getCurrentJDK();
+	  changeJDKOnSelectedFile(jdk.getName());  
+	}
+
 
 	
+	public enum Platform {
+	    Windows,
+	    Mac,
+	    Unix,
+	    Solaris,
+	    unsupported
+	}
+	
+	private static Platform m_os = null;
+	
+	
+	private static Platform getPlatform() {
+	    if(m_os == null) {
+		String os = System.getProperty("os.name").toLowerCase();
+		
+		m_os = Platform.unsupported;
+		if(os.indexOf("win")   >= 0) m_os = Platform.Windows;		// Windows
+		if(os.indexOf("mac")   >= 0) m_os = Platform.Mac;			// Mac
+		if(os.indexOf("nux")   >= 0) m_os = Platform.Unix;			// Linux
+		if(os.indexOf("nix")   >= 0) m_os = Platform.Unix;			// Unix
+		if(os.indexOf("sunos") >= 0) m_os = Platform.Solaris;		// Solaris
+	    }
+	    
+	    return m_os;
+	}
 }

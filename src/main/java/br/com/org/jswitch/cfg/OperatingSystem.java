@@ -86,5 +86,7 @@ public abstract class OperatingSystem {
 
 	public abstract void registerBootstrp() throws InstallationFailException, PermissionOperatingSystemExpection;
 
+	public abstract JDK getCurrentJDK() throws Exception;
+
 	
 }

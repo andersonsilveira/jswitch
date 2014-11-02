@@ -34,6 +34,7 @@ public class Main {
 			JOptionPane.showMessageDialog(null,
 					"O JSwicht ocorreu um erro durante a inicialização do aplicativo",
 					"JSwitch", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
 		}
 
 		
