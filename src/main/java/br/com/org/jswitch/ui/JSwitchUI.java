@@ -2,6 +2,7 @@ package br.com.org.jswitch.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -89,15 +90,18 @@ public class JSwitchUI {
 	// outros metodos prepara...
 
 	private void showWindow() {
-		window.pack();
+		//window.pack();
 		window.setSize(540, 560);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		window.setLocation(dim.width/2-window.getSize().width/2, dim.height/2-window.getSize().height/2);
 		window.setVisible(true);
-		Dimension maximumSize = new Dimension(540, 560);
-		window.setMaximumSize(maximumSize);
+		/*Dimension maximumSize = new Dimension(540, 560);
+		window.setMaximumSize(maximumSize);*/
 		window.setResizable(false);
 		ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,table);
 		waitAction.executeLoader(operationSystemManager);
 		jdks = waitAction.getLoadJDKInstalled();
+		
 	}
 	
 	private void prepareTabela(){

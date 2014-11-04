@@ -16,6 +16,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.WindowConstants;
 
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
@@ -40,6 +41,8 @@ class ShowWaitAction {
 	}
 
 	private String name;
+
+	private JDialog dialog;
 
 	public ShowWaitAction(String name, Component componentParent, JTable table) {
 		this.componentParent = componentParent;
@@ -70,9 +73,12 @@ class ShowWaitAction {
 		};
 
 		Window win = SwingUtilities.getWindowAncestor(componentParent);
-		final JDialog dialog = new JDialog(win, name,
+		 
+		dialog = new JDialog(win, name,
 				ModalityType.APPLICATION_MODAL);
-
+		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); 
+		dialog.setUndecorated(true) ;
+		
 		mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override

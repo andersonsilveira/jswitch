@@ -4,6 +4,8 @@
 package br.com.org.jswitch;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import br.com.org.jswitch.cfg.exception.JavaHomeVariableSystemNotFoundException;
 import br.com.org.jswitch.control.OperationSystemManager;
@@ -21,10 +23,15 @@ public class Main {
 
 	/**
 	 * @param args
+	 * @throws UnsupportedLookAndFeelException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		
 		OperationSystemManager operationSystemManager = new OperationSystemManager();
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		try {
 			if(!operationSystemManager.isAlreadyInstalled()){
 				new JSwitchUI().show();				
