@@ -10,13 +10,13 @@ import javax.swing.JCheckBoxMenuItem;
 
 import br.com.org.jswitch.control.OperationSystemManager;
 /**
- * 
+ * To be used with JPopupmenu
  * @author Anderson
  *
  */
-public class CheckboxMenuItemGroupListener implements ItemListener {
+public class JCheckBoxMenuItemGroupListener implements ItemListener {
 
-    public CheckboxMenuItemGroupListener(OperationSystemManager operationSystemManager,
+    public JCheckBoxMenuItemGroupListener(OperationSystemManager operationSystemManager,
 			TrayIcon icon) {
 		super();
 		this.operationSystemManager = operationSystemManager;
