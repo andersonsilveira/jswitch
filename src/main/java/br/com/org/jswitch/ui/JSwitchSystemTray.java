@@ -17,6 +17,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -36,12 +37,22 @@ public class JSwitchSystemTray implements FileChangeListener {
     private OperationSystemManager systemManager;
     private TrayIcon icon;
     private CheckboxMenuItemGroupListener menuItemListener;
+    private static JPopupMenuExt jpopup;
 
     public void show() throws Exception {
-
-	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	buildSystemTray();
-
+	 SwingUtilities.invokeLater(new Runnable() {
+	        @Override
+	        public void run () {
+	            try {
+	                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	                buildSystemTray();
+	            } catch (Exception e) {
+	                System.out.println("Not using the System UI defeats the purpose...");
+	                e.printStackTrace();
+	            }
+	        }
+	    });
+	
     }
 
     private void buildSystemTray() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
@@ -57,7 +68,7 @@ public class JSwitchSystemTray implements FileChangeListener {
 
 	icon = new TrayIcon(image, "JSwitch", null);
 
-	final JPopupMenuExt jpopup = new JPopupMenuExt();
+	jpopup = new JPopupMenuExt();
 
 	icon.setImageAutoSize(true);
 	List<String> jdkInstalled = systemManager.getJDKInstalled();
