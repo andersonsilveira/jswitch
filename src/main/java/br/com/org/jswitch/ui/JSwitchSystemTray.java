@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import br.com.org.jswitch.cfg.FileChangeListener;
@@ -42,7 +41,7 @@ public class JSwitchSystemTray implements FileChangeListener {
 			@Override
 			public void run() {
 				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					buildSystemTray();
 				} catch (Exception e) {
 					System.out.println("Not using the System UI defeats the purpose...");
