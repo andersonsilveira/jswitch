@@ -96,7 +96,7 @@ class ShowWaitAction {
 		progressBar.setIndeterminate(true);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(progressBar, BorderLayout.CENTER);
-		panel.add(new JLabel("Please wait......."), BorderLayout.PAGE_START);
+		panel.add(new JLabel("Buscando JDKs...."), BorderLayout.PAGE_START);
 		dialog.add(panel);
 		dialog.pack();
 		dialog.setLocationRelativeTo(win);
