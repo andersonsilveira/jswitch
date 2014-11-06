@@ -9,6 +9,16 @@ public class JDK {
 	private String path;
 	
 	private String name;
+	
+	private Boolean installed = Boolean.FALSE;
+
+	public Boolean getInstalled() {
+	    return installed;
+	}
+
+	public void setInstalled(Boolean installed) {
+	    this.installed = installed;
+	}
 
 	public JDK(String name, String path) {
 		this.name = name;

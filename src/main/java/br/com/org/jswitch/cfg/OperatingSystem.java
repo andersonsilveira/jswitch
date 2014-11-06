@@ -28,6 +28,7 @@ public abstract class OperatingSystem {
 	 private static final String SELECTED = ".selected";
 	public static final String CONFIG_CFG = "config.cfg";
 	public static final String PROPERTY_SELECTED_JDK = "selectedJDK";
+	protected StringBuilder log = new StringBuilder();
 
 	public abstract List<JDK> loadDefaultJDK() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException;
 	
@@ -87,6 +88,39 @@ public abstract class OperatingSystem {
 	public abstract void registerBootstrp() throws InstallationFailException, PermissionOperatingSystemExpection;
 
 	public abstract JDK getCurrentJDK() throws Exception;
+
+	public void verifyIfConfigured(List<JDK> jdks) {
+	    for (JDK jdk : jdks) {
+	        if(!getJDKInstalled().isEmpty()){
+	    	String name = getPathnameOrNameOfJDK(jdk.getPath());
+	    	if(name !=null && !name.isEmpty()){
+	    	    jdk.setName(name);
+	    	    jdk.setInstalled(true);
+	    	}
+	        }
+	    }
+	}
+
+	public String getPathnameOrNameOfJDK(String jdk) {
+	    try {
+	        return getPropertyValueOnConfigFile(jdk, getFileConfig());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+
+	public void initSysTray() throws InstallationFailException {
+	    try {
+	        String installationDir = getInstallationDir();
+	        ProcessBuilder processBuilder = new ProcessBuilder("\"" + installationDir + "\\sysTray.exe\"");
+	        processBuilder.start();
+	        log.append("[INFO] Systray iniciado!\n");
+	    } catch (Exception e) {
+	        log.append("[ERRO] Erro na inicialização do aplicativo\n");
+	        throw new InstallationFailException();
+	    }
+	}
 
 	
 }

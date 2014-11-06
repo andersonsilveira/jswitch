@@ -38,8 +38,6 @@ import br.com.org.jswitch.model.JDK;
  */
 public class WindowsSystem extends OperatingSystem {
     
-    private StringBuilder log = new StringBuilder();
-
     @Override
     public List<JDK> loadDefaultJDK() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException {
 	List<JDK> jdks = null;
@@ -73,7 +71,7 @@ public class WindowsSystem extends OperatingSystem {
 	if(jdks.isEmpty()){
 	    throw new DefautJDKInstalledNotFoundException();
 	}
-
+	
 	return jdks;
     }
 
@@ -117,7 +115,6 @@ public class WindowsSystem extends OperatingSystem {
     	configureConfigFiles(jdks);
     	configureContextMenu(jdks);
     	registerBootstrp();
-    	initSysTray();
     }else{
 	jTextPane.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
 	throw new InstallationDirectoryFaultException();
@@ -176,8 +173,10 @@ public class WindowsSystem extends OperatingSystem {
 	try {
 	    FileWriter fileWriter = new FileWriter(file);
 	    for (JDK jdk : jdks) {
-		file.createNewFile();
-		fileWriter.write(MessageFormat.format(command, BatchStringScapeUtils.escape(jdk.getName()), BatchStringScapeUtils.escape(jdk.getPath())));
+		if(!jdk.getInstalled()){
+		    file.createNewFile();
+		    fileWriter.write(MessageFormat.format(command, BatchStringScapeUtils.escape(jdk.getName()), BatchStringScapeUtils.escape(jdk.getPath())));
+		}
 	    }
 	    fileWriter.flush();
 	    fileWriter.close();
@@ -202,17 +201,8 @@ public class WindowsSystem extends OperatingSystem {
     @Override
     public void change(String jdk) throws IOException {
 	ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/C", MessageFormat.format(
-		Command.RESTORE_JAVA_HOME, "", getPathnameOfJDK(jdk)));
+		Command.RESTORE_JAVA_HOME, "", getPathnameOrNameOfJDK(jdk)));
 	processBuilder.start();
-    }
-
-    private String getPathnameOfJDK(String jdk) {
-	try {
-	    return getPropertyValueOnConfigFile(jdk, getFileConfig());
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	return null;
     }
 
     @Override
@@ -282,18 +272,6 @@ public class WindowsSystem extends OperatingSystem {
 	    file.delete();
 	} else {
 	    file.createNewFile();
-	}
-    }
-
-    private void initSysTray() throws InstallationFailException  {
-	try {
-	    String installationDir = getInstallationDir();
-	    ProcessBuilder processBuilder = new ProcessBuilder("\"" + installationDir + "\\sysTray.exe\"");
-	    processBuilder.start();
-	    log.append("[INFO] Systray iniciado!\n");
-	} catch (Exception e) {
-	    log.append("[ERRO] Erro na inicialização do aplicativo\n");
-	    throw new InstallationFailException();
 	}
     }
 
@@ -402,8 +380,8 @@ public class WindowsSystem extends OperatingSystem {
 	    if(pathname==null || pathname.isEmpty()){
 		throw new JavaHomeVariableSystemNotFoundException();
 	    }
-	    String nameOffileConfig = getPropertyValueOnConfigFile(pathname.trim(), getFileConfig());
-	    return new JDK(nameOffileConfig, pathname.trim());
+	    String name = getPropertyValueOnConfigFile(pathname.trim(), getFileConfig());
+	    return new JDK(name, pathname.trim());
 	} catch (IOException e) {
 	   throw new IllegalStateException();
 	} catch (Exception e) {

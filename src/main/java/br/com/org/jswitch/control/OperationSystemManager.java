@@ -35,6 +35,14 @@ public final class OperationSystemManager{
 		mapOfOperation.put(Platform.Windows, new WindowsSystem());
 	}
 	
+	public void verifyAlreadyInstalled(List<JDK> jdks){
+	     getPlatformSystem().verifyIfConfigured(jdks);
+	}
+	
+	public void initSystemTray() throws InstallationFailException{
+	    getPlatformSystem().initSysTray();
+	}
+	
 	public List<JDK> loadJDKInstalled() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException{
 		return getPlatformSystem().loadDefaultJDK();
 	}

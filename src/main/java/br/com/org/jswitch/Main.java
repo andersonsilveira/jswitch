@@ -9,7 +9,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import br.com.org.jswitch.cfg.exception.JavaHomeVariableSystemNotFoundException;
 import br.com.org.jswitch.control.OperationSystemManager;
-import br.com.org.jswitch.ui.JSwitchSystemTray;
+import br.com.org.jswitch.ui.JSwitchSystemTrayOld;
 import br.com.org.jswitch.ui.JSwitchUI;
 
 
@@ -34,9 +34,9 @@ public class Main {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		try {
 			if(!operationSystemManager.isAlreadyInstalled()){
-				new JSwitchUI().show();				
+				new JSwitchUI().showForInstall();				
 			}else{
-				new JSwitchSystemTray().show();				
+				new JSwitchSystemTrayOld().show();				
 			}
 		} 
 		catch (JavaHomeVariableSystemNotFoundException e) {

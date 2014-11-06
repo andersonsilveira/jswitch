@@ -29,7 +29,7 @@ import br.com.org.jswitch.control.OperationSystemManager;
  * @author Anderson
  *
  */
-public class JSwitchSystemTray implements FileChangeListener {
+public class JSwitchSystemTrayOld implements FileChangeListener {
 
 	private OperationSystemManager systemManager;
 	private TrayIcon icon;
@@ -66,6 +66,24 @@ public class JSwitchSystemTray implements FileChangeListener {
 		Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/switch-icon.png"));
 
 		PopupMenu menu = new PopupMenu();
+		MenuItem addjdk = new MenuItem("Adicionar...");
+		addjdk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			    SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try {
+					    new JSwitchUI().showForUpdate();
+					} catch (Exception e) {
+						System.out.println("Not using the System UI defeats the purpose...");
+						e.printStackTrace();
+					}
+				}
+			});
+			}
+		});
+		menu.add(addjdk);
+		menu.addSeparator();
 		icon = new TrayIcon(image, "JSwitch", menu);
 		icon.setImageAutoSize(true);
 		List<String> jdkInstalled = systemManager.getJDKInstalled();
@@ -77,7 +95,7 @@ public class JSwitchSystemTray implements FileChangeListener {
 			
 		}
 		menu.addSeparator();
-		MenuItem closeItem = new MenuItem("Fechar");
+		MenuItem closeItem = new MenuItem("Sair");
 		closeItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);

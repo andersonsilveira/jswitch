@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 import br.com.org.jswitch.control.OperationSystemManager;
@@ -30,12 +31,15 @@ public class JDKTableModel extends AbstractTableModel {
 	 */
     private static final long serialVersionUID = -6927900094627966098L;
 
+     public final Object[] longValues = {"jdk1.7.0_67(x64)", "C:\\Program Files\\Java\\jdk1.6.0_45",
+                                             Boolean.TRUE};
+
     private List<JDK> jdks = new ArrayList<JDK>();
 
     OperationSystemManager operationSystemManager = new OperationSystemManager();
 
     private final String[] columnNames = new String[] {
-	    "Name", "Diretório"
+	    "Name", "Diretório","Configurado?"
     };
 
     public void addRow(JDK jdk) {
@@ -61,6 +65,7 @@ public class JDKTableModel extends AbstractTableModel {
 	    }
 	}
 	this.jdks = new ArrayList<JDK>(set);
+	operationSystemManager.verifyAlreadyInstalled(jdks);
     }
 
     @Override
@@ -84,6 +89,9 @@ public class JDKTableModel extends AbstractTableModel {
 	    return jdkRow.getName();
 	case 1:
 	    return jdkRow.getPath();
+	
+	case 2:
+	    return jdkRow.getInstalled()?"Sim":"Não";
 	}
 	return null;
     }
@@ -92,10 +100,19 @@ public class JDKTableModel extends AbstractTableModel {
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 	JDK row = jdks.get(rowIndex);
 	       if(0 == columnIndex) {
-	           row.setName((String) aValue);
+		   if(row.getInstalled()){
+		       JOptionPane.showMessageDialog(null,
+				"Não é possivel editar uma JDK já configurada", "JSwitch",
+				JOptionPane.ERROR_MESSAGE);
+		   }else{
+		       row.setName((String) aValue);
+		   }
 	       }
 	       else if(1 == columnIndex) {
 	           row.setPath((String) aValue);
+	       }
+	       else if(2 == columnIndex) {
+	           row.setInstalled((Boolean) aValue);
 	       }
     }
     

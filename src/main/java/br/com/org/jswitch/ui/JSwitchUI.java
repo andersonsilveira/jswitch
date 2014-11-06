@@ -1,6 +1,7 @@
 package br.com.org.jswitch.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
@@ -51,7 +54,7 @@ public class JSwitchUI {
 
 	// main e montaTela
 
-	public void show() {
+	public void showForInstall() {
 		prepareWindow();
 		prepareMainPanel();
 		prepareTabbed();
@@ -61,6 +64,21 @@ public class JSwitchUI {
 		prepareLoadButton();
 		prepareExitButton();
 		showWindow();
+		loadDefaultJDKs();
+	}
+	
+	public void showForUpdate() {
+		prepareWindow();
+		prepareMainPanel();
+		prepareTabbed();
+		prepareTabela();
+		prepareConsole();
+		prepareInstallButton();
+		prepareLoadButton();
+		prepareExitButton();
+		showWindow();
+		loadDefaultJDKs();
+		initColumnSizes(table);
 	}
 	
 	private void prepareConsole() {
@@ -90,18 +108,19 @@ public class JSwitchUI {
 	// outros metodos prepara...
 
 	private void showWindow() {
-		//window.pack();
 		window.setSize(540, 560);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		window.setLocation(dim.width/2-window.getSize().width/2, dim.height/2-window.getSize().height/2);
 		window.setVisible(true);
-		/*Dimension maximumSize = new Dimension(540, 560);
-		window.setMaximumSize(maximumSize);*/
 		window.setResizable(false);
-		ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,table);
-		waitAction.executeLoader(operationSystemManager);
-		jdks = waitAction.getLoadJDKInstalled();
 		
+	}
+
+
+	private void loadDefaultJDKs() {
+	    ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,table);
+	    waitAction.executeLoader(operationSystemManager);
+	    jdks = waitAction.getLoadJDKInstalled();
 	}
 	
 	private void prepareTabela(){
@@ -111,6 +130,7 @@ public class JSwitchUI {
 		table.setBorder(new LineBorder(Color.black));
 		table.setGridColor(Color.black);
 		table.setShowGrid(true);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 		
 		tableScroll = new JScrollPane(); 
 		tableScroll.getViewport().setBorder(null);
@@ -118,6 +138,36 @@ public class JSwitchUI {
 		tableScroll.setSize(450, 450);
 		jTabbedPane.addTab("JDK", tableScroll);
 	}
+	
+	private void initColumnSizes(JTable table) {
+	        JDKTableModel model = (JDKTableModel)table.getModel();
+	        TableColumn column = null;
+	        Component comp = null;
+	        int headerWidth = 0;
+	        int cellWidth = 0;
+	        Object[] longValues = model.longValues;
+	        TableCellRenderer headerRenderer =
+	            table.getTableHeader().getDefaultRenderer();
+	 
+	        for (int i = 0; i < 3; i++) {
+	            column = table.getColumnModel().getColumn(i);
+	 
+	            comp = headerRenderer.getTableCellRendererComponent(
+	                                 null, column.getHeaderValue(),
+	                                 false, false, 0, 0);
+	            headerWidth = comp.getPreferredSize().width;
+	 
+	            comp = table.getDefaultRenderer(model.getColumnClass(i)).
+	                             getTableCellRendererComponent(
+	                                 table, longValues[i],
+	                                 false, false, 0, i);
+	            cellWidth = comp.getPreferredSize().width;
+	 
+	           
+	 
+	            column.setPreferredWidth(Math.max(headerWidth, cellWidth));
+	        }
+	    }
 
 	private void prepareLoadButton() {
 		JButton botaoCarregar = new JButton("Carregar...");
@@ -135,6 +185,7 @@ public class JSwitchUI {
 					table.setModel(model);
 					jTabbedPane.setSelectedComponent(tableScroll);
 					botaoInstalar.setEnabled(true);
+					initColumnSizes(table);
 				}
 				
 			}
@@ -158,6 +209,7 @@ public class JSwitchUI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 				    operationSystemManager.install(new ArrayList<JDK>( jdks ),jTextPane);
+				    operationSystemManager.initSystemTray();
 				} catch (InstallationFailException e1) {
 				    JOptionPane.showMessageDialog(null, "Erro durante a instalação do aplicativo",
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
