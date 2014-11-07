@@ -11,6 +11,7 @@ import br.com.org.jswitch.cfg.exception.JavaHomeVariableSystemNotFoundException;
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.ui.JSwitchSystemTray;
 import br.com.org.jswitch.ui.JSwitchUI;
+import br.com.org.jswitch.ui.JTrayIconTest;
 
 
 /**
@@ -36,7 +37,7 @@ public class Main {
 			if(!operationSystemManager.isAlreadyInstalled()){
 				new JSwitchUI().showForInstall();				
 			}else{
-				new JSwitchSystemTray().show();				
+				new JTrayIconTest().show();				
 			}
 		} 
 		catch (JavaHomeVariableSystemNotFoundException e) {
