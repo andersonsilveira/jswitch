@@ -4,16 +4,19 @@ import java.awt.CheckboxMenuItem;
 import java.awt.TrayIcon;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import br.com.org.jswitch.cfg.FileChangeListener;
 import br.com.org.jswitch.control.OperationSystemManager;
 /**
  * 
  * @author Anderson
  *
  */
-public class CheckboxMenuItemGroupItemListener implements ItemListener {
+public class CheckboxMenuItemGroupItemListener implements ItemListener,FileChangeListener {
 
     public CheckboxMenuItemGroupItemListener(OperationSystemManager operationSystemManager,
 			TrayIcon icon) {
@@ -22,7 +25,7 @@ public class CheckboxMenuItemGroupItemListener implements ItemListener {
 		this.icon = icon;
 	}
 
-	private Set<CheckboxMenuItem>   items = new HashSet<CheckboxMenuItem>();
+    private Set<CheckboxMenuItem>   items = new HashSet<CheckboxMenuItem>();
     
     OperationSystemManager operationSystemManager;
     
@@ -77,5 +80,31 @@ public class CheckboxMenuItemGroupItemListener implements ItemListener {
             if (item.getState()) return item;
         }
         return null;
+    }
+
+    @Override
+    public void fileChanged(File file) {
+	List<String> jdkInstalled = operationSystemManager.getJDKInstalled();
+	for (final String jdk : jdkInstalled) {
+	    if(!exists(jdk)){
+		CheckboxMenuItem checkboxMenuItem = new CheckboxMenuItem(jdk);
+		add(checkboxMenuItem);
+	    }
+		
+	}
+	
+    }
+
+    public Set<CheckboxMenuItem> getItems() {
+        return items;
+    }
+
+    private boolean exists(final String jdk) {
+	for (CheckboxMenuItem item : items) {
+	    if (item.getLabel().equals(jdk)){
+	         return true;
+	    }
+	}
+	return false;
     }
 }

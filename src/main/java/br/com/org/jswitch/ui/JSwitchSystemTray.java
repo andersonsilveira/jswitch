@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -28,20 +29,20 @@ import br.com.org.jswitch.control.OperationSystemManager;
  * @author Anderson
  *
  */
-public class JSwitchSystemTrayOld implements FileChangeListener {
+public class JSwitchSystemTray implements FileChangeListener {
 
 	private OperationSystemManager systemManager;
 	private TrayIcon icon;
 	//private CheckboxMenuItemGroupListener menuItemListener;
 	//private static JPopupMenuExt jpopup;
 	private CheckboxMenuItemGroupItemListener menuItemGroup;
+	private PopupMenu menu;
 
 	public void show() throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					buildSystemTray();
 				} catch (Exception e) {
 					System.out.println("Not using the System UI defeats the purpose...");
@@ -64,7 +65,7 @@ public class JSwitchSystemTrayOld implements FileChangeListener {
 		SystemTray tray = SystemTray.getSystemTray();
 		Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/switch-icon.png"));
 
-		PopupMenu menu = new PopupMenu();
+		menu = new PopupMenu();
 		MenuItem addjdk = new MenuItem("Adicionar...");
 		addjdk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -85,14 +86,8 @@ public class JSwitchSystemTrayOld implements FileChangeListener {
 		menu.addSeparator();
 		icon = new TrayIcon(image, "JSwitch", menu);
 		icon.setImageAutoSize(true);
-		List<String> jdkInstalled = systemManager.getJDKInstalled();
-		menuItemGroup = new CheckboxMenuItemGroupItemListener(systemManager,icon);
-		for (final String jdk : jdkInstalled) {
-			CheckboxMenuItem checkboxMenuItem = new CheckboxMenuItem(jdk);
-			menu.add(checkboxMenuItem);
-			menuItemGroup.add(checkboxMenuItem);
-			
-		}
+		createJDKItemMenu();
+		
 		menu.addSeparator();
 		MenuItem closeItem = new MenuItem("Sair");
 		closeItem.addActionListener(new ActionListener() {
@@ -108,8 +103,22 @@ public class JSwitchSystemTrayOld implements FileChangeListener {
 		
 		FileMonitor fileMonitor = FileMonitor.getInstance();
 		File fileConfSelected = systemManager.getFileSelected();
+		File fileConfig = systemManager.getFileConfig();
 		fileMonitor.addFileChangeListener(this, fileConfSelected, 1000);
+		fileMonitor.addFileChangeListener(this, fileConfig, 1000);
 		systemManager.setCurrentJDKOnSystem();
+	}
+
+	private void createJDKItemMenu() {
+	    List<String> jdkInstalled = systemManager.getJDKInstalled();
+	    menuItemGroup = new CheckboxMenuItemGroupItemListener(systemManager,icon);
+	    int index = 2;
+	    for (final String jdk : jdkInstalled) {
+	    	CheckboxMenuItem checkboxMenuItem = new CheckboxMenuItem(jdk);
+		menu.insert(checkboxMenuItem, index);
+	    	menuItemGroup.add(checkboxMenuItem);
+	    	index++;
+	    }
 	}
 
 	/*private ImageIcon createIconClose() {
@@ -122,6 +131,7 @@ public class JSwitchSystemTrayOld implements FileChangeListener {
 
 	@Override
 	public void fileChanged(File file) {
+	    if(OperatingSystem.SELECTED.equals(file.getName())){
 		try {
 			String value = systemManager.getPropertyValueOnSelectedFile(
 					OperatingSystem.PROPERTY_SELECTED_JDK, file);
@@ -132,7 +142,18 @@ public class JSwitchSystemTrayOld implements FileChangeListener {
 			icon.displayMessage("Atenção", " ocorreu um erro durante a configuração",
 					TrayIcon.MessageType.ERROR);
 		}
+	    }
+	    
+	     if(OperatingSystem.CONFIG_CFG.equals(file.getName())){{
+		 Set<CheckboxMenuItem> items = menuItemGroup.getItems();
+		 for (CheckboxMenuItem checkboxMenuItem : items) {
+		    menu.remove(checkboxMenuItem);
+		 }
+		 createJDKItemMenu();
+		 
+	     }
 
+	}
 	}
 
 }

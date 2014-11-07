@@ -25,7 +25,7 @@ import br.com.org.jswitch.model.JDK;
  */
 public abstract class OperatingSystem {
 	
-	 private static final String SELECTED = ".selected";
+	public static final String SELECTED = ".selected";
 	public static final String CONFIG_CFG = "config.cfg";
 	public static final String PROPERTY_SELECTED_JDK = "selectedJDK";
 	protected StringBuilder log = new StringBuilder();

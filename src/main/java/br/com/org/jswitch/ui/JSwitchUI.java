@@ -209,7 +209,7 @@ public class JSwitchUI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 				    operationSystemManager.install(new ArrayList<JDK>( jdks ),jTextPane);
-				    operationSystemManager.initSystemTray();
+				    //operationSystemManager.initSystemTray();
 				} catch (InstallationFailException e1) {
 				    JOptionPane.showMessageDialog(null, "Erro durante a instalação do aplicativo",
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
