@@ -39,7 +39,7 @@ import br.com.org.jswitch.model.JDK;
 public class WindowsSystem extends OperatingSystem {
     
     @Override
-    public List<JDK> loadDefaultJDK() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException {
+    public List<JDK> loadDefaultJDKOnSystem() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException {
 	List<JDK> jdks = null;
 	try {
 	    File file = new File("load.bat");
@@ -115,6 +115,19 @@ public class WindowsSystem extends OperatingSystem {
     	configureConfigFiles(jdks);
     	configureContextMenu(jdks);
     	registerBootstrp();
+    }else{
+	jTextPane.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
+	throw new InstallationDirectoryFaultException();
+
+    }
+    jTextPane.setText(log.toString());
+    }
+
+    @Override
+    public void update(List<JDK> jdks, JTextPane jTextPane) throws InstallationFailException, InstallationDirectoryFaultException, PermissionOperatingSystemExpection  {
+    if(jdks!=null && !jdks.isEmpty()){
+    	configureConfigFiles(jdks);
+    	configureContextMenu(jdks);
     }else{
 	jTextPane.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
 	throw new InstallationDirectoryFaultException();
@@ -369,7 +382,7 @@ public class WindowsSystem extends OperatingSystem {
 	}
 
     }
-
+    
     @Override
     public JDK getCurrentJDK() throws JavaHomeVariableSystemNotFoundException {
 	ProcessBuilder pFindProgramFiles = new ProcessBuilder("cmd", "/C", "echo %JAVA_HOME%");

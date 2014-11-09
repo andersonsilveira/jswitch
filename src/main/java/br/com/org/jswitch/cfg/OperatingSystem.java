@@ -2,6 +2,7 @@ package br.com.org.jswitch.cfg;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
@@ -17,6 +19,7 @@ import br.com.org.jswitch.cfg.exception.InstallationFailException;
 import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
 import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
 import br.com.org.jswitch.model.JDK;
+import br.com.org.jswitch.ui.JTrayIconUI;
 /**
  * Abstraction of operating system, to realize the specific O.S
  * is mandatory extends this class
@@ -30,7 +33,7 @@ public abstract class OperatingSystem {
 	public static final String PROPERTY_SELECTED_JDK = "selectedJDK";
 	protected StringBuilder log = new StringBuilder();
 
-	public abstract List<JDK> loadDefaultJDK() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException;
+	public abstract List<JDK> loadDefaultJDKOnSystem() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException;
 	
 	public abstract void install(List<JDK> jdks, JTextPane jTextPane) throws InstallationFailException, InstallationDirectoryFaultException, PermissionOperatingSystemExpection ;
 	
@@ -112,15 +115,33 @@ public abstract class OperatingSystem {
 
 	public void initSysTray() throws InstallationFailException {
 	    try {
-	        String installationDir = getInstallationDir();
+	       /* String installationDir = getInstallationDir();
 	        ProcessBuilder processBuilder = new ProcessBuilder("\"" + installationDir + "\\sysTray.exe\"");
-	        processBuilder.start();
+	        processBuilder.start();*/
+		new JTrayIconUI().show();
 	        log.append("[INFO] Systray iniciado!\n");
 	    } catch (Exception e) {
 	        log.append("[ERRO] Erro na inicialização do aplicativo\n");
 	        throw new InstallationFailException();
 	    }
 	}
+
+	public List<JDK> loadJDKConfigured() throws Exception {
+	    List<JDK> jdks = new ArrayList<JDK>();
+	    File fileConfig = getFileConfig();
+	    List<String> lines = FileUtils.readLines(fileConfig);
+	    for (String line : lines) {
+	        String[] split = line.split("=");
+	        JDK jdk = new JDK(split[0], split[1]);
+	        jdk.setInstalled(true);
+		jdks.add(jdk);
+	        
+	    }
+	    return jdks;
+	}
+
+	public abstract void update(List<JDK> jdks, JTextPane jTextPane) throws InstallationFailException,
+		InstallationDirectoryFaultException, PermissionOperatingSystemExpection ;
 
 	
 }

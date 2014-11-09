@@ -43,8 +43,12 @@ public final class OperationSystemManager{
 	    getPlatformSystem().initSysTray();
 	}
 	
-	public List<JDK> loadJDKInstalled() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException{
-		return getPlatformSystem().loadDefaultJDK();
+	public List<JDK> loadJDKInstalledOnSystem() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException{
+		return getPlatformSystem().loadDefaultJDKOnSystem();
+	}
+	
+	public List<JDK> loadJDKConfigured() throws Exception{
+		return getPlatformSystem().loadJDKConfigured();
 	}
 	
 	public boolean isAlreadyInstalled(){
@@ -53,6 +57,10 @@ public final class OperationSystemManager{
 	
 	public void install(List<JDK> jdks, JTextPane jTextPane) throws InstallationFailException, InstallationDirectoryFaultException, PermissionOperatingSystemExpection {
 			getPlatformSystem().install(jdks, jTextPane);
+	}
+	
+	public void update(List<JDK> jdks, JTextPane jTextPane) throws InstallationFailException, InstallationDirectoryFaultException, PermissionOperatingSystemExpection {
+		getPlatformSystem().update(jdks, jTextPane);
 	}
 	
 	public JDK chooseDirectory(){

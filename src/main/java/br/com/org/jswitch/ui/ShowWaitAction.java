@@ -13,7 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
@@ -32,8 +31,6 @@ class ShowWaitAction {
 
 	private Component componentParent;
 
-	private JTable table;
-
 	private List<JDK> loadJDKInstalled;
 
 	public List<JDK> getLoadJDKInstalled() {
@@ -44,10 +41,12 @@ class ShowWaitAction {
 
 	private JDialog dialog;
 
-	public ShowWaitAction(String name, Component componentParent, JTable table) {
+	private RESOURCE resource;
+
+	public ShowWaitAction(String name, Component componentParent, RESOURCE resource) {
 		this.componentParent = componentParent;
-		this.table = table;
 		this.name = name;
+		this.resource = resource;
 	}
 
 	public void executeLoader(final OperationSystemManager manager) {
@@ -57,7 +56,8 @@ class ShowWaitAction {
 			protected Void doInBackground() throws Exception {
 
 				try {
-				    loadJDKInstalled = manager.loadJDKInstalled();
+				    resource.setManager(manager);
+				    loadJDKInstalled = resource.execute();
 				} catch (LoadDefaultJDKException e) {
 				    JOptionPane.showMessageDialog(null, "Falha durante a busca de diretórios padrão de instalação da JDK, tente carregar manualmente apartir do botão 'Carregar..'",
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
@@ -65,8 +65,6 @@ class ShowWaitAction {
 				    JOptionPane.showMessageDialog(null, "Não foi encontrado nenhum dirétorio padrão de instalação, tente carregar manualmente apartir do botão 'Carregar..'",
 					    "JSwitch", JOptionPane.WARNING_MESSAGE);
 				}
-				JDKTableModel tableModel = new JDKTableModel(loadJDKInstalled);
-				table.setModel(tableModel);
 				Thread.sleep(SLEEP_TIME);
 				return null;
 			}
@@ -101,6 +99,33 @@ class ShowWaitAction {
 		dialog.pack();
 		dialog.setLocationRelativeTo(win);
 		dialog.setVisible(true);
+	}
+	
+	
+	public enum RESOURCE{
+	    CONFIGURED(1),
+	    INSTALLED_ON_SYSTEM(2);
+
+	    private int type;
+
+	    private RESOURCE(int type){
+		this.type = type;
+	    }
+	    private OperationSystemManager manager;
+
+	    public void setManager(OperationSystemManager manager) {
+		this.manager = manager;
+	    }
+	    
+	    public List<JDK> execute() throws Exception{
+		switch (type) {
+		case 1:
+		    return manager.loadJDKConfigured();
+		case 2:
+		    return manager.loadJDKInstalledOnSystem();
+		}
+		return null;
+	    }
 	}
 
 }

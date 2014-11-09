@@ -11,8 +11,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -22,6 +24,7 @@ import br.com.org.jswitch.cfg.FileChangeListener;
 import br.com.org.jswitch.cfg.FileMonitor;
 import br.com.org.jswitch.cfg.OperatingSystem;
 import br.com.org.jswitch.control.OperationSystemManager;
+import br.com.org.jswitch.ui.JSwitchUI.MODE;
 
 /**
  * This class build elements necessary to show System Tray at app
@@ -29,21 +32,27 @@ import br.com.org.jswitch.control.OperationSystemManager;
  * @author Anderson
  *
  */
-public class JTrayIconTest implements FileChangeListener {
+public class JTrayIconUI implements FileChangeListener {
 
 	private OperationSystemManager systemManager;
 	private TrayIcon icon;
-	//private CheckboxMenuItemGroupListener menuItemListener;
-	//private static JPopupMenuExt jpopup;
 	private JCheckBoxMenuItemGroupListener menuItemGroup;
+	private JSwitchUI jSwitchUI;
+	
+	public JTrayIconUI() {
+	    jSwitchUI = new JSwitchUI(this);
+	}
 
 	public void show() throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					buildSystemTray();
+					jSwitchUI.initTray();
+					icon.displayMessage("Atenção", "JSwitch foi iniciado com sucesso!!", 
+						TrayIcon.MessageType.INFO);
+					systemManager.setCurrentJDKOnSystem();
 				} catch (Exception e) {
 					System.out.println("Not using the System UI defeats the purpose...");
 					e.printStackTrace();
@@ -53,7 +62,7 @@ public class JTrayIconTest implements FileChangeListener {
 
 	}
 
-	private void buildSystemTray() throws ClassNotFoundException, InstantiationException,
+	public void buildSystemTray() throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException, AWTException, Exception,
 			FileNotFoundException {
 		systemManager = new OperationSystemManager();
@@ -62,7 +71,6 @@ public class JTrayIconTest implements FileChangeListener {
 			return;
 		}
 
-		SystemTray tray = SystemTray.getSystemTray();
 		Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/switch-icon.png"));
 
 		JPopupMenu menu = new JPopupMenu();
@@ -70,14 +78,34 @@ public class JTrayIconTest implements FileChangeListener {
 		icon.setImageAutoSize(true);
 		List<String> jdkInstalled = systemManager.getJDKInstalled();
 		menuItemGroup = new JCheckBoxMenuItemGroupListener(systemManager,icon);
+		ButtonGroup buttonGroup = new ButtonGroup();
 		for (final String jdk : jdkInstalled) {
 			JCheckBoxMenuItem checkboxMenuItem = new JCheckBoxMenuItem(jdk);
 			menu.add(checkboxMenuItem);
+			buttonGroup.add(checkboxMenuItem);
 			menuItemGroup.add(checkboxMenuItem);
 			
 		}
 		menu.addSeparator();
-		JMenuItem closeItem = new JMenuItem("Fechar",createIconClose());
+		JMenuItem addjdk = new JMenuItem("Configurar...",createIconClose("/settings.png"));
+		menu.add(addjdk);
+		
+		addjdk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			    SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try {  
+					    jSwitchUI.show(MODE.UPDATE);
+					} catch (Exception e) {
+						System.out.println("Not using the System UI defeats the purpose...");
+						e.printStackTrace();
+					}
+				}
+			});
+			}
+		});
+		JMenuItem closeItem = new JMenuItem("Sair");
 		closeItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -85,18 +113,36 @@ public class JTrayIconTest implements FileChangeListener {
 		});
 		menu.add(closeItem);
 
-		tray.add(icon);
-		icon.displayMessage("Attention", "JSwitch foi iniciado com sucesso!!", 
-				TrayIcon.MessageType.INFO);
-		
 		FileMonitor fileMonitor = FileMonitor.getInstance();
 		File fileConfSelected = systemManager.getFileSelected();
 		fileMonitor.addFileChangeListener(this, fileConfSelected, 1000);
-		systemManager.setCurrentJDKOnSystem();
+		
 	}
 
-	private ImageIcon createIconClose() {
-		ImageIcon iconClose = new ImageIcon((getClass().getResource("/logout.png")));
+	public void addIconTray(JFrame jFrame, boolean wasUpdate) throws Exception {
+	    SystemTray tray = SystemTray.getSystemTray();
+	    buildSystemTray();
+	    tray.add(icon);
+	    if(jFrame!=null){
+		jFrame.setVisible(false);
+	    }
+	    systemManager.setCurrentJDKOnSystem();
+	    if(wasUpdate){
+		icon.displayMessage("Atenção", "JSwitch foi atualizado", 
+			TrayIcon.MessageType.INFO);
+	    }
+	}
+	
+	public void removeIconTray(JFrame jFrame){
+	    SystemTray tray = SystemTray.getSystemTray();
+	    if(icon!=null){
+		tray.remove(icon);
+		jFrame.setVisible(true);		
+	    }
+	}
+
+	private ImageIcon createIconClose(String imageName) {
+		ImageIcon iconClose = new ImageIcon((getClass().getResource(imageName)));
 		Image imageOrg = iconClose.getImage(); // transform it
 		Image imageNew = imageOrg.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
 		iconClose = new ImageIcon(imageNew);

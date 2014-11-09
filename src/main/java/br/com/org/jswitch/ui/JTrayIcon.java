@@ -35,72 +35,79 @@ public class JTrayIcon extends TrayIcon {
     private JPopupMenu menu;
     private static JDialog dialog;
     static {
-        dialog = new JDialog((Frame) null);
-        dialog.setUndecorated(true);
-        dialog.setAlwaysOnTop(true);
+	dialog = new JDialog((Frame) null);
+	dialog.setUndecorated(true);
+	dialog.setAlwaysOnTop(true);
     }
-    
+
     private static PopupMenuListener popupListener = new PopupMenuListener() {
-        
-    	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-        }
-        
-        public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-            dialog.setVisible(false);
-        }
-        public void popupMenuCanceled(PopupMenuEvent e) {
-            dialog.setVisible(false);
-        }
+
+	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+	}
+
+	public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+	    dialog.setVisible(false);
+	}
+
+	public void popupMenuCanceled(PopupMenuEvent e) {
+	    dialog.setVisible(false);
+	}
     };
 
-
     public JTrayIcon(Image image) {
-        super(image);
-        setMouseListener();
+	super(image);
+	setMouseListener();
     }
-
-	private void setMouseListener() {
-		addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                showJPopupMenu(e);
-            }
-
-            public void mouseReleased(MouseEvent e) {
-                showJPopupMenu(e);
-            }
-        });
-	}
 
     public JTrayIcon(Image image, String name, JPopupMenu menu2) {
-		super(image, name);
-		setJPopupMenu(menu2);
-		setMouseListener();
-	}
-
-	protected void showJPopupMenu(MouseEvent e) {
-        if (e.isPopupTrigger() && menu != null) {
-            Dimension size = menu.getPreferredSize();
-            showJPopupMenu(e.getX(), e.getY() - size.height);
-        }
+	super(image, name);
+	setJPopupMenu(menu2);
+	setMouseListener();
     }
-    
+
+    private void setMouseListener() {
+	addMouseListener(new MouseAdapter() {
+	    /*
+	     * public void mousePressed(MouseEvent e) { showJPopupMenu(e); }
+	     */
+
+	    @Override
+	    public void mouseClicked(MouseEvent me) {
+		if (me.getButton() == MouseEvent.BUTTON1 && me.getClickCount() == 1) {
+		    showJPopupMenu(me);
+		}
+	    }
+
+	    /*
+	     * public void mouseReleased(MouseEvent e) { showJPopupMenu(e); }
+	     */
+	});
+    }
+
+    protected void showJPopupMenu(MouseEvent e) {
+	if (/*e.isPopupTrigger() &&*/ menu != null) {
+	    Dimension size = menu.getPreferredSize();
+	    showJPopupMenu(e.getX()-size.width, e.getY() - size.height);
+	}
+    }
+
     protected void showJPopupMenu(int x, int y) {
-        dialog.setLocation(x, y);
-        dialog.setVisible(true);
-        menu.show(dialog.getContentPane(), 0, 0);
-        // popup works only for focused windows
-        dialog.toFront();
+	dialog.setLocation(x, y);
+	dialog.setVisible(true);
+	menu.show(dialog.getContentPane(), 0, 0);
+	// popup works only for focused windows
+	dialog.toFront();
     }
 
     public JPopupMenu getJPopupMenu() {
-        return menu;
+	return menu;
     }
 
     public void setJPopupMenu(JPopupMenu menu) {
-        if (this.menu != null) {
-            this.menu.removePopupMenuListener(popupListener);
-        }
-        this.menu = menu;
-        menu.addPopupMenuListener(popupListener);
+	if (this.menu != null) {
+	    this.menu.removePopupMenuListener(popupListener);
+	}
+	this.menu = menu;
+	menu.addPopupMenuListener(popupListener);
     }
-} 
+}

@@ -43,12 +43,34 @@ public class JDKTableModel extends AbstractTableModel {
     };
 
     public void addRow(JDK jdk) {
-	operationSystemManager.ajustNames(jdk,jdks);
-	jdks.add(jdk);
+	Set<JDK> set = new HashSet<JDK>(jdks);
+	Set<String> jdkNames = extractNames(jdks);
+	if(!set.contains(jdk)){
+	    if(jdkNames.contains(jdk.getName())){
+		jdk.setName(jdk.getName()+"(1)");
+	    }
+	    jdks.add(jdk);
+	}    
+	fireTableDataChanged();
+	
+    }
+    
+    
+
+    private Set<String> extractNames(List<JDK> tmpJdks) {
+	Set<String> names = new HashSet<String>();
+	for (JDK jdk : tmpJdks) {
+	    names.add(jdk.getName());
+	}
+	
+	return names;
+	
     }
 
+
+
     public List<JDK> getDataRows() {
-	return jdks;
+	return new ArrayList<JDK>(jdks);
     }
 
     public boolean isEmpty() {
@@ -56,16 +78,7 @@ public class JDKTableModel extends AbstractTableModel {
     }
 
     public JDKTableModel(List<JDK> jdks) {
-	List<JDK> dest = new ArrayList<JDK>(jdks);
-	Set<JDK> set = new HashSet<JDK>(dest);
-	Set<String> names = new HashSet<String>();
-	  for (JDK newJDK : set) {
-		if(!names.add(newJDK.getName())){
-		   newJDK.setName(newJDK.getName()+"(1)");
-	    }
-	}
-	this.jdks = new ArrayList<JDK>(set);
-	operationSystemManager.verifyAlreadyInstalled(jdks);
+	this.jdks = jdks;
     }
 
     @Override
@@ -114,7 +127,8 @@ public class JDKTableModel extends AbstractTableModel {
 	       else if(2 == columnIndex) {
 	           row.setInstalled((Boolean) aValue);
 	       }
+	       fireTableDataChanged();
     }
     
-    
+   
 }
