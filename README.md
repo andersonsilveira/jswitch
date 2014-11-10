@@ -19,11 +19,11 @@ The installer can be found on "installer" folder of project on github, therefore
 ## 3) Using Program
 
 * Grid show JDKs installed on machine( be able to find on default installation).
-* "Load"(Carregar..) button: it allows you find the default directory installation.
-* "Install"(Instalar) button: execute the installation on O.S to enable switch JDK.
+* "Add.."(Adicionar..) button: it allows you find the default directory installation.
+* "Configure"(Configurar) button: execute the configuration on O.S to enable switch JDK.
 * A result of operation is display on tabbed "Result"(Resultado).
 
-![Initial window](http://content.screencast.com/users/anderson.satriani/folders/Jing/media/6eca085f-4ee6-434a-8164-beb26531f0bf/2014-10-05_1451.png)
+![Initial window](http://content.screencast.com/users/anderson.satriani/folders/Jing/media/3a2ec0b5-32c3-408c-854f-eda9cd14e67f/2014-11-09_2204.png)
 
 ## 4) Switch JDKs Installed
 
@@ -42,5 +42,9 @@ Another way to switch is a System Tray on O.S, which that will be enabled at sys
 (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/1ab771b5-3501-4b94-a5d5-aae8e92617c7/2014-11-03_2223.png)
 
 ![Menu System Icon Tray] 
-(http://content.screencast.com/users/anderson.satriani/folders/Jing/media/c51a6fbf-fd2b-4b46-8a05-379000338846/2014-11-03_2221.png)
+(http://content.screencast.com/users/anderson.satriani/folders/Jing/media/73ec5049-6b5b-45e7-810b-06adef09816d/2014-11-09_2208.png)
+
+The Popup Menu enable some options: like choice of JDK to setting on system and configure new JDK that was installed after last configuration of JSwitch.
+
+
 
