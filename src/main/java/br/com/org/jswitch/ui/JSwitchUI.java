@@ -293,7 +293,7 @@ public class JSwitchUI {
 	}
 	
 	private void prepareInstallButton() {
-		botaoInstalar = new JButton("Instalar");
+		botaoInstalar = new JButton("Configurar");
 		botaoInstalar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
