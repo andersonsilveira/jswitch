@@ -1,4 +1,4 @@
-package br.com.org.jswitch.cfg;
+package br.com.org.jswitch.control;
 
 import java.io.File;
 import java.io.IOException;

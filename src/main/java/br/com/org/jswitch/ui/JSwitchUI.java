@@ -243,7 +243,7 @@ public class JSwitchUI {
 	            column = table.getColumnModel().getColumn(i);
 	 
 	            comp = headerRenderer.getTableCellRendererComponent(
-	                                 null, column.getHeaderValue(),
+	                                 table, column.getHeaderValue(),
 	                                 false, false, 0, 0);
 	            headerWidth = comp.getPreferredSize().width;
 	 

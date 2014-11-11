@@ -22,7 +22,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import br.com.org.jswitch.cfg.FileChangeListener;
 import br.com.org.jswitch.cfg.FileMonitor;
-import br.com.org.jswitch.cfg.OperatingSystem;
+import br.com.org.jswitch.control.OperatingSystem;
 import br.com.org.jswitch.control.OperationSystemManager;
 import br.com.org.jswitch.ui.JSwitchUI.MODE;
 

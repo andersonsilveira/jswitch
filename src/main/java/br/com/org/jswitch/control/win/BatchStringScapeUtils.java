@@ -1,4 +1,4 @@
-package br.com.org.jswitch.cfg.win;
+package br.com.org.jswitch.control.win;
 
 import java.util.HashMap;
 import java.util.Map;
