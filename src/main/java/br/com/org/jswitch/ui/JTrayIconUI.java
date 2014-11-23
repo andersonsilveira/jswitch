@@ -52,7 +52,7 @@ public class JTrayIconUI implements FileChangeListener {
 					jSwitchUI.initTray();
 					icon.displayMessage("Atenção", "JSwitch foi iniciado com sucesso!!", 
 						TrayIcon.MessageType.INFO);
-					systemManager.setCurrentJDKOnSystem();
+					//systemManager.setCurrentJDKOnSystem();
 				} catch (Exception e) {
 					System.out.println("Not using the System UI defeats the purpose...");
 					e.printStackTrace();
@@ -158,7 +158,7 @@ public class JTrayIconUI implements FileChangeListener {
 			menuItemGroup.selectItem(value);
 			icon.displayMessage("JSwitch", value + " foi selecionado!", TrayIcon.MessageType.INFO);
 		} catch (Exception e) {
-			icon.displayMessage("Atenção", " ocorreu um erro durante a configuração",
+			icon.displayMessage("Atenção", " ocorreu um erro durante as configurações",
 					TrayIcon.MessageType.ERROR);
 		}
 

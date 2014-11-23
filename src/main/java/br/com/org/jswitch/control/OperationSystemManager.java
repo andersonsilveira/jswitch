@@ -13,6 +13,7 @@ import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
 import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
 import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
+import br.com.org.jswitch.control.linux.LinuxSystem;
 import br.com.org.jswitch.control.win.WindowsSystem;
 import br.com.org.jswitch.model.JDK;
 
@@ -32,6 +33,7 @@ public final class OperationSystemManager{
 	
 	public OperationSystemManager() {
 		mapOfOperation.put(Platform.Windows, new WindowsSystem());
+		mapOfOperation.put(Platform.Unix, new LinuxSystem());
 	}
 	
 	public void verifyAlreadyInstalled(List<JDK> jdks){
@@ -72,8 +74,8 @@ public final class OperationSystemManager{
 		return getPlatformSystem().getJDKInstalled();
 	}
 
-	public void change(String jdk) throws IOException {
-		getPlatformSystem().change(jdk);
+	public void change(String newjdkname) throws IOException {
+		getPlatformSystem().change(newjdkname);
 		
 	}
 	
@@ -95,9 +97,9 @@ public final class OperationSystemManager{
 	    return getPlatformSystem().getFileSelectedConfig();
 	}
 
-	public void changeJDKOnSelectedFile(String jdkname) throws Exception {
+	public void changeJDKOnSelectedFile(String newjdkname) throws Exception {
 		File fileConfig = getFileSelected();
-		getPlatformSystem().setPropertyValueOnFile(OperatingSystem.PROPERTY_SELECTED_JDK,jdkname, fileConfig);
+		getPlatformSystem().setPropertyValueOnFile(OperatingSystem.PROPERTY_SELECTED_JDK,newjdkname, fileConfig);
 		
 	}
 	

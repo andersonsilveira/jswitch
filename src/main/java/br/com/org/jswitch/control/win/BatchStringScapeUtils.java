@@ -8,7 +8,7 @@ import java.util.Map.Entry;
  * @author Anderson
  *
  */
-public final class BatchStringScapeUtils {
+final class BatchStringScapeUtils {
 
     public static String escape(String comment) {
 	Map<String, String> mapOfEscape = new HashMap<String, String>();

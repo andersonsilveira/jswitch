@@ -92,114 +92,74 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
 				<version>1.8.1</version>
-				<executions>
-					<execution>
-						<id>generate-scripts</id>
-						<phase>package</phase>
-						<goals>
-							<goal>create-repository</goal>
-						</goals>
-						</execution>
-				</executions>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
 				<configuration>
-					<descriptor>src/main/assembly/bin.xml</descriptor>
+					<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+					<extraJvmArguments>-Xms16m</extraJvmArguments>
+					<programs>
+						<program>
+							<mainClass>br.com.org.jswitch.Main</mainClass>
+						</program>
+					</programs>
 				</configuration>
-			</plugin>
-						
-			<!-- <plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>appassembler-maven-plugin</artifactId>
-				<version>1.8.1</version>
 				<executions>
 					<execution>
-						<id>generate-jsw-scripts</id>
-						<phase>package</phase>
 						<goals>
-							<goal>generate-daemons</goal>
-							<goal>create-repository</goal>
-						</goals>
-						<configuration>
-							<repositoryLayout>flat</repositoryLayout> <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-							<daemons>
-								<daemon>
-									<id>app1</id>
-									the next line is added by default if you don't have wrapperMainClass's 
-										setting
-									<wrapperMainClass>org.tanukisoftware.wrapper.WrapperSimpleApp</wrapperMainClass>
-									<mainClass>br.com.org.jswitch.SystemTrayMain</mainClass>
-									<commandLineArguments>
-										<commandLineArgument>start</commandLineArgument>
-									</commandLineArguments>
-									<generatorConfigurations>
-										<generatorConfiguration>
-											<generator>jsw</generator>
-											<includes>
-												<include>windows-x86-64</include>
-											</includes>
-										</generatorConfiguration>
-									</generatorConfigurations>
-									<platforms>
-										<platform>jsw</platform>
-									</platforms>
-								</daemon>
-							</daemons>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
- -->
-<!-- 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
+							<goal>assemble</goal>
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<descriptor>src/main/assembly/bin.xml</descriptor>
-				</configuration>
-			</plugin> -->
+			</plugin>
+
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>appassembler-maven-plugin</artifactId> 
+				<version>1.8.1</version> <executions> <execution> <id>generate-scripts</id> 
+				<phase>package</phase> <goals> <goal>generate-daemons</goal> <goal>create-repository</goal> 
+				</goals> <configuration> <daemons> <daemon> <id>my-server</id> <mainClass>br.com.org.jswitch.Main</mainClass> 
+				<platforms> <platform>booter-unix</platform> <platform>booter-windows</platform> 
+				</platforms> </daemon> </daemons> </configuration> </execution> </executions> 
+				</plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-assembly-plugin</artifactId> 
+				<executions> <execution> <phase>package</phase> <goals> <goal>single</goal> 
+				</goals> </execution> </executions> <configuration> <descriptor>src/main/assembly/bin.xml</descriptor> 
+				</configuration> </plugin> -->
+
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>appassembler-maven-plugin</artifactId> 
+				<version>1.8.1</version> <executions> <execution> <id>generate-jsw-scripts</id> 
+				<phase>package</phase> <goals> <goal>generate-daemons</goal> <goal>create-repository</goal> 
+				</goals> <configuration> <repositoryLayout>flat</repositoryLayout> <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath> 
+				<daemons> <daemon> <id>app1</id> the next line is added by default if you 
+				don't have wrapperMainClass's setting <wrapperMainClass>org.tanukisoftware.wrapper.WrapperSimpleApp</wrapperMainClass> 
+				<mainClass>br.com.org.jswitch.SystemTrayMain</mainClass> <commandLineArguments> 
+				<commandLineArgument>start</commandLineArgument> </commandLineArguments> 
+				<generatorConfigurations> <generatorConfiguration> <generator>jsw</generator> 
+				<includes> <include>windows-x86-64</include> </includes> </generatorConfiguration> 
+				</generatorConfigurations> <platforms> <platform>jsw</platform> </platforms> 
+				</daemon> </daemons> </configuration> </execution> </executions> </plugin> -->
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-assembly-plugin</artifactId> 
+				<executions> <execution> <phase>package</phase> <goals> <goal>single</goal> 
+				</goals> </execution> </executions> <configuration> <descriptor>src/main/assembly/bin.xml</descriptor> 
+				</configuration> </plugin> -->
 		</plugins>
 	</build>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-		
-	</dependencies>
 
-	<!-- <dependencies>
 		<dependency>
 			<groupId>org.codehaus.mojo.appassembler</groupId>
 			<artifactId>appassembler-booter</artifactId>
 			<version>1.8.1</version>
 		</dependency>
-	</dependencies> -->
+	</dependencies>
+
+
+
 
 </project>

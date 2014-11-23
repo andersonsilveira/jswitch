@@ -29,7 +29,7 @@ public class JCheckBoxMenuItemGroupListener implements ItemListener {
     
     TrayIcon icon;
 
-    public void add(JCheckBoxMenuItem cbmi) {
+	public void add(JCheckBoxMenuItem cbmi) {
         cbmi.addItemListener(this);
         cbmi.setSelected(false);
         items.add(cbmi);
@@ -70,7 +70,7 @@ public class JCheckBoxMenuItemGroupListener implements ItemListener {
 
     public JCheckBoxMenuItem getSelectedItem() {
         for (JCheckBoxMenuItem item : items) {
-            if (item.getState()) return item;
+            if (item.isSelected()) return item;
         }
         return null;
     }
