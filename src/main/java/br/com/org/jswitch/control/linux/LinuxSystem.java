@@ -75,6 +75,7 @@ public class LinuxSystem extends OperatingSystem {
 		commands.add("-c");
 		String envCommandBashrc = MessageFormat.format(Command.INSTALL_ENV, newJDK);
 		commands.add(envCommandBashrc);
+		commands.add("source $HOME/.jswitchrc");
 		commands.add("source $HOME/.bashrc");
 		log.append("[SET ENV] configurando variable de ambinente no .bashrc\n"+envCommandBashrc+"\n");
 		// execute the command
@@ -116,13 +117,13 @@ public class LinuxSystem extends OperatingSystem {
 					+ "JAVA_HOME="
 					+ BatchStringScapeUtils
 							.escape(getPathnameOrNameOfJDK(newJDK))
-					+ "/g\" $HOME/.bashrc";
+					+ "/g\" $HOME/.jswitchrc";
 			List<String> commands = new ArrayList<String>();
 			commands.add("bash");
 			commands.add("-c");
-			commands.add(MessageFormat.format(changeCommand,
-					getPathnameOrNameOfJDK(newJDK)));
-			commands.add("source $HOME/.bashrc");
+					
+			commands.add(changeCommand);
+			commands.add("source $HOME/.jswitchrc");
 
 			// execute the command
 			SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
