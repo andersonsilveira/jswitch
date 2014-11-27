@@ -29,6 +29,8 @@ import br.com.org.jswitch.model.JDK;
  */
 public class WindowsSystem extends OperatingSystem {
 
+	private static final String JSWITCH_JAR = "jswitch.jar";
+
 	@Override
 	public List<JDK> loadDefaultJDKOnSystem() throws LoadDefaultJDKException,
 			DefautJDKInstalledNotFoundException {
@@ -210,8 +212,12 @@ public class WindowsSystem extends OperatingSystem {
 
 	private void copySysTrayToProgramFiles() throws Exception {
 		String installPathname = getInstallationDir();
-		File dest = new File(installPathname + File.separator + "sysTray.exe");
+		File dest = new File(installPathname + File.separator + JSWITCH_JAR);
 		dest.createNewFile();
+		FileWriter fileWriter = new FileWriter(installPathname + File.separator + "run.bat");
+		fileWriter.write("start javaw -jar "+JSWITCH_JAR);
+		fileWriter.flush();
+		fileWriter.close();
 		copyFileUsingChannel(new File(Command.INSTALL_JSWITCH_EXE), dest);
 	}
 

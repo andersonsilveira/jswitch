@@ -122,7 +122,7 @@ class ThreadedStreamHandler extends Thread
     }
   }
   
-  private void doSleep(long millis)
+/*  private void doSleep(long millis)
   {
     try
     {
@@ -132,7 +132,7 @@ class ThreadedStreamHandler extends Thread
     {
       // ignore
     }
-  }
+  }*/
   
   public StringBuilder getOutputBuffer()
   {

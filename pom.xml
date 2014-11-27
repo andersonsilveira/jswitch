@@ -92,8 +92,49 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>appassembler-maven-plugin</artifactId>
+				<version>1.8.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>create-repository</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>br.com.org.jswitch.Main</mainClass>
+						</manifest>
+					</archive>
+					<descriptors>
+						<descriptor>src/main/assembly/dist.xml</descriptor>
+						<descriptor>src/main/assembly/compress.xml</descriptor>
+					</descriptors>
+					<finalName>jswitch</finalName>
+				</configuration>
+			</plugin>
+
+			
+			
+		<!-- 	<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
 				<version>1.8.1</version>
@@ -113,7 +154,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 
 			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>appassembler-maven-plugin</artifactId> 
 				<version>1.8.1</version> <executions> <execution> <id>generate-scripts</id> 
@@ -152,11 +193,11 @@
 			<version>2.4</version>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.codehaus.mojo.appassembler</groupId>
 			<artifactId>appassembler-booter</artifactId>
 			<version>1.8.1</version>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 
 

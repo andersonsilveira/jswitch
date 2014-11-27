@@ -7,13 +7,13 @@ package br.com.org.jswitch.control.win;
  */
 final class Command {
 
-    static final String INSTALL_JSWITCH_EXE = "install-jswitch.exe";
+    static final String INSTALL_JSWITCH_EXE = "lib/jswitch-dist.jar";
     static final String FIND_JAVA_PATH = "cd %programFiles% \n" + "dir javac.exe /B /S";
     static final String RESTORE_JAVA_HOME = "setx JAVA_HOME \"{1}\" /m";
     static final String CREATE_FILE_CONF = "cd /d %ProgramFiles%\n" + "cd JSwitch\n" + "if exist config.cfg (\n"
     + "type nul> text.txt)\n" + "echo {0}>>config.cfg\n";
     static final String BOOTSTP = "reg add HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /v \"JSwitchSysTray\" /d "
-    + Command.QUOTE + Command.SLASHDOT + Command.QUOTE + "%ProgramFiles%\\JSwitch\\sysTray.exe" + Command.SLASHDOT + Command.QUOTE + Command.QUOTE + " /f\n";
+    + Command.QUOTE + Command.SLASHDOT + Command.QUOTE + "%ProgramFiles%\\JSwitch\\run.bat" + Command.SLASHDOT + Command.QUOTE + Command.QUOTE + " /f\n";
     static final String REGISTRY = "cd /d %ProgramFiles%\n" + "if not exist JSwitch (\n" + "mkdir JSwitch)\n"
         + "cd JSwitch\n" + "if not exist {0}.bat (\n" + "echo "
         + RESTORE_JAVA_HOME
