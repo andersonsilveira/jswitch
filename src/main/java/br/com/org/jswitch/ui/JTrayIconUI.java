@@ -24,6 +24,7 @@ import br.com.org.jswitch.cfg.FileChangeListener;
 import br.com.org.jswitch.cfg.FileMonitor;
 import br.com.org.jswitch.control.OperatingSystem;
 import br.com.org.jswitch.control.OperationSystemManager;
+import br.com.org.jswitch.model.JDK;
 import br.com.org.jswitch.ui.JSwitchUI.MODE;
 
 /**
@@ -126,7 +127,8 @@ public class JTrayIconUI implements FileChangeListener {
 	    if(jFrame!=null){
 		jFrame.setVisible(false);
 	    }
-	    systemManager.setCurrentJDKOnSystem();
+	    JDK currentJavaHomeVar = systemManager.getCurrentJavaHomeVar();
+	    menuItemGroup.selectItem(currentJavaHomeVar.getName());
 	    if(wasUpdate){
 		icon.displayMessage("Atenção", "JSwitch foi atualizado", 
 			TrayIcon.MessageType.INFO);
@@ -155,7 +157,7 @@ public class JTrayIconUI implements FileChangeListener {
 			String value = systemManager.getPropertyValueOnSelectedFile(
 					OperatingSystem.PROPERTY_SELECTED_JDK, file);
 			systemManager.change(value);
-			menuItemGroup.selectItem(value);
+			//menuItemGroup.selectItem(value);
 			icon.displayMessage("JSwitch", value + " foi selecionado!", TrayIcon.MessageType.INFO);
 		} catch (Exception e) {
 			icon.displayMessage("Atenção", " ocorreu um erro durante as configurações",

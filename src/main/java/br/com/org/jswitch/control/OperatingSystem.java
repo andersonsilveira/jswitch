@@ -3,11 +3,14 @@ package br.com.org.jswitch.control;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,6 +44,7 @@ public abstract class OperatingSystem {
 	public static final String SELECTED = ".selected";
 	public static final String CONFIG_CFG = "config.cfg";
 	public static final String PROPERTY_SELECTED_JDK = "selectedJDK";
+	protected static final String JSWITCH_JAR = "jswitch.jar";
 	protected StringBuilder log = new StringBuilder();
 
 	public abstract List<JDK> loadDefaultJDKOnSystem()
@@ -306,5 +310,19 @@ public abstract class OperatingSystem {
 		}
 		return result;
 	}
+
+	public void copyFileUsingChannel(File source, File dest)
+			throws IOException {
+				FileChannel sourceChannel = null;
+				FileChannel destChannel = null;
+				try {
+					sourceChannel = new FileInputStream(source).getChannel();
+					destChannel = new FileOutputStream(dest).getChannel();
+					destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+				} finally {
+					sourceChannel.close();
+					destChannel.close();
+				}
+			}
 
 }

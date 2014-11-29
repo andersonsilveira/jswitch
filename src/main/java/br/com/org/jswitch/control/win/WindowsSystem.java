@@ -1,11 +1,8 @@
 package br.com.org.jswitch.control.win;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +25,6 @@ import br.com.org.jswitch.model.JDK;
  *
  */
 public class WindowsSystem extends OperatingSystem {
-
-	private static final String JSWITCH_JAR = "jswitch.jar";
 
 	@Override
 	public List<JDK> loadDefaultJDKOnSystem() throws LoadDefaultJDKException,
@@ -234,20 +229,6 @@ public class WindowsSystem extends OperatingSystem {
 			dir.mkdir();
 		}
 		return installPathname;
-	}
-
-	private void copyFileUsingChannel(File source, File dest)
-			throws IOException {
-		FileChannel sourceChannel = null;
-		FileChannel destChannel = null;
-		try {
-			sourceChannel = new FileInputStream(source).getChannel();
-			destChannel = new FileOutputStream(dest).getChannel();
-			destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-		} finally {
-			sourceChannel.close();
-			destChannel.close();
-		}
 	}
 
 	@Override

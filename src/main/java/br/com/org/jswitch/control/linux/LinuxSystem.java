@@ -1,6 +1,7 @@
 package br.com.org.jswitch.control.linux;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ public class LinuxSystem extends OperatingSystem {
 		try {
 			setEnv("Default");
 			createFileConfig(jdks);
+			copySysTrayToProgramFiles();
+			// registerBootstrp();
 			jTextPane.setText(log.toString());
 		} catch (Exception e) {
 
@@ -69,15 +72,47 @@ public class LinuxSystem extends OperatingSystem {
 
 	}
 
+	private void copySysTrayToProgramFiles() throws Exception {
+		String installPathname = getInstallationDir();
+		String pathnamejar = installPathname + File.separator + JSWITCH_JAR;
+		File dest = new File(pathnamejar);
+		dest.createNewFile();
+		FileWriter fileWriter = new FileWriter(installPathname + File.separator
+				+ "run.sh");
+		fileWriter.write("java -jar \"" + pathnamejar + "\"");
+		fileWriter.flush();
+		fileWriter.close();
+
+		List<String> commands = new ArrayList<String>();
+		commands.add("bash");
+		commands.add("-c");
+		commands.add("cd $HOME/JSwitch && chmod +x run.sh");
+
+		// execute the command
+		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
+				commands);
+		int result = commandExecutor.executeCommand();
+		if (result == 1) {
+			throw new IllegalStateException();
+		}
+		try {
+			copyFileUsingChannel(new File(Command.LIB_JSWITCH), dest);
+		} catch (Exception e) {
+			throw new IllegalStateException();
+		}
+	}
+
 	private void setEnv(String newJDK) {
 		List<String> commands = new ArrayList<String>();
 		commands.add("bash");
 		commands.add("-c");
-		String envCommandBashrc = MessageFormat.format(Command.INSTALL_ENV, newJDK);
+		String envCommandBashrc = MessageFormat.format(Command.INSTALL_ENV,
+				newJDK);
 		commands.add(envCommandBashrc);
 		commands.add("source $HOME/.jswitchrc");
 		commands.add("source $HOME/.bashrc");
-		log.append("[SET ENV] configurando variable de ambinente no .bashrc\n"+envCommandBashrc+"\n");
+		log.append("[SET ENV] configurando variable de ambinente no .bashrc\n"
+				+ envCommandBashrc + "\n");
 		// execute the command
 		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
 				commands);
@@ -90,10 +125,10 @@ public class LinuxSystem extends OperatingSystem {
 					.getStandardErrorFromCommand();
 
 			// print the stdout and stderr
-			log.append("The numeric result of the command was: "
-					+ result+"\n");
-			log.append("STDOUT: "+stdout+"\n");
-			log.append("STDERR:"+stderr+"\n");
+			log.append("The numeric result of the command was: " + result
+					+ "\n");
+			log.append("STDOUT: " + stdout + "\n");
+			log.append("STDERR:" + stderr + "\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,7 +156,6 @@ public class LinuxSystem extends OperatingSystem {
 			List<String> commands = new ArrayList<String>();
 			commands.add("bash");
 			commands.add("-c");
-					
 			commands.add(changeCommand);
 			commands.add("source $HOME/.jswitchrc");
 
@@ -162,7 +196,7 @@ public class LinuxSystem extends OperatingSystem {
 		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
 				commands);
 		int result = commandExecutor.executeCommand();
-		if(result==1){
+		if (result == 1) {
 			throw new IllegalStateException();
 		}
 		StringBuilder user = commandExecutor.getStandardOutputFromCommand();
@@ -178,7 +212,24 @@ public class LinuxSystem extends OperatingSystem {
 	@Override
 	public void registerBootstrp() throws InstallationFailException,
 			PermissionOperatingSystemExpection {
-		// TODO not implemented yet
+		List<String> commands = new ArrayList<String>();
+		commands.add("bash");
+		commands.add("-c");
+		commands.add(Command.BOOTSTP);
+
+		// execute the command
+		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
+				commands);
+		try {
+			int result = commandExecutor.executeCommand();
+			if (result == 1) {
+				throw new IllegalStateException();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 	}
 

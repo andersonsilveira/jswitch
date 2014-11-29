@@ -1,1 +1,1 @@
-start javaw -jar ./lib/jswitch-dist.jar
+java -jar ./lib/jswitch-dist.jar

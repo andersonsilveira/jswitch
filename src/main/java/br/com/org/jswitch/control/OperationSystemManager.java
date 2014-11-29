@@ -117,8 +117,13 @@ public final class OperationSystemManager{
 	}
 
 	public void setCurrentJDKOnSystem() throws Exception {
-	  JDK jdk =  getPlatformSystem().getCurrentJDK();
+	  JDK jdk = getCurrentJavaHomeVar();
 	  changeJDKOnSelectedFile(jdk.getName());  
+	}
+
+	public JDK getCurrentJavaHomeVar() throws Exception {
+		JDK jdk =  getPlatformSystem().getCurrentJDK();
+		return jdk;
 	}
 
 

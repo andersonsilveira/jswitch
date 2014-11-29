@@ -9,4 +9,9 @@ final class Command {
 			+ "echo CLASSPATH=.:\\$CLASSPATH >> .jswitchrc\n"
 			+ "echo export PATH JAVA_HOME CLASSPATH >> .jswitchrc\n"
 			+ "echo . ~/.jswitchrc >> .bashrc";
+	
+	static final String LIB_JSWITCH = "lib/jswitch-dist.jar";
+
+	static final String BOOTSTP = "cd $HOME\n"
+			+ "echo $HOME/JSwitch/run.sh >> .profile";
 }
