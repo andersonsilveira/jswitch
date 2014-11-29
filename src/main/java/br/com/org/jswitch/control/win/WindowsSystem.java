@@ -212,10 +212,11 @@ public class WindowsSystem extends OperatingSystem {
 
 	private void copySysTrayToProgramFiles() throws Exception {
 		String installPathname = getInstallationDir();
-		File dest = new File(installPathname + File.separator + JSWITCH_JAR);
+		String pathnamejar = installPathname + File.separator + JSWITCH_JAR;
+		File dest = new File(pathnamejar);
 		dest.createNewFile();
 		FileWriter fileWriter = new FileWriter(installPathname + File.separator + "run.bat");
-		fileWriter.write("start javaw -jar "+JSWITCH_JAR);
+		fileWriter.write("start javaw -jar \""+pathnamejar+"\"");
 		fileWriter.flush();
 		fileWriter.close();
 		copyFileUsingChannel(new File(Command.INSTALL_JSWITCH_EXE), dest);
