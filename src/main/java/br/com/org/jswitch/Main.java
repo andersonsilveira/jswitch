@@ -43,12 +43,12 @@ public class Main {
 		} 
 		catch (JavaHomeVariableSystemNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
-					"O Systema operacional n„o esta com a vari·vel JAVA_HOME configurada, por favor faÁa a configuraÁ„o antes de iniciar o aplicativo",
+					"O Systema operacional n√£o esta com a vari√°vel JAVA_HOME configurada, por favor fa√ßa a configura√ß√£o antes de iniciar o aplicativo",
 					"JSwitch", JOptionPane.ERROR_MESSAGE);
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
-					"O JSwicht ocorreu um erro durante a inicializaÁ„o do aplicativo",
+					"O JSwicht ocorreu um erro durante a inicializa√ß√£o do aplicativo",
 					"JSwitch", JOptionPane.ERROR_MESSAGE);
 			
 		}

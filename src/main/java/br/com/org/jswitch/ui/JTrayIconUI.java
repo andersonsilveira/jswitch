@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.MessageFormat;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -35,6 +36,10 @@ import br.com.org.jswitch.ui.JSwitchUI.MODE;
  */
 public class JTrayIconUI implements FileChangeListener {
 
+	private static final String J_SWITCH_FOI_INICIADO_COM_SUCESSO = "JSwitch foi iniciado com sucesso!!";
+	private static final String J_SWITCH_FOI_ATUALIZADO = "JSwitch foi atualizado";
+	private static final String OCORREU_UM_ERRO_DURANTE_AS_CONFIGURACOES = "Ocorreu um erro durante as configuraÃ§Ãµes";
+	private static final String ATENCAO = "AtenÃ§Ã£o";
 	private OperationSystemManager systemManager;
 	private TrayIcon icon;
 	private JCheckBoxMenuItemGroupListener menuItemGroup;
@@ -51,9 +56,8 @@ public class JTrayIconUI implements FileChangeListener {
 				try {
 					buildSystemTray();
 					jSwitchUI.initTray();
-					icon.displayMessage("Atenção", "JSwitch foi iniciado com sucesso!!", 
+					icon.displayMessage(ATENCAO, J_SWITCH_FOI_INICIADO_COM_SUCESSO, 
 						TrayIcon.MessageType.INFO);
-					//systemManager.setCurrentJDKOnSystem();
 				} catch (Exception e) {
 					System.out.println("Not using the System UI defeats the purpose...");
 					e.printStackTrace();
@@ -130,7 +134,7 @@ public class JTrayIconUI implements FileChangeListener {
 	    JDK currentJavaHomeVar = systemManager.getCurrentJavaHomeVar();
 	    menuItemGroup.selectItem(currentJavaHomeVar.getName());
 	    if(wasUpdate){
-		icon.displayMessage("Atenção", "JSwitch foi atualizado", 
+		icon.displayMessage(ATENCAO, J_SWITCH_FOI_ATUALIZADO, 
 			TrayIcon.MessageType.INFO);
 	    }
 	}
@@ -158,9 +162,9 @@ public class JTrayIconUI implements FileChangeListener {
 					OperatingSystem.PROPERTY_SELECTED_JDK, file);
 			systemManager.change(value);
 			//menuItemGroup.selectItem(value);
-			icon.displayMessage("JSwitch", value + " foi selecionado!", TrayIcon.MessageType.INFO);
+			icon.displayMessage("JSwitch",MessageFormat.format("{0} foi selecionado!",value), TrayIcon.MessageType.INFO);
 		} catch (Exception e) {
-			icon.displayMessage("Atenção", " ocorreu um erro durante as configurações",
+			icon.displayMessage(ATENCAO, OCORREU_UM_ERRO_DURANTE_AS_CONFIGURACOES,
 					TrayIcon.MessageType.ERROR);
 		}
 

@@ -18,7 +18,15 @@ import br.com.org.jswitch.model.JDK;
  */
 public class JDKTableModel extends AbstractTableModel {
 
-    @Override
+    private static final String NAME = "Nome";
+
+	private static final String DIRETORIO = "Diret√≥rio";
+
+	private static final String CONFIGURADO = "Configurado?";
+
+	private static final String NAO_E_POSSIVEL_EDITAR_UMA_JDK_JA_CONFIGURADA = "N√£o √© possivel editar uma JDK j√° configurada";
+
+	@Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 	if (columnIndex == 0) {
 	    return true;
@@ -39,7 +47,7 @@ public class JDKTableModel extends AbstractTableModel {
     OperationSystemManager operationSystemManager = new OperationSystemManager();
 
     private final String[] columnNames = new String[] {
-	    "Name", "DiretÛrio","Configurado?"
+	    NAME, DIRETORIO,CONFIGURADO
     };
 
     public void addRow(JDK jdk) {
@@ -104,7 +112,7 @@ public class JDKTableModel extends AbstractTableModel {
 	    return jdkRow.getPath();
 	
 	case 2:
-	    return jdkRow.getInstalled()?"Sim":"N„o";
+	    return jdkRow.getInstalled()?"Sim":"N√£o";
 	}
 	return null;
     }
@@ -115,7 +123,7 @@ public class JDKTableModel extends AbstractTableModel {
 	       if(0 == columnIndex) {
 		   if(row.getInstalled()){
 		       JOptionPane.showMessageDialog(null,
-				"N„o È possivel editar uma JDK j· configurada", "JSwitch",
+				NAO_E_POSSIVEL_EDITAR_UMA_JDK_JA_CONFIGURADA, "JSwitch",
 				JOptionPane.ERROR_MESSAGE);
 		   }else{
 		       row.setName((String) aValue);

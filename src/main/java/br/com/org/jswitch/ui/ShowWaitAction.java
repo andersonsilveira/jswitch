@@ -59,10 +59,12 @@ class ShowWaitAction {
 				    resource.setManager(manager);
 				    loadJDKInstalled = resource.execute();
 				} catch (LoadDefaultJDKException e) {
-				    JOptionPane.showMessageDialog(null, "Falha durante a busca de diretÛrios padr„o de instalaÁ„o da JDK, tente carregar manualmente apartir do bot„o 'Carregar..'",
+				    JOptionPane.showMessageDialog(null, "Falha durante a busca de diret√≥rios padr√£o de instala√ß√£o da JDK, "
+				    		+ "\ntente carregar manualmente apartir do bot√£o 'Carregar..'",
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				}catch (DefautJDKInstalledNotFoundException e){
-				    JOptionPane.showMessageDialog(null, "N„o foi encontrado nenhum dirÈtorio padr„o de instalaÁ„o, tente carregar manualmente apartir do bot„o 'Carregar..'",
+				    JOptionPane.showMessageDialog(null, "N√£o foi encontrado nenhum dir√≥torio padr√£o de instala√ß√£o, "
+				    		+ "\ntente carregar manualmente apartir do bot√£o 'Carregar..'",
 					    "JSwitch", JOptionPane.WARNING_MESSAGE);
 				}
 				Thread.sleep(SLEEP_TIME);

@@ -1,8 +1,13 @@
 package br.com.org.jswitch.control.linux;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +25,8 @@ import br.com.org.jswitch.control.OperatingSystem;
 import br.com.org.jswitch.model.JDK;
 
 public class LinuxSystem extends OperatingSystem {
+
+	private static final String AREA_DE_TRABALHO = "Área de Trabalho";
 
 	@Override
 	public List<JDK> loadDefaultJDKOnSystem() throws LoadDefaultJDKException,
@@ -61,15 +68,19 @@ public class LinuxSystem extends OperatingSystem {
 			PermissionOperatingSystemExpection {
 		try {
 			setEnv("Default");
-			createFileConfig(jdks);
+			configureFiles(jdks);
+			createShortcut();
 			copySysTrayToProgramFiles();
-			// registerBootstrp();
 			jTextPane.setText(log.toString());
+			// registerBootstrp();
 		} catch (Exception e) {
-
-			e.printStackTrace();
+			throw new InstallationFailException();
 		}
 
+	}
+
+	public void configureFiles(List<JDK> jdks) throws Exception {
+		createFileConfig(jdks);
 	}
 
 	private void copySysTrayToProgramFiles() throws Exception {
@@ -111,7 +122,7 @@ public class LinuxSystem extends OperatingSystem {
 		commands.add(envCommandBashrc);
 		commands.add("source $HOME/.jswitchrc");
 		commands.add("source $HOME/.bashrc");
-		log.append("[SET ENV] configurando variable de ambinente no .bashrc\n"
+		log.append("[SET ENV] configurando variável de ambinente no .bashrc\n"
 				+ envCommandBashrc + "\n");
 		// execute the command
 		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
@@ -130,11 +141,9 @@ public class LinuxSystem extends OperatingSystem {
 			log.append("STDOUT: " + stdout + "\n");
 			log.append("STDERR:" + stderr + "\n");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IllegalStateException();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IllegalStateException();
 		}
 
 	}
@@ -178,19 +187,29 @@ public class LinuxSystem extends OperatingSystem {
 			System.out.println("STDERR:");
 			System.out.println(stderr);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			throw new IllegalStateException();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new IllegalStateException();
 		}
 
 	}
 
 	@Override
 	public String getInstallationDir() throws Exception {
+		StringBuilder user = getUserDir();
+		String installPathname = user.toString().trim() + File.separator + "JSwitch";
+		File dir = new File(installPathname);
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		return installPathname;
+	}
+
+	public StringBuilder getUserDir() throws IOException, InterruptedException {
 		List<String> commands = new ArrayList<String>();
 		commands.add("bash");
 		commands.add("-c");
-		commands.add("echo $USER");
+		commands.add("echo $HOME");
 
 		// execute the command
 		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
@@ -200,13 +219,81 @@ public class LinuxSystem extends OperatingSystem {
 			throw new IllegalStateException();
 		}
 		StringBuilder user = commandExecutor.getStandardOutputFromCommand();
-		String installPathname = File.separator + "home" + File.separator
-				+ user.toString().trim() + File.separator + "JSwitch";
-		File dir = new File(installPathname);
-		if (!dir.exists()) {
-			dir.mkdir();
-		}
-		return installPathname;
+		return user;
+	}
+	
+	public void createShortcut() throws InstallationFailException{
+		InputStream resource=null;
+		FileOutputStream outputStream=null;
+		try {
+				resource = getClass().getResourceAsStream("/switch-icon.png");
+				String imgemTargPath = getInstallationDir().toString()+File.separator+"switch-icon.png";
+				File imageTarget = new File(imgemTargPath);
+				outputStream = new FileOutputStream(imageTarget);
+	 
+				
+			int read = 0;
+			byte[] bytes = new byte[1024];
+	 
+			while ((read = resource.read(bytes)) != -1) {
+				outputStream.write(bytes, 0, read);
+			}
+				
+				String shortcut = "[Desktop Entry]\n"+
+				"Encoding=UTF-8\n"+
+				"Name=Shortcut JSwitch\n"+
+				"Comment=Launch JSwich\n"+
+				"Exec=java -jar \""+getInstallationDir().toString()+File.separator+"jswitch.jar\"\n"+
+				"Icon="+imgemTargPath+"\n"+
+				"Type=Application\n"+
+				"Name[pt_BR]=JSwitch";
+				
+				String userDir = getUserDir().toString().trim();
+				userDir = userDir+File.separator+"Desktop"+File.separator;
+				File desktopDir = new File(userDir);
+				String homeCmd = getUserDir().toString().trim()+File.separator+"Desktop";
+				String shortcutFileName = "jswitch.desktop";
+				if(!desktopDir.exists()){
+					userDir = getUserDir().toString().trim();
+					//userDir = userDir+File.separator+AREA_DE_TRABALHO;
+					//desktopDir = new File(userDir);
+					homeCmd = userDir+File.separator+AREA_DE_TRABALHO;
+				}
+					
+					//String fileNameTmp = getInstallationDir()+File.separator+shortcutfile;
+					FileWriter fileWriter = new FileWriter(homeCmd+File.separator+shortcutFileName);
+					fileWriter.write(shortcut);
+					fileWriter.flush();
+					fileWriter.close();
+					
+					List<String> commands = new ArrayList<String>();
+					commands.add("bash");
+					commands.add("-c");
+					commands.add("cd \""+homeCmd+"\" && chmod +x "+shortcutFileName);
+
+					ProcessBuilder processBuilder = new ProcessBuilder(commands);
+					Process process = processBuilder.start();
+					int result = process.waitFor();
+					if (result == 1) {
+						throw new IllegalStateException();
+					}
+					
+				} catch (IOException e) {
+					throw new InstallationFailException();
+				} catch (InterruptedException e) {
+					throw new InstallationFailException();
+				} catch (Exception e) {
+					throw new InstallationFailException();
+				}finally{
+					try {
+						resource.close();
+						outputStream.close();
+					} catch (IOException e) {
+						throw new InstallationFailException();
+					}
+				}
+				
+				
 	}
 
 	@Override
@@ -226,9 +313,9 @@ public class LinuxSystem extends OperatingSystem {
 				throw new IllegalStateException();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new IllegalStateException();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			throw new IllegalStateException();
 		}
 
 	}
@@ -259,7 +346,13 @@ public class LinuxSystem extends OperatingSystem {
 			throws InstallationFailException,
 			InstallationDirectoryFaultException,
 			PermissionOperatingSystemExpection {
-		// TODO Auto-generated method stub
+		try {
+			configureFiles(jdks);
+		} catch (Exception e) {
+			log.append("[ERRO] Problemas ao criar arquivos de configuração\n");
+			throw new InstallationFailException();
+		}
+		
 
 	}
 

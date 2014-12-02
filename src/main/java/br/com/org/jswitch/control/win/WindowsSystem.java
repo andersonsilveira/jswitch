@@ -77,7 +77,7 @@ public class WindowsSystem extends OperatingSystem {
 			registerBootstrp();
 		} else {
 			jTextPane
-					.setText("Erro durante a instalaÁ„o, selecione pelo menos um diretÛrio de instalaÁ„o da JDK.\nPara isso use o bot„o \"Carregar\"");
+					.setText("Erro durante a instala√ß√£o, selecione pelo menos um diret√≥rio de instala√ß√£o da JDK.\nPara isso use o bot√£o \"Carregar\"");
 			throw new InstallationDirectoryFaultException();
 
 		}
@@ -94,7 +94,7 @@ public class WindowsSystem extends OperatingSystem {
 			configureContextMenu(jdks);
 		} else {
 			jTextPane
-					.setText("Erro durante a instalaÁ„o, selecione pelo menos um diretÛrio de instalaÁ„o da JDK.\nPara isso use o bot„o \"Carregar\"");
+					.setText("Erro durante a instala√ß√£o, selecione pelo menos um diret√≥rio de instala√ß√£o da JDK.\nPara isso use o bot√£o \"Carregar\"");
 			throw new InstallationDirectoryFaultException();
 
 		}
@@ -114,13 +114,13 @@ public class WindowsSystem extends OperatingSystem {
 			fileWriter.close();
 			processCommand();
 		} catch (IOException e) {
-			log.append("[ERRO] Problemas na instalaÁ„o do programa");
+			log.append("[ERRO] Problemas na instala√ß√£o do programa");
 			throw new InstallationFailException();
 		} catch (InterruptedException e) {
-			log.append("[ERRO] Problemas na instalaÁ„o do programa");
+			log.append("[ERRO] Problemas na instala√ß√£o do programa");
 			throw new InstallationFailException();
 		} catch (PermissionOperatingSystemExpection e) {
-			log.append("[ERRO] Erro na permissÁ„o de operaÁ„o no sistema operacional");
+			log.append("[ERRO] Erro na permiss√£o de opera√ß√£o no sistema operacional");
 			throw e;
 		} finally {
 			file.delete();
@@ -136,13 +136,13 @@ public class WindowsSystem extends OperatingSystem {
 			processCommand();
 
 		} catch (IOException e) {
-			log.append("[ERRO] Problemas na instalaÁ„o do programa");
+			log.append("[ERRO] Problemas na instala√ß√£o do programa");
 			throw new InstallationFailException();
 		} catch (InterruptedException e) {
-			log.append("[ERRO] Problemas na instalaÁ„o do programa");
+			log.append("[ERRO] Problemas na instala√ß√£o do programa");
 			throw new InstallationFailException();
 		} catch (PermissionOperatingSystemExpection e) {
-			log.append("[ERRO] Erro na permissÁ„o de operaÁ„o no sistema operacional");
+			log.append("[ERRO] Erro na permiss√£o de opera√ß√£o no sistema operacional");
 			throw e;
 		} finally {
 			file.delete();
@@ -176,7 +176,7 @@ public class WindowsSystem extends OperatingSystem {
 			copySysTrayToProgramFiles();
 			createFileConfig(jdks);
 		} catch (Exception e1) {
-			log.append("[ERRO] Problemas ao criar arquivos de configuraÁ„o\n");
+			log.append("[ERRO] Problemas ao criar arquivos de configura√ß√£o\n");
 			throw new InstallationFailException();
 		}
 	}

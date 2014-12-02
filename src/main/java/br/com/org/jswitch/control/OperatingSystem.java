@@ -80,7 +80,7 @@ public abstract class OperatingSystem {
 			}
 		}
 		JOptionPane.showMessageDialog(null,
-				"O diretorio escolhido n„o È um diretÛrio v·lido!", "JSwitch",
+				"O diretorio escolhido n√£o √© um diret√≥rio v√°lido!", "JSwitch",
 				JOptionPane.ERROR_MESSAGE);
 		return null;
 
@@ -140,7 +140,7 @@ public abstract class OperatingSystem {
 			new JTrayIconUI().show();
 			log.append("[INFO] Systray iniciado!\n");
 		} catch (Exception e) {
-			log.append("[ERRO] Erro na inicializaÁ„o do aplicativo\n");
+			log.append("[ERRO] Erro na inicializa√ß√£o do aplicativo\n");
 			throw new InstallationFailException();
 		}
 	}

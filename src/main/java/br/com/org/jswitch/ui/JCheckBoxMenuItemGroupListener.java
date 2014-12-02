@@ -42,7 +42,7 @@ public class JCheckBoxMenuItemGroupListener implements ItemListener {
             try {
 				operationSystemManager.changeJDKOnSelectedFile(itemAffected.getText());
 			} catch (Exception e1) {
-				icon.displayMessage("Atenção", itemAffected +" ocorreu um erro durante a configuração", 
+				icon.displayMessage("AtenÃ§Ã£o", itemAffected +" ocorreu um erro durante a configuraÃ§Ã£o", 
 						TrayIcon.MessageType.ERROR);
 			}
    

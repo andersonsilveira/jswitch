@@ -44,7 +44,7 @@ public class CheckboxMenuItemGroupItemListener implements ItemListener,FileChang
             try {
 				operationSystemManager.changeJDKOnSelectedFile(itemAffected);
 			} catch (Exception e1) {
-				icon.displayMessage("Attention", itemAffected +" ocorreu um erro durante a configuração", 
+				icon.displayMessage("Attention", itemAffected +" ocorreu um erro durante a configuraÃ§Ã£o", 
 						TrayIcon.MessageType.ERROR);
 			}
             for (CheckboxMenuItem item : items) {

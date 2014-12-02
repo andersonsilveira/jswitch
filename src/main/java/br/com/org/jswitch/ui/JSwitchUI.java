@@ -36,6 +36,10 @@ import br.com.org.jswitch.ui.ShowWaitAction.RESOURCE;
  */
 public class JSwitchUI {
 
+	private static final String CARREGANDO_JDK_INSTALADAS = "Carregando JDK instaladas...";
+	private static final String ERRO_DURANTE_A_INSTALACAO_DO_APLICATIVO = "Erro durante a instalaÃ§Ã£o do aplicativo";
+	private static final String VERIFIQUE_SE_VOCA_TEM_PERMISSAO_NECESSARIA_PARA_INSTALACAO_DO_APLICATIVO = "Verifique se vocÃª tem permissÃ£o necessÃ¡ria para instalaÃ§Ã£o do aplicativo";
+	private static final String SELECIONE_PELO_MENOS_UM_DIRETORIO_DE_INSTALACAO = "Selecione pelo menos um diretÃ³rio de instalaÃ§Ã£o";
 	private OperationSystemManager operationSystemManager;
 	private List<JDK> jdks = new ArrayList<JDK>();
 	private JFrame window;
@@ -83,7 +87,7 @@ public class JSwitchUI {
 		prepareWindow();
 		prepareMainPanel();
 		prepareTabbed();
-		prepareTabela();
+		prepareTable();
 		prepareConsole();
 		prepareInstallButton();
 		prepareLoadButton();
@@ -100,7 +104,7 @@ public class JSwitchUI {
 		prepareWindow();
 		prepareMainPanel();
 		prepareTabbed();
-		prepareTabela();
+		prepareTable();
 		prepareConsole();
 		prepareInstallButton();
 		prepareLoadButton();
@@ -204,7 +208,7 @@ public class JSwitchUI {
 
 
 	private void loadDefaultJDKs(RESOURCE resource) {
-	    ShowWaitAction waitAction = new ShowWaitAction("Carregando JDK instaladas...", mainPanel,resource);
+	    ShowWaitAction waitAction = new ShowWaitAction(CARREGANDO_JDK_INSTALADAS, mainPanel,resource);
 	    waitAction.executeLoader(operationSystemManager);
 	    jdks = waitAction.getLoadJDKInstalled();
 	    for (JDK jdk2 : jdks) {
@@ -212,11 +216,11 @@ public class JSwitchUI {
 	    }
 	}
 	
-	private void prepareTabela(){
+	private void prepareTable(){
 	    	model = new JDKTableModel(jdks);
 		table = new JTable(model);
 
-		// por padrão, vem sem bordas, então colocamos:
+		// por padrï¿½o, vem sem bordas, entï¿½o colocamos:
 		table.setBorder(new LineBorder(Color.black));
 		table.setGridColor(Color.black);
 		table.setShowGrid(true);
@@ -309,18 +313,18 @@ public class JSwitchUI {
 				    }
 				    
 				} catch (InstallationFailException e1) {
-				    JOptionPane.showMessageDialog(null, "Erro durante a instalação do aplicativo",
+				    JOptionPane.showMessageDialog(null, ERRO_DURANTE_A_INSTALACAO_DO_APLICATIVO,
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				} catch (InstallationDirectoryFaultException e1) {
 				    JOptionPane.showMessageDialog(null,
-					"Selecione pelo menos um diretório de instalação", "JSwitch",
+					SELECIONE_PELO_MENOS_UM_DIRETORIO_DE_INSTALACAO, "JSwitch",
 					JOptionPane.ERROR_MESSAGE);
 				   
 				} catch (PermissionOperatingSystemExpection e1) {
-				    JOptionPane.showMessageDialog(null, "Verifique se você tem permissão necessária para instalação do aplicativo",
+				    JOptionPane.showMessageDialog(null, VERIFIQUE_SE_VOCA_TEM_PERMISSAO_NECESSARIA_PARA_INSTALACAO_DO_APLICATIVO,
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e1) {
-				    JOptionPane.showMessageDialog(null, "Erro durante a instalação do aplicativo",
+				    JOptionPane.showMessageDialog(null, ERRO_DURANTE_A_INSTALACAO_DO_APLICATIVO,
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				}
 				jTabbedPane.setSelectedComponent(resultScroll);
