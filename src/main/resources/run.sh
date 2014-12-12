@@ -1,1 +1,1 @@
-java -Dfile.encoding=UTF-8 -jar ./lib/jswitch-dist.jar
+java -Dfile.encoding=UTF-8 -jar ./dist/jswitch-dist.jar
