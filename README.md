@@ -5,11 +5,13 @@ JSwitch is program to help to fast switch of JDKs installed on machine.
 
 ## Pre-Conditions
 
-At least the JAVA_HOME variable configured on environment of operating system.
+At least the JAVA_HOME variable configured on environment of operating system. 
+Java 6 version installed on machine. This is necessary just run first start.
 
 ## 1) Compatibility
 
 * Windows 7
+* Ubuntu 12.04 or later
 
 ## 2) Installer
 
