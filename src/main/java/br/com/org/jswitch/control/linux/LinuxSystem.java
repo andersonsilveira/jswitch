@@ -1,13 +1,10 @@
 package br.com.org.jswitch.control.linux;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.nio.channels.FileChannel;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 import javax.swing.JTextPane;
 
 import br.com.org.jswitch.cfg.SystemCommandExecutor;
+import br.com.org.jswitch.cfg.exception.ChangeJDKFailException;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
@@ -154,7 +152,7 @@ public class LinuxSystem extends OperatingSystem {
 	}
 
 	@Override
-	public void change(String newJDK) throws IOException {
+	public void change(String newJDK) throws ChangeJDKFailException {
 		try {
 			String changeCommand = "sed -i \"s/"
 					+ "JAVA_HOME=.*/"

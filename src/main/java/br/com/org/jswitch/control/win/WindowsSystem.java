@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.swing.JTextPane;
 
+import br.com.org.jswitch.cfg.SystemCommandExecutor;
+import br.com.org.jswitch.cfg.exception.ChangeJDKFailException;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
@@ -75,6 +77,7 @@ public class WindowsSystem extends OperatingSystem {
 			configureConfigFiles(jdks);
 			configureContextMenu(jdks);
 			registerBootstrp();
+			//createShortcut();
 		} else {
 			jTextPane
 					.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
@@ -84,20 +87,59 @@ public class WindowsSystem extends OperatingSystem {
 		jTextPane.setText(log.toString());
 	}
 
+	/*private void createShortcut() throws InstallationFailException {
+	List<String> commands = new ArrayList<String>();
+	commands.add("cmd");
+	commands.add("/C");
+	commands.add("lib\\Shortcut.exe /f:\"%USERPROFILE%\\Desktop\\JSwitch.lnk\" /a:c /t:%programfiles%\\JSwitch\\run.bat");
+
+	// execute the command
+	SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
+			commands);
+	try {
+		int result = commandExecutor.executeCommand();
+		if (result == 1) {
+			//throw new InstallationFailException();
+		}
+		// get the stdout and stderr from the command that was run
+					StringBuilder stdout = commandExecutor
+							.getStandardOutputFromCommand();
+					StringBuilder stderr = commandExecutor
+							.getStandardErrorFromCommand();
+
+					// print the stdout and stderr
+					System.out.println("The numeric result of the command was: "
+							+ result);
+					System.out.println("STDOUT:");
+					System.out.println(stdout);
+					System.out.println("STDERR:");
+					System.out.println(stderr);
+	} catch (IOException e) {
+		throw new IllegalStateException();
+	} catch (InterruptedException e) {
+		throw new IllegalStateException();
+	}
+	    
+	}
+*/
 	@Override
 	public void update(List<JDK> jdks, JTextPane jTextPane)
 			throws InstallationFailException,
 			InstallationDirectoryFaultException,
 			PermissionOperatingSystemExpection {
+	    try {
 		if (jdks != null && !jdks.isEmpty()) {
-			configureConfigFiles(jdks);
+			    createFileConfig(jdks);
 			configureContextMenu(jdks);
 		} else {
-			jTextPane
-					.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
+			jTextPane.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
 			throw new InstallationDirectoryFaultException();
 
 		}
+	    } catch (Exception e) {
+		jTextPane.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
+		throw new InstallationDirectoryFaultException();
+	    }
 		jTextPane.setText(log.toString());
 	}
 
@@ -182,11 +224,23 @@ public class WindowsSystem extends OperatingSystem {
 	}
 
 	@Override
-	public void change(String newJDK) throws IOException {
+	public void change(String newJDK) throws ChangeJDKFailException {
 		ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/C",
 				MessageFormat.format(Command.RESTORE_JAVA_HOME, "",
 						getPathnameOrNameOfJDK(newJDK)));
-		processBuilder.start();
+		int exitValue = 0;
+		try {
+		    Process process = processBuilder.start();
+		    exitValue = process.waitFor();
+		} catch (InterruptedException e) {
+		    throw new ChangeJDKFailException();
+		} catch (IOException e) {
+		    throw new ChangeJDKFailException();
+		}
+		if (exitValue != 0) {
+		    throw new ChangeJDKFailException();
+		}
+		
 	}
 
 	private void processCommand() throws PermissionOperatingSystemExpection,
@@ -211,7 +265,8 @@ public class WindowsSystem extends OperatingSystem {
 		File dest = new File(pathnamejar);
 		dest.createNewFile();
 		FileWriter fileWriter = new FileWriter(installPathname + File.separator + "run.bat");
-		fileWriter.write("start javaw -jar \""+pathnamejar+"\"");
+		String javaHomeEnv = getJavaHomeEnv();
+		fileWriter.write("start \""+javaHomeEnv+File.separator+"java -jar\" \""+pathnamejar+"\"");
 		fileWriter.flush();
 		fileWriter.close();
 		copyFileUsingChannel(new File(Command.INSTALL_JSWITCH_EXE), dest);
@@ -238,15 +293,8 @@ public class WindowsSystem extends OperatingSystem {
 
 	@Override
 	public JDK getCurrentJDK() throws JavaHomeVariableSystemNotFoundException {
-		ProcessBuilder pFindProgramFiles = new ProcessBuilder("cmd", "/C",
-				"echo %JAVA_HOME%");
-		Process findProgramFiles;
 		try {
-			findProgramFiles = pFindProgramFiles.start();
-			String pathname = outputProcess(findProgramFiles);
-			if (pathname == null || pathname.isEmpty()) {
-				throw new JavaHomeVariableSystemNotFoundException();
-			}
+		    	String pathname = getJavaHomeEnv();
 			String name = getPropertyValueOnConfigFile(pathname.trim(),
 					getFileConfig());
 			return new JDK(name, pathname.trim());
@@ -255,6 +303,17 @@ public class WindowsSystem extends OperatingSystem {
 		} catch (Exception e) {
 			throw new IllegalStateException();
 		}
+	}
+
+	private String getJavaHomeEnv() throws IOException, JavaHomeVariableSystemNotFoundException {
+	    ProcessBuilder pFindProgramFiles = new ProcessBuilder("cmd", "/C",
+	        "echo %JAVA_HOME%");
+	    Process findProgramFiles = pFindProgramFiles.start();
+	    String pathname = outputProcess(findProgramFiles);
+	    if (pathname == null || pathname.isEmpty()) {
+	    	throw new JavaHomeVariableSystemNotFoundException();
+	    }
+	    return pathname;
 	}
 
 }

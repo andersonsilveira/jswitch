@@ -7,7 +7,7 @@ package br.com.org.jswitch.control.win;
  */
 final class Command {
 
-    static final String INSTALL_JSWITCH_EXE = "lib/jswitch-dist.jar";
+    static final String INSTALL_JSWITCH_EXE = "dist/jswitch-dist.jar";
     static final String FIND_JAVA_PATH = "cd %programFiles% \n" + "dir javac.exe /B /S";
     static final String RESTORE_JAVA_HOME = "setx JAVA_HOME \"{1}\" /m";
     static final String CREATE_FILE_CONF = "cd /d %ProgramFiles%\n" + "cd JSwitch\n" + "if exist config.cfg (\n"

@@ -24,6 +24,7 @@ import javax.swing.JTextPane;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 
+import br.com.org.jswitch.cfg.exception.ChangeJDKFailException;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
@@ -69,7 +70,7 @@ public abstract class OperatingSystem {
 				File dirBin = new File(chosenDirectory.getAbsolutePath()
 						+ File.separator + "bin");
 				List<String> files = Arrays.asList(dirBin
-						.list(new NameFileFilter("javac")));
+						.list(new NameFileFilter(new String[]{"javac","javac.exe"})));
 				if (!files.isEmpty()) {
 					String path = chosenDirectory.getPath();
 					String name = chosenDirectory.getName();
@@ -88,7 +89,7 @@ public abstract class OperatingSystem {
 
 	public abstract String getInitialDirectoryChooser();
 
-	public abstract void change(String newJDK) throws IOException;
+	public abstract void change(String newJDK) throws ChangeJDKFailException;
 
 	public File getFileConfig() throws Exception {
 		String pathname = getInstallationDir();

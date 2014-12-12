@@ -9,7 +9,7 @@
 <fileSets>
    <fileSet>
       <directory>target</directory>
-      <outputDirectory>/lib</outputDirectory>
+      <outputDirectory>/dist</outputDirectory>
       <includes>
         <include>jswitch-dist.jar</include>
       </includes>
@@ -30,6 +30,15 @@
       <lineEnding>dos</lineEnding>
 	   <includes>
         <include>run.bat</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/lib</outputDirectory>
+      <fileMode>0755</fileMode>
+      <lineEnding>dos</lineEnding>
+	   <includes>
+        <include>Shortcut.exe</include>
       </includes>
     </fileSet>
 </fileSets>

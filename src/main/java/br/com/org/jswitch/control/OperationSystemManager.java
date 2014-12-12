@@ -1,13 +1,13 @@
 package br.com.org.jswitch.control;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JTextPane;
 
+import br.com.org.jswitch.cfg.exception.ChangeJDKFailException;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
@@ -74,7 +74,7 @@ public final class OperationSystemManager{
 		return getPlatformSystem().getJDKInstalled();
 	}
 
-	public void change(String newjdkname) throws IOException {
+	public void change(String newjdkname) throws ChangeJDKFailException {
 		getPlatformSystem().change(newjdkname);
 		
 	}

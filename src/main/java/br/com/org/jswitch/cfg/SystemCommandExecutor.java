@@ -70,7 +70,8 @@ public class SystemCommandExecutor
     this.adminPassword = adminPassword;
   }
 
-  public int executeCommand()
+  @SuppressWarnings("finally")
+public int executeCommand()
   throws IOException, InterruptedException
   {
     int exitValue = -99;
