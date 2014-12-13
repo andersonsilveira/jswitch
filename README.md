@@ -15,7 +15,7 @@ Java 6 version installed on machine. This is necessary just run first start.
 
 ## 2) Installer
 
-The installer can be found on "installer" folder of project on github, therefore make download [install-jswitch.exe](https://github.com/andersonsilveira/jswitch/blob/master/install/install-jswitch.exe?raw=true) and execute "**as administrator**" it and then show initial window.
+The installer can be found on "installer" folder of project on github, therefore make the download [package(zip or tar.gz)](https://github.com/andersonsilveira/jswitch/blob/master/install) and execute **run** file "**as administrator**" it and then show initial window.
 
 
 ## 3) Using Program

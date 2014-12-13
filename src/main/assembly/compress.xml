@@ -32,7 +32,7 @@
         <include>run.bat</include>
       </includes>
     </fileSet>
-    <fileSet>
+   <!-- <fileSet>
       <directory>target/classes</directory>
       <outputDirectory>/lib</outputDirectory>
       <fileMode>0755</fileMode>
@@ -40,7 +40,7 @@
 	   <includes>
         <include>Shortcut.exe</include>
       </includes>
-    </fileSet>
+    </fileSet>-->
 </fileSets>
 
 </assembly>

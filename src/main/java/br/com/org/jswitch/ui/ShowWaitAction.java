@@ -6,6 +6,7 @@ import java.awt.Dialog.ModalityType;
 import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
@@ -31,7 +32,7 @@ class ShowWaitAction {
 
 	private Component componentParent;
 
-	private List<JDK> loadJDKInstalled;
+	private List<JDK> loadJDKInstalled  = new ArrayList<JDK>();
 
 	public List<JDK> getLoadJDKInstalled() {
 		return loadJDKInstalled;
@@ -60,11 +61,11 @@ class ShowWaitAction {
 				    loadJDKInstalled = resource.execute();
 				} catch (LoadDefaultJDKException e) {
 				    JOptionPane.showMessageDialog(null, "Falha durante a busca de diretórios padrão de instalação da JDK, "
-				    		+ "\ntente carregar manualmente apartir do botão 'Carregar..'",
+				    		+ "\ntente carregar manualmente apartir do botão 'Adicionar...'",
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				}catch (DefautJDKInstalledNotFoundException e){
-				    JOptionPane.showMessageDialog(null, "Não foi encontrado nenhum dirótorio padrão de instalação, "
-				    		+ "\ntente carregar manualmente apartir do botão 'Carregar..'",
+				    JOptionPane.showMessageDialog(null, "Não foi encontrado nenhum JDK no dirótorio padrão de instalação, "
+				    		+ "\ntente carregar manualmente a partir do botão 'Adicionar...'",
 					    "JSwitch", JOptionPane.WARNING_MESSAGE);
 				}
 				Thread.sleep(SLEEP_TIME);

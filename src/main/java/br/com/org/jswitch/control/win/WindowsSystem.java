@@ -80,7 +80,7 @@ public class WindowsSystem extends OperatingSystem {
 			//createShortcut();
 		} else {
 			jTextPane
-					.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Carregar\"");
+					.setText("Erro durante a instalação, selecione pelo menos um diretório de instalação da JDK.\nPara isso use o botão \"Adicionar...\"");
 			throw new InstallationDirectoryFaultException();
 
 		}
@@ -266,7 +266,8 @@ public class WindowsSystem extends OperatingSystem {
 		dest.createNewFile();
 		FileWriter fileWriter = new FileWriter(installPathname + File.separator + "run.bat");
 		String javaHomeEnv = getJavaHomeEnv();
-		fileWriter.write("start \""+javaHomeEnv+File.separator+"java -jar\" \""+pathnamejar+"\"");
+		fileWriter.write("@echo off\n");
+		fileWriter.write("start \"\" \""+javaHomeEnv.trim()+"\\bin\\javaw\" -jar \""+pathnamejar.trim()+"\"");
 		fileWriter.flush();
 		fileWriter.close();
 		copyFileUsingChannel(new File(Command.INSTALL_JSWITCH_EXE), dest);

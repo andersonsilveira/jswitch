@@ -88,7 +88,8 @@ public class LinuxSystem extends OperatingSystem {
 		dest.createNewFile();
 		FileWriter fileWriter = new FileWriter(installPathname + File.separator
 				+ "run.sh");
-		fileWriter.write("java -jar \"" + pathnamejar + "\"");
+		String javaHomeEnv = getJavaHomeEnv();
+		fileWriter.write("/"+javaHomeEnv+"java\" -jar \"" + pathnamejar + "\"");
 		fileWriter.flush();
 		fileWriter.close();
 
@@ -320,15 +321,8 @@ public class LinuxSystem extends OperatingSystem {
 
 	@Override
 	public JDK getCurrentJDK() throws Exception {
-		ProcessBuilder pFindProgramFiles = new ProcessBuilder("bash", "-c",
-				"echo $JAVA_HOME");
-		Process findProgramFiles;
-		try {
-			findProgramFiles = pFindProgramFiles.start();
-			String pathname = outputProcess(findProgramFiles);
-			if (pathname == null || pathname.isEmpty()) {
-				throw new JavaHomeVariableSystemNotFoundException();
-			}
+	    try {
+		String pathname = getJavaHomeEnv();
 			String name = getPropertyValueOnConfigFile(pathname.trim(),
 					getFileConfig());
 			return new JDK(name, pathname.trim());
@@ -337,6 +331,18 @@ public class LinuxSystem extends OperatingSystem {
 		} catch (Exception e) {
 			throw new IllegalStateException();
 		}
+	}
+
+	private String getJavaHomeEnv() throws IOException, JavaHomeVariableSystemNotFoundException {
+	    ProcessBuilder pFindProgramFiles = new ProcessBuilder("bash", "-c",
+	    		"echo $JAVA_HOME");
+	    Process findProgramFiles;
+	    	findProgramFiles = pFindProgramFiles.start();
+	    	String pathname = outputProcess(findProgramFiles);
+	    	if (pathname == null || pathname.isEmpty()) {
+	    		throw new JavaHomeVariableSystemNotFoundException();
+	    	}
+	    return pathname;
 	}
 
 	@Override
