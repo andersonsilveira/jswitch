@@ -89,7 +89,7 @@ public class LinuxSystem extends OperatingSystem {
 		FileWriter fileWriter = new FileWriter(installPathname + File.separator
 				+ "run.sh");
 		String javaHomeEnv = getJavaHomeEnv();
-		fileWriter.write("/"+javaHomeEnv+"java\" -jar \"" + pathnamejar + "\"");
+		fileWriter.write("\""+javaHomeEnv.trim()+File.separator+"bin"+File.separator+"java\" -jar \"" + pathnamejar.trim() + "\"");
 		fileWriter.flush();
 		fileWriter.close();
 
