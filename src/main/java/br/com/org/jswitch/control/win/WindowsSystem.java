@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.swing.JTextPane;
 
-import br.com.org.jswitch.cfg.SystemCommandExecutor;
 import br.com.org.jswitch.cfg.exception.ChangeJDKFailException;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;

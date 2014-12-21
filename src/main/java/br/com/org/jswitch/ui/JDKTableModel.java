@@ -3,6 +3,7 @@ package br.com.org.jswitch.ui;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -18,13 +19,21 @@ import br.com.org.jswitch.model.JDK;
  */
 public class JDKTableModel extends AbstractTableModel {
 
-    private static final String NAME = "Nome";
+    	
 
-	private static final String DIRETORIO = "Diretório";
+	private static final ResourceBundle bundle = MessagesHelp.getBundle();
+	
+	private static final String NOT =  bundle.getString("table.yes");//"Não";
+	
+	private static final String YES =  bundle.getString("table.not"); //"Sim";
+	
+    	private static final String NAME = bundle.getString("table.name");//"Nome";
 
-	private static final String CONFIGURADO = "Configurado?";
+	private static final String DIRETORIO = bundle.getString("table.path");//"Diretório";
 
-	private static final String NAO_E_POSSIVEL_EDITAR_UMA_JDK_JA_CONFIGURADA = "Não é possivel editar uma JDK já configurada";
+	private static final String CONFIGURADO = bundle.getString("table.config");//"Configurado?";
+
+	private static final String NOT_POSSIBLE_EDIT = bundle.getString("warn.table.edit");//"Não é possivel editar uma JDK já configurada";
 
 	@Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -39,7 +48,7 @@ public class JDKTableModel extends AbstractTableModel {
 	 */
     private static final long serialVersionUID = -6927900094627966098L;
 
-     public final Object[] longValues = {"jdk1.7.0_67(x64)", "C:\\Program Files\\Java\\jdk1.6.0_45",
+     public final Object[] longValues = {"jdk1.7.0_67(x64)", "C:\\Program Files\\Java\\jdk1.6.0_45     ",
                                              Boolean.TRUE};
 
     private List<JDK> jdks = new ArrayList<JDK>();
@@ -112,7 +121,7 @@ public class JDKTableModel extends AbstractTableModel {
 	    return jdkRow.getPath();
 	
 	case 2:
-	    return jdkRow.getInstalled()?"Sim":"Não";
+	    return jdkRow.getInstalled()?YES:NOT;
 	}
 	return null;
     }
@@ -123,7 +132,7 @@ public class JDKTableModel extends AbstractTableModel {
 	       if(0 == columnIndex) {
 		   if(row.getInstalled()){
 		       JOptionPane.showMessageDialog(null,
-				NAO_E_POSSIVEL_EDITAR_UMA_JDK_JA_CONFIGURADA, "JSwitch",
+				NOT_POSSIBLE_EDIT, "JSwitch",
 				JOptionPane.ERROR_MESSAGE);
 		   }else{
 		       row.setName((String) aValue);

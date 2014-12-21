@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import br.com.org.jswitch.cfg.exception.DirectoryChooseNotValidException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
 import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
@@ -36,10 +38,18 @@ import br.com.org.jswitch.ui.ShowWaitAction.RESOURCE;
  */
 public class JSwitchUI {
 
-	private static final String CARREGANDO_JDK_INSTALADAS = "Carregando JDK instaladas...";
-	private static final String ERRO_DURANTE_A_INSTALACAO_DO_APLICATIVO = "Erro durante a instalação do aplicativo";
-	private static final String VERIFIQUE_SE_VOCA_TEM_PERMISSAO_NECESSARIA_PARA_INSTALACAO_DO_APLICATIVO = "Verifique se você tem permissão necessária para instalação do aplicativo";
-	private static final String SELECIONE_PELO_MENOS_UM_DIRETORIO_DE_INSTALACAO = "Selecione pelo menos um diretório de instalação";
+    	private static final ResourceBundle bundle = MessagesHelp.getBundle();
+        
+        private static final String CONFIG_LABEL_BUTTON = bundle.getString("button.config"); //"Configurar";
+        private static final String CLOSE_LABEL_BUTTON = bundle.getString("button.close"); //"Sair";
+        private static final String ADD_LABEL_BUTTON = bundle.getString("button.add"); //"Adicionar...";
+	private static final String CARREGANDO_JDK_INSTALADAS = bundle.getString("info.load.jdk"); //"Carregando JDK instaladas...";
+	private static final String RESULT_LOG = bundle.getString("tab.result");//"Resultado";
+	private static final String ERRO_DURANTE_A_INSTALACAO_DO_APLICATIVO = bundle.getString("error.instalation"); //"Erro durante a instalação do aplicativo";
+	private static final String VERIFIQUE_SE_VOCA_TEM_PERMISSAO_NECESSARIA_PARA_INSTALACAO_DO_APLICATIVO = bundle.getString("warn.permission.needle");//"Verifique se você tem permissão necessária para instalação do aplicativo";
+	private static final String SELECIONE_PELO_MENOS_UM_DIRETORIO_DE_INSTALACAO = bundle.getString("info.select.one.directory"); //"Selecione pelo menos um diretório de instalação";
+	
+	
 	private OperationSystemManager operationSystemManager;
 	private List<JDK> jdks = new ArrayList<JDK>();
 	private JFrame window;
@@ -49,7 +59,7 @@ public class JSwitchUI {
 	private JScrollPane tableScroll;
 	private JTextWrapPane jTextPane;
 	private JScrollPane resultScroll;
-	private JButton botaoInstalar;
+	private JButton installButton;
 	private JTrayIconUI jTrayIconUI;
 	private JButton botaoSair;
 	private boolean wasUpdate = false;
@@ -114,7 +124,7 @@ public class JSwitchUI {
 		initColumnSizes(table);
 		configureSystemTray();
 		window.setResizable(false);
-		botaoInstalar.setEnabled(false);
+		installButton.setEnabled(false);
 		window.setDefaultCloseOperation(JFrame.ICONIFIED);
 		window.setExtendedState(JFrame.NORMAL);
 		window.addWindowListener(new WindowAdapter(){
@@ -131,7 +141,7 @@ public class JSwitchUI {
 		jTextPane.setLineWrap(false);
 		resultScroll = new JScrollPane(jTextPane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		resultScroll.setPreferredSize(new Dimension(450, 450));
-		jTabbedPane.addTab("Resultado", resultScroll);
+		jTabbedPane.addTab(RESULT_LOG, resultScroll);
 		
 	}
 
@@ -264,17 +274,23 @@ public class JSwitchUI {
 	    }
 
 	private void prepareLoadButton() {
-		JButton botaoCarregar = new JButton("Adicionar...");
+		JButton botaoCarregar = new JButton(ADD_LABEL_BUTTON);
 		botaoCarregar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				JDK jdk = operationSystemManager.chooseDirectory();
-				if(jdk!=null){
-				    	jdks.add(jdk);
-				    	model.addRow(jdk);
+				try {
+				    JDK jdk = operationSystemManager.chooseDirectory();
+				    if(jdk!=null){
+					jdks.add(jdk);
+					model.addRow(jdk);
 					jTabbedPane.setSelectedComponent(tableScroll);
-					botaoInstalar.setEnabled(true);
+					installButton.setEnabled(true);
 					initColumnSizes(table);
+				    }
+				} catch (DirectoryChooseNotValidException e1) {
+				    JOptionPane.showMessageDialog(null,
+						"O diretorio escolhido não é um diretório válido!", "JSwitch",
+						JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
@@ -283,7 +299,7 @@ public class JSwitchUI {
 	}
 
 	private void prepareExitButton(final boolean onlyHide) {
-		botaoSair = new JButton("Sair");
+		botaoSair = new JButton(CLOSE_LABEL_BUTTON);
 		botaoSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			    if(onlyHide){
@@ -297,8 +313,8 @@ public class JSwitchUI {
 	}
 	
 	private void prepareInstallButton() {
-		botaoInstalar = new JButton("Configurar");
-		botaoInstalar.addActionListener(new ActionListener() {
+		installButton = new JButton(CONFIG_LABEL_BUTTON);
+		installButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -331,7 +347,7 @@ public class JSwitchUI {
 				((JButton)e.getSource()).setEnabled(false);
 			}
 		});
-		mainPanel.add(botaoInstalar);
+		mainPanel.add(installButton);
 		
 	}
 

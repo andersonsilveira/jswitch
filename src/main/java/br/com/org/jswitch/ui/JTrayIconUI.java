@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -36,10 +37,15 @@ import br.com.org.jswitch.ui.JSwitchUI.MODE;
  */
 public class JTrayIconUI implements FileChangeListener {
 
-	private static final String J_SWITCH_FOI_INICIADO_COM_SUCESSO = "JSwitch foi iniciado com sucesso!!";
-	private static final String J_SWITCH_FOI_ATUALIZADO = "JSwitch foi atualizado";
-	private static final String OCORREU_UM_ERRO_DURANTE_AS_CONFIGURACOES = "Ocorreu um erro durante as configurações";
-	private static final String ATENCAO = "Atenção";
+    	private static final ResourceBundle bundle = MessagesHelp.getBundle();
+	
+    	private static final String MENU_CLOSE = bundle.getString("menu.close");//"Sair";
+    	private static final String MENU_CONFIG = bundle.getString("menu.config");//"Configurar...";
+    	private static final String WAS_SELECTED = bundle.getString("warn.jdk.was.selected");//"{0} foi selecionado!";
+	private static final String J_SWITCH_FOI_INICIADO_COM_SUCESSO = bundle.getString("info.init.success");//"JSwitch foi iniciado com sucesso!!";
+	private static final String J_SWITCH_FOI_ATUALIZADO = bundle.getString("info.update.success");//"JSwitch foi atualizado";
+	private static final String OCORREU_UM_ERRO_DURANTE_AS_CONFIGURACOES = bundle.getString("error.config"); //"Ocorreu um erro durante as configurações";
+	private static final String ATENCAO = bundle.getString("info.atention");// "Atenção";
 	private OperationSystemManager systemManager;
 	private TrayIcon icon;
 	private JCheckBoxMenuItemGroupListener menuItemGroup;
@@ -92,7 +98,7 @@ public class JTrayIconUI implements FileChangeListener {
 			
 		}
 		menu.addSeparator();
-		JMenuItem addjdk = new JMenuItem("Configurar...",createIconClose("/settings.png"));
+		JMenuItem addjdk = new JMenuItem(MENU_CONFIG,createIconClose("/settings.png"));
 		menu.add(addjdk);
 		
 		addjdk.addActionListener(new ActionListener() {
@@ -110,7 +116,7 @@ public class JTrayIconUI implements FileChangeListener {
 			});
 			}
 		});
-		JMenuItem closeItem = new JMenuItem("Sair");
+		JMenuItem closeItem = new JMenuItem(MENU_CLOSE);
 		closeItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -162,7 +168,7 @@ public class JTrayIconUI implements FileChangeListener {
 					OperatingSystem.PROPERTY_SELECTED_JDK, file);
 			systemManager.change(value);
 			//menuItemGroup.selectItem(value);
-			icon.displayMessage("JSwitch",MessageFormat.format("{0} foi selecionado!",value), TrayIcon.MessageType.INFO);
+			icon.displayMessage("JSwitch",MessageFormat.format(WAS_SELECTED,value), TrayIcon.MessageType.INFO);
 		} catch (Exception e) {
 			icon.displayMessage(ATENCAO, OCORREU_UM_ERRO_DURANTE_AS_CONFIGURACOES,
 					TrayIcon.MessageType.ERROR);

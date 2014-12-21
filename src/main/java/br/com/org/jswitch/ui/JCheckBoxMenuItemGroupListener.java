@@ -4,6 +4,7 @@ import java.awt.TrayIcon;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.HashSet;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -15,6 +16,10 @@ import br.com.org.jswitch.control.OperationSystemManager;
  *
  */
 public class JCheckBoxMenuItemGroupListener implements ItemListener {
+
+    private static final ResourceBundle bundle = MessagesHelp.getBundle();
+    
+    private static final String ERRO_DURING_CONFIG = bundle.getString("error.config");//" ocorreu um erro durante a configuração";
 
     public JCheckBoxMenuItemGroupListener(OperationSystemManager operationSystemManager,
 			TrayIcon icon) {
@@ -42,7 +47,7 @@ public class JCheckBoxMenuItemGroupListener implements ItemListener {
             try {
 				operationSystemManager.changeJDKOnSelectedFile(itemAffected.getText());
 			} catch (Exception e1) {
-				icon.displayMessage("Atenção", itemAffected +" ocorreu um erro durante a configuração", 
+				icon.displayMessage("Atenção", itemAffected +ERRO_DURING_CONFIG, 
 						TrayIcon.MessageType.ERROR);
 			}
    

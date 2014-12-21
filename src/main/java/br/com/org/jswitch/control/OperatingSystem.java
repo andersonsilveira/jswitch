@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
 import org.apache.commons.io.FileUtils;
@@ -26,6 +25,7 @@ import org.apache.commons.io.filefilter.NameFileFilter;
 
 import br.com.org.jswitch.cfg.exception.ChangeJDKFailException;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
+import br.com.org.jswitch.cfg.exception.DirectoryChooseNotValidException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
 import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
@@ -56,7 +56,7 @@ public abstract class OperatingSystem {
 			InstallationDirectoryFaultException,
 			PermissionOperatingSystemExpection;
 
-	public JDK chooseDirectoryOfJDKInstalation() {
+	public JDK chooseDirectoryOfJDKInstalation() throws DirectoryChooseNotValidException {
 		JFileChooser chooser = new JFileChooser(getInitialDirectoryChooser());
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int retorno = chooser.showOpenDialog(null);
@@ -80,10 +80,8 @@ public abstract class OperatingSystem {
 
 			}
 		}
-		JOptionPane.showMessageDialog(null,
-				"O diretorio escolhido não é um diretório válido!", "JSwitch",
-				JOptionPane.ERROR_MESSAGE);
-		return null;
+		
+		throw new DirectoryChooseNotValidException();
 
 	}
 

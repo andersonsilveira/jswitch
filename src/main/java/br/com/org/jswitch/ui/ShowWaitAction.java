@@ -8,6 +8,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -28,6 +30,14 @@ import br.com.org.jswitch.model.JDK;
  *
  */
 class ShowWaitAction {
+    	private static final ResourceBundle bundle = MessagesHelp.getBundle();
+	
+    	private static final String SEARCHING_JDK = bundle.getString("info.searching.jdk"); //"Buscando JDKs.....";
+
+	private static final String JDK_NOT_FOUND = bundle.getString("error.jdk.not.found");//"Não foi encontrado nenhum JDK no dirótorio padrão de instalação, \ntente carregar manualmente a partir do botão 'Adicionar...'";
+
+	private static final String LOAD_ERROR =  bundle.getString("error.jdk.load");//"Falha durante a busca de diretórios padrão de instalação da JDK, \ntente carregar manualmente apartir do botão 'Adicionar...'";
+
 	protected static final long SLEEP_TIME = 1 * 1000;
 
 	private Component componentParent;
@@ -60,12 +70,10 @@ class ShowWaitAction {
 				    resource.setManager(manager);
 				    loadJDKInstalled = resource.execute();
 				} catch (LoadDefaultJDKException e) {
-				    JOptionPane.showMessageDialog(null, "Falha durante a busca de diretórios padrão de instalação da JDK, "
-				    		+ "\ntente carregar manualmente apartir do botão 'Adicionar...'",
+				    JOptionPane.showMessageDialog(null, LOAD_ERROR,
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				}catch (DefautJDKInstalledNotFoundException e){
-				    JOptionPane.showMessageDialog(null, "Não foi encontrado nenhum JDK no dirótorio padrão de instalação, "
-				    		+ "\ntente carregar manualmente a partir do botão 'Adicionar...'",
+				    JOptionPane.showMessageDialog(null, JDK_NOT_FOUND,
 					    "JSwitch", JOptionPane.WARNING_MESSAGE);
 				}
 				Thread.sleep(SLEEP_TIME);
@@ -97,7 +105,7 @@ class ShowWaitAction {
 		progressBar.setIndeterminate(true);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(progressBar, BorderLayout.CENTER);
-		panel.add(new JLabel("Buscando JDKs....."), BorderLayout.PAGE_START);
+		panel.add(new JLabel(SEARCHING_JDK), BorderLayout.PAGE_START);
 		dialog.add(panel);
 		dialog.pack();
 		dialog.setLocationRelativeTo(win);

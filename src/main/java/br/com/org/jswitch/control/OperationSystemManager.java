@@ -9,6 +9,7 @@ import javax.swing.JTextPane;
 
 import br.com.org.jswitch.cfg.exception.ChangeJDKFailException;
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
+import br.com.org.jswitch.cfg.exception.DirectoryChooseNotValidException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
 import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
@@ -64,7 +65,7 @@ public final class OperationSystemManager{
 		getPlatformSystem().update(jdks, jTextPane);
 	}
 	
-	public JDK chooseDirectory(){
+	public JDK chooseDirectory() throws DirectoryChooseNotValidException{
 		return getPlatformSystem().chooseDirectoryOfJDKInstalation();
 	}
 	
