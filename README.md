@@ -1,12 +1,11 @@
 JSwitch
 =======
 
-JSwitch is program to help to fast switch of JDKs installed on machine. 
+JSwitch is program to help to fast switch of JDKs installed on machine. In environments that require exchange the virtual machine constantly due to maintenance of various systems is essential a fast and convenient way facilitating the production and testing of these systems.
 
 ## Pre-Conditions
 
-At least the JAVA_HOME variable configured on environment of operating system. 
-Java 6 version installed on machine. This is necessary just run first start.
+At least the JAVA_HOME variable configured on environment of operating system. Java 6 version installed on machine. This is necessary just run first start.
 
 ## 1) Compatibility
 
@@ -36,6 +35,8 @@ After installation, open folder on explorer and access context menu with options
 ![Context Menu Explore] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/5cb524e6-6bf0-4c63-8f6e-79d5379ef2f3/2014-10-05_1457.png)
 
 ![Prompt console] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/c5c1fcf2-fcef-4ea3-b239-8514b53ad566/2014-10-05_1506.png)
+
+Obs. For linux system haven't contextmenu.
 
 ###System Tray
 Another way to switch is a System Tray on O.S, which that will be enabled at system startup. You can see icon tray available:

@@ -24,7 +24,10 @@ import br.com.org.jswitch.control.OperatingSystem;
 import br.com.org.jswitch.model.JDK;
 
 
-
+/**
+ * This class is responsible to execute system commands for linux
+ * @author anderson
+ */
 public class LinuxSystem extends OperatingSystem {
 
     private static final String AREA_DE_TRABALHO = "Área de Trabalho";
@@ -34,8 +37,6 @@ public class LinuxSystem extends OperatingSystem {
 	String fincCommand = "find /usr/local/java/ -name javac";
 	ArrayList<JDK> list = new ArrayList<JDK>();
 	try {
-	    // ProcessBuilder pb = new ProcessBuilder("bash", "-c",
-	    // fincCommand);
 	    List<String> commands = new ArrayList<String>();
 	    commands.add("bash");
 	    commands.add("-c");
@@ -46,10 +47,8 @@ public class LinuxSystem extends OperatingSystem {
 		throw new IllegalStateException();
 	    }
 	    StringBuilder outPut = commandExecutor.getStandardOutputFromCommand();
-	    String[] strings = outPut.toString().split("\\r?\\n");
-	    // List<String> javaInstalations =
-	    // getDiretoryOfJavaInstalations(pb);
-	    for (String javaDirectory : strings) {
+	    String[] dirs = outPut.toString().split("\\r?\\n");
+	    for (String javaDirectory : dirs) {
 		javaDirectory = javaDirectory.trim();
 		String[] pathSplited = javaDirectory.split(File.separator);
 		StringBuilder path = new StringBuilder();
@@ -93,67 +92,67 @@ public class LinuxSystem extends OperatingSystem {
     }
 
     private void copySysTrayToProgramFiles() throws Exception {
-	String installPathname = getInstallationDir();
-	String pathnamejar = installPathname + File.separator + JSWITCH_JAR;
-	File dest = new File(pathnamejar);
-	dest.createNewFile();
-	FileWriter fileWriter = new FileWriter(installPathname + File.separator + "run.sh");
-	String javaHomeEnv = getJavaHomeEnv();
-	fileWriter.write("\"" + javaHomeEnv.trim() + File.separator + "bin" + File.separator + "java\" -jar \""
-		+ pathnamejar.trim() + "\"");
-	fileWriter.flush();
-	fileWriter.close();
-
-	List<String> commands = new ArrayList<String>();
-	commands.add("bash");
-	commands.add("-c");
-	commands.add("cd $HOME/JSwitch && chmod +x run.sh");
-
-	// execute the command
-	SystemCommandExecutor commandExecutor = new SystemCommandExecutor(commands);
-	int result = commandExecutor.executeCommand();
-	if (result == 1) {
-	    throw new IllegalStateException();
-	}
-	try {
-	    copyFileUsingChannel(new File(Command.LIB_JSWITCH), dest);
-	} catch (Exception e) {
-	    throw new IllegalStateException();
-	}
+		String installPathname = getInstallationDir();
+		String pathnamejar = installPathname + File.separator + JSWITCH_JAR;
+		File dest = new File(pathnamejar);
+		dest.createNewFile();
+		FileWriter fileWriter = new FileWriter(installPathname + File.separator + "run.sh");
+		String javaHomeEnv = getJavaHomeEnv();
+		fileWriter.write("\"" + javaHomeEnv.trim() + File.separator + "bin" + File.separator + "java\" -jar \""
+			+ pathnamejar.trim() + "\"");
+		fileWriter.flush();
+		fileWriter.close();
+	
+		List<String> commands = new ArrayList<String>();
+		commands.add("bash");
+		commands.add("-c");
+		commands.add("cd $HOME/JSwitch && chmod +x run.sh");
+	
+		// execute the command
+		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(commands);
+		int result = commandExecutor.executeCommand();
+		if (result == 1) {
+		    throw new IllegalStateException();
+		}
+		try {
+		    copyFileUsingChannel(new File(Command.LIB_JSWITCH), dest);
+		} catch (Exception e) {
+		    throw new IllegalStateException();
+		}
     }
 
     private void setEnv(String newJDK) {
-	List<String> commands = new ArrayList<String>();
-	commands.add("bash");
-	commands.add("-c");
-	String envCommandBashrc = MessageFormat.format(Command.INSTALL_ENV, newJDK);
-	commands.add(envCommandBashrc);
-	commands.add("source $HOME/.jswitchrc");
-	commands.add("source $HOME/.bashrc");
-	log.append("[SET ENV] configurando variável de ambinente no .bashrc\n" + envCommandBashrc + "\n");
-	// execute the command
-	SystemCommandExecutor commandExecutor = new SystemCommandExecutor(commands);
-	try {
-	    int result = commandExecutor.executeCommand();
-	    // get the stdout and stderr from the command that was run
-	    StringBuilder stdout = commandExecutor.getStandardOutputFromCommand();
-	    StringBuilder stderr = commandExecutor.getStandardErrorFromCommand();
-
-	    // print the stdout and stderr
-	    log.append("The numeric result of the command was: " + result + "\n");
-	    log.append("STDOUT: " + stdout + "\n");
-	    log.append("STDERR:" + stderr + "\n");
-	} catch (IOException e) {
-	    throw new IllegalStateException();
-	} catch (InterruptedException e) {
-	    throw new IllegalStateException();
-	}
+		List<String> commands = new ArrayList<String>();
+		commands.add("bash");
+		commands.add("-c");
+		String envCommandBashrc = MessageFormat.format(Command.INSTALL_ENV, newJDK);
+		commands.add(envCommandBashrc);
+		commands.add("source $HOME/.jswitchrc");
+		commands.add("source $HOME/.bashrc");
+		log.append("[SET ENV] configurando variável de ambinente no .bashrc\n" + envCommandBashrc + "\n");
+		// execute the command
+		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(commands);
+		try {
+		    int result = commandExecutor.executeCommand();
+		    // get the stdout and stderr from the command that was run
+		    StringBuilder stdout = commandExecutor.getStandardOutputFromCommand();
+		    StringBuilder stderr = commandExecutor.getStandardErrorFromCommand();
+	
+		    // print the stdout and stderr
+		    log.append("The numeric result of the command was: " + result + "\n");
+		    log.append("STDOUT: " + stdout + "\n");
+		    log.append("STDERR:" + stderr + "\n");
+		} catch (IOException e) {
+		    throw new IllegalStateException();
+		} catch (InterruptedException e) {
+		    throw new IllegalStateException();
+		}
 
     }
 
     @Override
     public String getInitialDirectoryChooser() {
-	return File.separator;
+    	return File.separator;
     }
 
     @Override
@@ -191,29 +190,29 @@ public class LinuxSystem extends OperatingSystem {
 
     @Override
     public String getInstallationDir() throws Exception {
-	StringBuilder user = getUserDir();
-	String installPathname = user.toString().trim() + File.separator + "JSwitch";
-	File dir = new File(installPathname);
-	if (!dir.exists()) {
-	    dir.mkdir();
-	}
-	return installPathname;
+		StringBuilder user = getUserDir();
+		String installPathname = user.toString().trim() + File.separator + "JSwitch";
+		File dir = new File(installPathname);
+		if (!dir.exists()) {
+		    dir.mkdir();
+		}
+		return installPathname;
     }
 
     public StringBuilder getUserDir() throws IOException, InterruptedException {
-	List<String> commands = new ArrayList<String>();
-	commands.add("bash");
-	commands.add("-c");
-	commands.add("echo $HOME");
-
-	// execute the command
-	SystemCommandExecutor commandExecutor = new SystemCommandExecutor(commands);
-	int result = commandExecutor.executeCommand();
-	if (result == 1) {
-	    throw new IllegalStateException();
-	}
-	StringBuilder user = commandExecutor.getStandardOutputFromCommand();
-	return user;
+		List<String> commands = new ArrayList<String>();
+		commands.add("bash");
+		commands.add("-c");
+		commands.add("echo $HOME");
+	
+		// execute the command
+		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(commands);
+		int result = commandExecutor.executeCommand();
+		if (result == 1) {
+		    throw new IllegalStateException();
+		}
+		StringBuilder user = commandExecutor.getStandardOutputFromCommand();
+		return user;
     }
 
     public void createShortcut() throws InstallationFailException {
@@ -263,23 +262,23 @@ public class LinuxSystem extends OperatingSystem {
     }
 
     private String createIcon() throws Exception, FileNotFoundException, IOException, InstallationFailException {
-	InputStream resource = getClass().getResourceAsStream("/switch-icon.png");
-	String imgemTargPath = getInstallationDir().toString() + File.separator + "switch-icon.png";
-	File imageTarget = new File(imgemTargPath);
-	FileOutputStream outputStream = new FileOutputStream(imageTarget);
-
-	int read = 0;
-	byte[] bytes = new byte[1024];
-	while ((read = resource.read(bytes)) != -1) {
-	    outputStream.write(bytes, 0, read);
-	}
-	try {
-	    resource.close();
-	    outputStream.close();
-	} catch (IOException e) {
-	    throw new InstallationFailException();
-	}
-	return imgemTargPath;
+		InputStream resource = getClass().getResourceAsStream("/switch-icon.png");
+		String imgemTargPath = getInstallationDir().toString() + File.separator + "switch-icon.png";
+		File imageTarget = new File(imgemTargPath);
+		FileOutputStream outputStream = new FileOutputStream(imageTarget);
+	
+		int read = 0;
+		byte[] bytes = new byte[1024];
+		while ((read = resource.read(bytes)) != -1) {
+		    outputStream.write(bytes, 0, read);
+		}
+		try {
+		    resource.close();
+		    outputStream.close();
+		} catch (IOException e) {
+		    throw new InstallationFailException();
+		}
+		return imgemTargPath;
     }
 
     @Override
@@ -324,12 +323,6 @@ public class LinuxSystem extends OperatingSystem {
 	    commands.add("bash");
 	    commands.add("-c");
 	    commands.add("echo $JAVA_HOME");
-	    /*
-	     * ProcessBuilder pFindProgramFiles = new ProcessBuilder("bash",
-	     * "-c", "echo $JAVA_HOME"); Process findProgramFiles;
-	     * findProgramFiles = pFindProgramFiles.start(); String pathname =
-	     * outputProcess(findProgramFiles);
-	     */
 	    SystemCommandExecutor commandExecutor = new SystemCommandExecutor(commands);
 	    int result = commandExecutor.executeCommand();
 	    if (result == 1) {
