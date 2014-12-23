@@ -1,7 +1,7 @@
 JSwitch
 =======
 
-JSwitch is program to help to fast switch of JDKs installed on machine. In environments that require exchange the virtual machine constantly due to maintenance of various systems is essential a fast and convenient way facilitating the production and testing of these systems.
+JSwitch is program to help to fast switch of JDKs installed on machine. In environments that require switch the virtual machine constantly due to maintenance of various systems is essential a fast and convenient way facilitating the production and testing of these systems.
 
 ## Pre-Conditions
 
