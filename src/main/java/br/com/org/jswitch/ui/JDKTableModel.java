@@ -21,9 +21,9 @@ public class JDKTableModel extends AbstractTableModel {
 
     private static final ResourceBundle bundle = MessagesHelp.getBundle();
 
-    private static final String NOT = bundle.getString("table.yes");
+    private static final String NOT = bundle.getString("table.not");
 
-    private static final String YES = bundle.getString("table.not");
+    private static final String YES = bundle.getString("table.yes");
 
     private static final String NAME = bundle.getString("table.name");
 
