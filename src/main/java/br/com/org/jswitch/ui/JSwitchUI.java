@@ -27,7 +27,7 @@ import br.com.org.jswitch.cfg.exception.DirectoryChooseNotValidException;
 import br.com.org.jswitch.cfg.exception.InstallationDirectoryFaultException;
 import br.com.org.jswitch.cfg.exception.InstallationFailException;
 import br.com.org.jswitch.cfg.exception.PermissionOperatingSystemExpection;
-import br.com.org.jswitch.control.OperationSystemManager;
+import br.com.org.jswitch.control.JSwitchManager;
 import br.com.org.jswitch.model.JDK;
 import br.com.org.jswitch.ui.ShowWaitAction.RESOURCE;
 /**
@@ -40,17 +40,17 @@ public class JSwitchUI {
 
     	private static final ResourceBundle bundle = MessagesHelp.getBundle();
         
-        private static final String CONFIG_LABEL_BUTTON = bundle.getString("button.config"); //"Configurar";
-        private static final String CLOSE_LABEL_BUTTON = bundle.getString("button.close"); //"Sair";
-        private static final String ADD_LABEL_BUTTON = bundle.getString("button.add"); //"Adicionar...";
-	private static final String CARREGANDO_JDK_INSTALADAS = bundle.getString("info.load.jdk"); //"Carregando JDK instaladas...";
-	private static final String RESULT_LOG = bundle.getString("tab.result");//"Resultado";
-	private static final String ERRO_DURANTE_A_INSTALACAO_DO_APLICATIVO = bundle.getString("error.instalation"); //"Erro durante a instalação do aplicativo";
-	private static final String VERIFIQUE_SE_VOCA_TEM_PERMISSAO_NECESSARIA_PARA_INSTALACAO_DO_APLICATIVO = bundle.getString("warn.permission.needle");//"Verifique se você tem permissão necessária para instalação do aplicativo";
-	private static final String SELECIONE_PELO_MENOS_UM_DIRETORIO_DE_INSTALACAO = bundle.getString("info.select.one.directory"); //"Selecione pelo menos um diretório de instalação";
+        private static final String CONFIG_LABEL_BUTTON = bundle.getString("button.config"); 
+        private static final String CLOSE_LABEL_BUTTON = bundle.getString("button.close"); 
+        private static final String ADD_LABEL_BUTTON = bundle.getString("button.add"); 
+	private static final String LOADING_JDK_INSTALLED = bundle.getString("info.load.jdk");
+	private static final String RESULT_LOG = bundle.getString("tab.result");
+	private static final String ERROR_DURING_INSTALATION = bundle.getString("error.instalation");
+	private static final String PERMISSION_WARNING = bundle.getString("warn.permission.needle");
+	private static final String SELECT_AT_LAST_ONE_PATH = bundle.getString("info.select.one.directory");
 	
 	
-	private OperationSystemManager operationSystemManager;
+	private JSwitchManager operationSystemManager;
 	private List<JDK> jdks = new ArrayList<JDK>();
 	private JFrame window;
 	private JPanel mainPanel;
@@ -71,7 +71,7 @@ public class JSwitchUI {
 
 	public JSwitchUI() {
 		super();
-		operationSystemManager = new OperationSystemManager();
+		operationSystemManager = new JSwitchManager();
 		jTrayIconUI = new JTrayIconUI();
 	}
 
@@ -79,7 +79,7 @@ public class JSwitchUI {
 	// main e montaTela
 
 	public JSwitchUI(JTrayIconUI jTrayIconUI) {
-	    	operationSystemManager = new OperationSystemManager();
+	    	operationSystemManager = new JSwitchManager();
 		this.jTrayIconUI = jTrayIconUI;
 	}
 
@@ -218,7 +218,7 @@ public class JSwitchUI {
 
 
 	private void loadDefaultJDKs(RESOURCE resource) {
-	    ShowWaitAction waitAction = new ShowWaitAction(CARREGANDO_JDK_INSTALADAS, mainPanel,resource);
+	    ShowWaitAction waitAction = new ShowWaitAction(LOADING_JDK_INSTALLED, mainPanel,resource);
 	    waitAction.executeLoader(operationSystemManager);
 	    jdks = waitAction.getLoadJDKInstalled();
 	    for (JDK jdk2 : jdks) {
@@ -329,18 +329,18 @@ public class JSwitchUI {
 				    }
 				    
 				} catch (InstallationFailException e1) {
-				    JOptionPane.showMessageDialog(null, ERRO_DURANTE_A_INSTALACAO_DO_APLICATIVO,
+				    JOptionPane.showMessageDialog(null, ERROR_DURING_INSTALATION,
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				} catch (InstallationDirectoryFaultException e1) {
 				    JOptionPane.showMessageDialog(null,
-					SELECIONE_PELO_MENOS_UM_DIRETORIO_DE_INSTALACAO, "JSwitch",
+					SELECT_AT_LAST_ONE_PATH, "JSwitch",
 					JOptionPane.ERROR_MESSAGE);
 				   
 				} catch (PermissionOperatingSystemExpection e1) {
-				    JOptionPane.showMessageDialog(null, VERIFIQUE_SE_VOCA_TEM_PERMISSAO_NECESSARIA_PARA_INSTALACAO_DO_APLICATIVO,
+				    JOptionPane.showMessageDialog(null, PERMISSION_WARNING,
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e1) {
-				    JOptionPane.showMessageDialog(null, ERRO_DURANTE_A_INSTALACAO_DO_APLICATIVO,
+				    JOptionPane.showMessageDialog(null, ERROR_DURING_INSTALATION,
 					    "JSwitch", JOptionPane.ERROR_MESSAGE);
 				}
 				jTabbedPane.setSelectedComponent(resultScroll);

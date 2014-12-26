@@ -25,7 +25,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import br.com.org.jswitch.cfg.FileChangeListener;
 import br.com.org.jswitch.cfg.FileMonitor;
 import br.com.org.jswitch.control.OperatingSystem;
-import br.com.org.jswitch.control.OperationSystemManager;
+import br.com.org.jswitch.control.JSwitchManager;
 import br.com.org.jswitch.model.JDK;
 import br.com.org.jswitch.ui.JSwitchUI.MODE;
 
@@ -39,14 +39,14 @@ public class JTrayIconUI implements FileChangeListener {
 
     	private static final ResourceBundle bundle = MessagesHelp.getBundle();
 	
-    	private static final String MENU_CLOSE = bundle.getString("menu.close");//"Sair";
-    	private static final String MENU_CONFIG = bundle.getString("menu.config");//"Configurar...";
-    	private static final String WAS_SELECTED = bundle.getString("warn.jdk.was.selected");//"{0} foi selecionado!";
-	private static final String J_SWITCH_FOI_INICIADO_COM_SUCESSO = bundle.getString("info.init.success");//"JSwitch foi iniciado com sucesso!!";
-	private static final String J_SWITCH_FOI_ATUALIZADO = bundle.getString("info.update.success");//"JSwitch foi atualizado";
-	private static final String OCORREU_UM_ERRO_DURANTE_AS_CONFIGURACOES = bundle.getString("error.config"); //"Ocorreu um erro durante as configurações";
-	private static final String ATENCAO = bundle.getString("info.atention");// "Atenção";
-	private OperationSystemManager systemManager;
+    	private static final String MENU_CLOSE = bundle.getString("menu.close");
+    	private static final String MENU_CONFIG = bundle.getString("menu.config");
+    	private static final String WAS_SELECTED = bundle.getString("warn.jdk.was.selected");
+	private static final String J_SWITCH_WAS_INIT_SUCCESS = bundle.getString("info.init.success");
+	private static final String J_SWITCH_WAS_UPDATED = bundle.getString("info.update.success");
+	private static final String ERROR_DURING_SETTINGS = bundle.getString("error.config"); 
+	private static final String ATENTION = bundle.getString("info.atention");
+	private JSwitchManager systemManager;
 	private TrayIcon icon;
 	private JCheckBoxMenuItemGroupListener menuItemGroup;
 	private JSwitchUI jSwitchUI;
@@ -62,7 +62,7 @@ public class JTrayIconUI implements FileChangeListener {
 				try {
 					buildSystemTray();
 					jSwitchUI.initTray();
-					icon.displayMessage(ATENCAO, J_SWITCH_FOI_INICIADO_COM_SUCESSO, 
+					icon.displayMessage(ATENTION, J_SWITCH_WAS_INIT_SUCCESS, 
 						TrayIcon.MessageType.INFO);
 				} catch (Exception e) {
 					System.out.println("Not using the System UI defeats the purpose...");
@@ -76,7 +76,7 @@ public class JTrayIconUI implements FileChangeListener {
 	public void buildSystemTray() throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException, AWTException, Exception,
 			FileNotFoundException {
-		systemManager = new OperationSystemManager();
+		systemManager = new JSwitchManager();
 		if (!SystemTray.isSupported()) {
 			System.out.println("SystemTray is not supported");
 			return;
@@ -140,7 +140,7 @@ public class JTrayIconUI implements FileChangeListener {
 	    JDK currentJavaHomeVar = systemManager.getCurrentJavaHomeVar();
 	    menuItemGroup.selectItem(currentJavaHomeVar.getName());
 	    if(wasUpdate){
-		icon.displayMessage(ATENCAO, J_SWITCH_FOI_ATUALIZADO, 
+		icon.displayMessage(ATENTION, J_SWITCH_WAS_UPDATED, 
 			TrayIcon.MessageType.INFO);
 	    }
 	}
@@ -170,7 +170,7 @@ public class JTrayIconUI implements FileChangeListener {
 			//menuItemGroup.selectItem(value);
 			icon.displayMessage("JSwitch",MessageFormat.format(WAS_SELECTED,value), TrayIcon.MessageType.INFO);
 		} catch (Exception e) {
-			icon.displayMessage(ATENCAO, OCORREU_UM_ERRO_DURANTE_AS_CONFIGURACOES,
+			icon.displayMessage(ATENTION, ERROR_DURING_SETTINGS,
 					TrayIcon.MessageType.ERROR);
 		}
 

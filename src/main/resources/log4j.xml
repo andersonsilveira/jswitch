@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration debug="true"
+	xmlns:log4j='http://jakarta.apache.org/log4j/'>
+ 
+	
+	<appender name="fileStdout" class="org.apache.log4j.RollingFileAppender">
+	   <param name="append" value="false" />
+	   <param name="maxFileSize" value="10MB" />
+	   <param name="maxBackupIndex" value="5" />
+	    <param name="Threshold" value="INFO" />
+	   <!-- For Tomcat -->
+	   <param name="file" value="logs/info.log" />
+	   <layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern" 
+			value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+	   </layout>
+	</appender>
+
+	<appender name="fileError" class="org.apache.log4j.RollingFileAppender">
+	   <param name="append" value="false" />
+	   <param name="maxFileSize" value="10MB" />
+	   <param name="maxBackupIndex" value="5" />
+	   <param name="Threshold" value="ERROR" />
+	   <!-- For Tomcat -->
+	   <param name="file" value="logs/error.log" />
+	   <layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern" 
+			value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+	   </layout>
+	</appender>
+	
+	
+	<root>
+		<appender-ref ref="fileError"/>
+		<appender-ref ref="fileStdout" />
+	</root>
+ 
+</log4j:configuration>

@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
-import br.com.org.jswitch.control.OperationSystemManager;
+import br.com.org.jswitch.control.JSwitchManager;
 import br.com.org.jswitch.model.JDK;
 
 /**
@@ -19,23 +19,21 @@ import br.com.org.jswitch.model.JDK;
  */
 public class JDKTableModel extends AbstractTableModel {
 
-    	
+    private static final ResourceBundle bundle = MessagesHelp.getBundle();
 
-	private static final ResourceBundle bundle = MessagesHelp.getBundle();
-	
-	private static final String NOT =  bundle.getString("table.yes");//"Não";
-	
-	private static final String YES =  bundle.getString("table.not"); //"Sim";
-	
-    	private static final String NAME = bundle.getString("table.name");//"Nome";
+    private static final String NOT = bundle.getString("table.yes");
 
-	private static final String DIRETORIO = bundle.getString("table.path");//"Diretório";
+    private static final String YES = bundle.getString("table.not");
 
-	private static final String CONFIGURADO = bundle.getString("table.config");//"Configurado?";
+    private static final String NAME = bundle.getString("table.name");
 
-	private static final String NOT_POSSIBLE_EDIT = bundle.getString("warn.table.edit");//"Não é possivel editar uma JDK já configurada";
+    private static final String DERECTORY = bundle.getString("table.path");
 
-	@Override
+    private static final String CONFIGURED = bundle.getString("table.config");
+
+    private static final String NOT_POSSIBLE_EDIT = bundle.getString("warn.table.edit");
+
+    @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 	if (columnIndex == 0) {
 	    return true;
@@ -48,43 +46,36 @@ public class JDKTableModel extends AbstractTableModel {
 	 */
     private static final long serialVersionUID = -6927900094627966098L;
 
-     public final Object[] longValues = {"jdk1.7.0_67(x64)", "C:\\Program Files\\Java\\jdk1.6.0_45     ",
-                                             Boolean.TRUE};
+    public final Object[] longValues = { "jdk1.7.0_67(x64)", "C:\\Program Files\\Java\\jdk1.6.0_45     ", Boolean.TRUE };
 
     private List<JDK> jdks = new ArrayList<JDK>();
 
-    OperationSystemManager operationSystemManager = new OperationSystemManager();
+    JSwitchManager operationSystemManager = new JSwitchManager();
 
-    private final String[] columnNames = new String[] {
-	    NAME, DIRETORIO,CONFIGURADO
-    };
+    private final String[] columnNames = new String[] { NAME, DERECTORY, CONFIGURED };
 
     public void addRow(JDK jdk) {
 	Set<JDK> set = new HashSet<JDK>(jdks);
 	Set<String> jdkNames = extractNames(jdks);
-	if(!set.contains(jdk)){
-	    if(jdkNames.contains(jdk.getName())){
-		jdk.setName(jdk.getName()+"(1)");
+	if (!set.contains(jdk)) {
+	    if (jdkNames.contains(jdk.getName())) {
+		jdk.setName(jdk.getName() + "(1)");
 	    }
 	    jdks.add(jdk);
-	}    
+	}
 	fireTableDataChanged();
-	
+
     }
-    
-    
 
     private Set<String> extractNames(List<JDK> tmpJdks) {
 	Set<String> names = new HashSet<String>();
 	for (JDK jdk : tmpJdks) {
 	    names.add(jdk.getName());
 	}
-	
+
 	return names;
-	
+
     }
-
-
 
     public List<JDK> getDataRows() {
 	return new ArrayList<JDK>(jdks);
@@ -119,9 +110,9 @@ public class JDKTableModel extends AbstractTableModel {
 	    return jdkRow.getName();
 	case 1:
 	    return jdkRow.getPath();
-	
+
 	case 2:
-	    return jdkRow.getInstalled()?YES:NOT;
+	    return jdkRow.getInstalled() ? YES : NOT;
 	}
 	return null;
     }
@@ -129,23 +120,18 @@ public class JDKTableModel extends AbstractTableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 	JDK row = jdks.get(rowIndex);
-	       if(0 == columnIndex) {
-		   if(row.getInstalled()){
-		       JOptionPane.showMessageDialog(null,
-				NOT_POSSIBLE_EDIT, "JSwitch",
-				JOptionPane.ERROR_MESSAGE);
-		   }else{
-		       row.setName((String) aValue);
-		   }
-	       }
-	       else if(1 == columnIndex) {
-	           row.setPath((String) aValue);
-	       }
-	       else if(2 == columnIndex) {
-	           row.setInstalled((Boolean) aValue);
-	       }
-	       fireTableDataChanged();
+	if (0 == columnIndex) {
+	    if (row.getInstalled()) {
+		JOptionPane.showMessageDialog(null, NOT_POSSIBLE_EDIT, "JSwitch", JOptionPane.ERROR_MESSAGE);
+	    } else {
+		row.setName((String) aValue);
+	    }
+	} else if (1 == columnIndex) {
+	    row.setPath((String) aValue);
+	} else if (2 == columnIndex) {
+	    row.setInstalled((Boolean) aValue);
+	}
+	fireTableDataChanged();
     }
-    
-   
+
 }

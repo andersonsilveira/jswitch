@@ -11,7 +11,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import br.com.org.jswitch.cfg.exception.JavaHomeVariableSystemNotFoundException;
-import br.com.org.jswitch.control.OperationSystemManager;
+import br.com.org.jswitch.control.JSwitchManager;
 import br.com.org.jswitch.ui.JSwitchUI;
 import br.com.org.jswitch.ui.JSwitchUI.MODE;
 import br.com.org.jswitch.ui.JTrayIconUI;
@@ -28,8 +28,8 @@ public class Main {
     	private static final Locale locale = Locale.getDefault();
     	private static final ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
 	
-	private static final String ERROR_INIT = bundle.getString("error.during.init");//"O JSwicht ocorreu um erro durante a inicialização do aplicativo";
-	private static final String JAVA_HOME_NOT_FOUND = bundle.getString("warn.java.home.not.found"); //"O Sistema operacional não esta com a variável JAVA_HOME configurada, por favor faça a configuração antes de iniciar o aplicativo";
+	private static final String ERROR_INIT = bundle.getString("error.during.init");
+	private static final String JAVA_HOME_NOT_FOUND = bundle.getString("warn.java.home.not.found"); 
 
 	/**
 	 * @param args
@@ -40,7 +40,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		
-		OperationSystemManager operationSystemManager = new OperationSystemManager();
+		JSwitchManager operationSystemManager = new JSwitchManager();
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		try {
 			if(!operationSystemManager.isAlreadyInstalled()){

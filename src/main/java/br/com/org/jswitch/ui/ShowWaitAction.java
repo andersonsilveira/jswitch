@@ -21,121 +21,118 @@ import javax.swing.WindowConstants;
 
 import br.com.org.jswitch.cfg.exception.DefautJDKInstalledNotFoundException;
 import br.com.org.jswitch.cfg.exception.LoadDefaultJDKException;
-import br.com.org.jswitch.control.OperationSystemManager;
+import br.com.org.jswitch.control.JSwitchManager;
 import br.com.org.jswitch.model.JDK;
+
 /**
  * 
  * @author Anderson
  *
  */
 class ShowWaitAction {
-    	private static final ResourceBundle bundle = MessagesHelp.getBundle();
-	
-    	private static final String SEARCHING_JDK = bundle.getString("info.searching.jdk"); //"Buscando JDKs.....";
+    private static final ResourceBundle bundle = MessagesHelp.getBundle();
 
-	private static final String JDK_NOT_FOUND = bundle.getString("error.jdk.not.found");//"Não foi encontrado nenhum JDK no dirótorio padrão de instalação, \ntente carregar manualmente a partir do botão 'Adicionar...'";
+    private static final String SEARCHING_JDK = bundle.getString("info.searching.jdk");
 
-	private static final String LOAD_ERROR =  bundle.getString("error.jdk.load");//"Falha durante a busca de diretórios padrão de instalação da JDK, \ntente carregar manualmente apartir do botão 'Adicionar...'";
+    private static final String JDK_NOT_FOUND = bundle.getString("error.jdk.not.found");
 
-	protected static final long SLEEP_TIME = 1 * 1000;
+    private static final String LOAD_ERROR = bundle.getString("error.jdk.load");
 
-	private Component componentParent;
+    protected static final long SLEEP_TIME = 1 * 1000;
 
-	private List<JDK> loadJDKInstalled  = new ArrayList<JDK>();
+    private Component componentParent;
 
-	public List<JDK> getLoadJDKInstalled() {
-		return loadJDKInstalled;
-	}
+    private List<JDK> loadJDKInstalled = new ArrayList<JDK>();
 
-	private String name;
+    public List<JDK> getLoadJDKInstalled() {
+	return loadJDKInstalled;
+    }
 
-	private JDialog dialog;
+    private String name;
 
-	private RESOURCE resource;
+    private JDialog dialog;
 
-	public ShowWaitAction(String name, Component componentParent, RESOURCE resource) {
-		this.componentParent = componentParent;
-		this.name = name;
-		this.resource = resource;
-	}
+    private RESOURCE resource;
 
-	public void executeLoader(final OperationSystemManager manager) {
-		SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
+    public ShowWaitAction(String name, Component componentParent, RESOURCE resource) {
+	this.componentParent = componentParent;
+	this.name = name;
+	this.resource = resource;
+    }
 
-			@Override
-			protected Void doInBackground() throws Exception {
+    public void executeLoader(final JSwitchManager manager) {
+	SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
 
-				try {
-				    resource.setManager(manager);
-				    loadJDKInstalled = resource.execute();
-				} catch (LoadDefaultJDKException e) {
-				    JOptionPane.showMessageDialog(null, LOAD_ERROR,
-					    "JSwitch", JOptionPane.ERROR_MESSAGE);
-				}catch (DefautJDKInstalledNotFoundException e){
-				    JOptionPane.showMessageDialog(null, JDK_NOT_FOUND,
-					    "JSwitch", JOptionPane.WARNING_MESSAGE);
-				}
-				Thread.sleep(SLEEP_TIME);
-				return null;
-			}
-		};
+	    @Override
+	    protected Void doInBackground() throws Exception {
 
-		Window win = SwingUtilities.getWindowAncestor(componentParent);
-		 
-		dialog = new JDialog(win, name,
-				ModalityType.APPLICATION_MODAL);
-		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); 
-		dialog.setUndecorated(true) ;
-		
-		mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getPropertyName().equals("state")) {
-					if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
-						dialog.dispose();
-					}
-				}
-			}
-		});
-		mySwingWorker.execute();
-
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setIndeterminate(true);
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(progressBar, BorderLayout.CENTER);
-		panel.add(new JLabel(SEARCHING_JDK), BorderLayout.PAGE_START);
-		dialog.add(panel);
-		dialog.pack();
-		dialog.setLocationRelativeTo(win);
-		dialog.setVisible(true);
-	}
-	
-	
-	public enum RESOURCE{
-	    CONFIGURED(1),
-	    INSTALLED_ON_SYSTEM(2);
-
-	    private int type;
-
-	    private RESOURCE(int type){
-		this.type = type;
-	    }
-	    private OperationSystemManager manager;
-
-	    public void setManager(OperationSystemManager manager) {
-		this.manager = manager;
-	    }
-	    
-	    public List<JDK> execute() throws Exception{
-		switch (type) {
-		case 1:
-		    return manager.loadJDKConfigured();
-		case 2:
-		    return manager.loadJDKInstalledOnSystem();
+		try {
+		    resource.setManager(manager);
+		    loadJDKInstalled = resource.execute();
+		} catch (LoadDefaultJDKException e) {
+		    JOptionPane.showMessageDialog(null, LOAD_ERROR, "JSwitch", JOptionPane.ERROR_MESSAGE);
+		} catch (DefautJDKInstalledNotFoundException e) {
+		    JOptionPane.showMessageDialog(null, JDK_NOT_FOUND, "JSwitch", JOptionPane.WARNING_MESSAGE);
 		}
+		Thread.sleep(SLEEP_TIME);
 		return null;
 	    }
+	};
+
+	Window win = SwingUtilities.getWindowAncestor(componentParent);
+
+	dialog = new JDialog(win, name, ModalityType.APPLICATION_MODAL);
+	dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+	dialog.setUndecorated(true);
+
+	mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
+
+	    @Override
+	    public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals("state")) {
+		    if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
+			dialog.dispose();
+		    }
+		}
+	    }
+	});
+	mySwingWorker.execute();
+
+	JProgressBar progressBar = new JProgressBar();
+	progressBar.setIndeterminate(true);
+	JPanel panel = new JPanel(new BorderLayout());
+	panel.add(progressBar, BorderLayout.CENTER);
+	panel.add(new JLabel(SEARCHING_JDK), BorderLayout.PAGE_START);
+	dialog.add(panel);
+	dialog.pack();
+	dialog.setLocationRelativeTo(win);
+	dialog.setVisible(true);
+    }
+
+    public enum RESOURCE {
+	CONFIGURED(1), INSTALLED_ON_SYSTEM(2);
+
+	private int type;
+
+	private RESOURCE(int type) {
+	    this.type = type;
 	}
+
+	private JSwitchManager manager;
+
+	public void setManager(JSwitchManager manager) {
+	    this.manager = manager;
+	}
+
+	public List<JDK> execute() throws Exception {
+	    switch (type) {
+	    case 1:
+		return manager.loadJDKConfigured();
+	    case 2:
+		return manager.loadJDKInstalledOnSystem();
+	    }
+	    return null;
+	}
+    }
 
 }

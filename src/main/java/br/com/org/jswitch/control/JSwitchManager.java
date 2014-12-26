@@ -23,7 +23,7 @@ import br.com.org.jswitch.model.JDK;
  * @author Anderson
  *
  */
-public final class OperationSystemManager{
+public final class JSwitchManager{
 
 	
 	
@@ -32,18 +32,11 @@ public final class OperationSystemManager{
 	
 	
 	
-	public OperationSystemManager() {
+	public JSwitchManager() {
 		mapOfOperation.put(Platform.Windows, new WindowsSystem());
 		mapOfOperation.put(Platform.Unix, new LinuxSystem());
 	}
 	
-	public void verifyAlreadyInstalled(List<JDK> jdks){
-	     getPlatformSystem().verifyIfConfigured(jdks);
-	}
-	
-	public void initSystemTray() throws InstallationFailException{
-	    getPlatformSystem().initSysTray();
-	}
 	
 	public List<JDK> loadJDKInstalledOnSystem() throws LoadDefaultJDKException, DefautJDKInstalledNotFoundException{
 		return getPlatformSystem().loadDefaultJDKOnSystem();
@@ -53,7 +46,7 @@ public final class OperationSystemManager{
 		return getPlatformSystem().loadJDKConfigured();
 	}
 	
-	public boolean isAlreadyInstalled(){
+	public boolean isAlreadyInstalled() throws InstallationFailException{
 		return !getJDKInstalled().isEmpty();
 	}
 	
@@ -71,7 +64,7 @@ public final class OperationSystemManager{
 	
 	
 
-	public List<String> getJDKInstalled() {
+	public List<String> getJDKInstalled() throws InstallationFailException {
 		return getPlatformSystem().getJDKInstalled();
 	}
 
