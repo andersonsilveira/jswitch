@@ -32,20 +32,18 @@ After installation, open folder on explorer and access context menu with options
 
 ###Prompt Console
 
-![Context Menu Explore] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/5cb524e6-6bf0-4c63-8f6e-79d5379ef2f3/2014-10-05_1457.png)
+![Context Menu Explore](http://content.screencast.com/users/anderson.satriani/folders/Jing/media/5cb524e6-6bf0-4c63-8f6e-79d5379ef2f3/2014-10-05_1457.png)
 
-![Prompt console] (http://content.screencast.com/users/anderson.satriani/folders/Jing/media/c5c1fcf2-fcef-4ea3-b239-8514b53ad566/2014-10-05_1506.png)
+![Prompt console](http://content.screencast.com/users/anderson.satriani/folders/Jing/media/c5c1fcf2-fcef-4ea3-b239-8514b53ad566/2014-10-05_1506.png)
 
 Obs. For linux system haven't contextmenu.
 
 ###System Tray
 Another way to switch is a System Tray on O.S, which that will be enabled at system startup. You can see icon tray available:
 
-![System Icon Tray] 
-(http://content.screencast.com/users/anderson.satriani/folders/Jing/media/1ab771b5-3501-4b94-a5d5-aae8e92617c7/2014-11-03_2223.png)
+![System Icon Tray](http://content.screencast.com/users/anderson.satriani/folders/Jing/media/1ab771b5-3501-4b94-a5d5-aae8e92617c7/2014-11-03_2223.png)
 
-![Menu System Icon Tray] 
-(http://content.screencast.com/users/anderson.satriani/folders/Jing/media/73ec5049-6b5b-45e7-810b-06adef09816d/2014-11-09_2208.png)
+![Menu System Icon Tray](http://content.screencast.com/users/anderson.satriani/folders/Jing/media/73ec5049-6b5b-45e7-810b-06adef09816d/2014-11-09_2208.png)
 
 The Popup Menu enable some options: like choice of JDK to setting on system and configure new JDK that was installed after last configuration of JSwitch.
 
